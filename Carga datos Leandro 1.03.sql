@@ -64,7 +64,7 @@ and Butaca_Tipo in ('Ventanilla', 'Pasillo')
 order by id_micro, Butaca_Nro
 
 insert into DEL_NAVAL.compras
-select ma.Cli_Dni, vi.id_viaje, null,
+select ma.Cli_Dni, null,
 case when ma.Paquete_FechaCompra > ma.Pasaje_FechaCompra then ma.Paquete_FechaCompra else ma.Pasaje_FechaCompra end,
 case when ma.Pasaje_Codigo > ma.Paquete_Codigo then ma.Pasaje_Codigo else ma.Paquete_Codigo end
 from gd_esquema.Maestra ma, DEL_NAVAL.viajes vi, DEL_NAVAL.recorridos re, DEL_NAVAL.micros mi
@@ -76,11 +76,25 @@ and vi.recorrido = re.id_recorrido
 and ma.Micro_Patente = mi.patente
 and vi.micro = mi.id_micro
 
+insert into DEL_NAVAL.compras_viajes
+select co.id_voucher, vi.id_viaje
+from gd_esquema.Maestra ma, DEL_NAVAL.viajes vi, DEL_NAVAL.compras co, DEL_NAVAL.micros mi, DEL_NAVAL.recorridos re
+where vi.fecha_llegada = ma.FechaLLegada
+and vi.fecha_salida = ma.FechaSalida
+and vi.micro = mi.id_micro
+and vi.recorrido = re.id_recorrido
+and mi.patente = ma.Micro_Patente
+and re.codigo_recorrido = ma.Recorrido_Codigo
+and co.comprador = ma.Cli_Dni
+and co.fecha_compra = case when ma.Pasaje_FechaCompra > ma.Paquete_FechaCompra then ma.Pasaje_FechaCompra else ma.Paquete_FechaCompra end
+and co.aux_migracion = case when ma.Pasaje_Codigo > ma.Paquete_Codigo then ma.Pasaje_Codigo else ma.Paquete_Codigo end
+
 insert into DEL_NAVAL.encomiendas
 select co.id_voucher, ma.Paquete_KG, 0, ma.Paquete_Precio, ma.Paquete_Codigo
 from gd_esquema.Maestra ma,
-DEL_NAVAL.compras co, DEL_NAVAL.viajes vi, DEL_NAVAL.recorridos re, DEL_NAVAL.micros mi
-where co.viaje = vi.id_viaje
+DEL_NAVAL.compras co, DEL_NAVAL.viajes vi, DEL_NAVAL.recorridos re, DEL_NAVAL.micros mi, DEL_NAVAL.compras_viajes cv
+where cv.viaje = vi.id_viaje
+and cv.voucher = co.id_voucher
 and vi.recorrido = re.id_recorrido
 and vi.micro = mi.id_micro
 and ma.Cli_Dni = co.comprador
@@ -92,9 +106,10 @@ and ma.Paquete_Codigo <> 0
 
 insert into DEL_NAVAL.pasajes
 select co.id_voucher, ma.Cli_Dni, bu.id_butaca, 0, ma.Pasaje_Precio, ma.Pasaje_Codigo
-from gd_esquema.Maestra ma,
+from gd_esquema.Maestra ma, DEL_NAVAL.compras_viajes cv,
 DEL_NAVAL.compras co, DEL_NAVAL.viajes vi, DEL_NAVAL.recorridos re, DEL_NAVAL.micros mi, DEL_NAVAL.butacas bu
-where co.viaje = vi.id_viaje
+where cv.viaje = vi.id_viaje
+and cv.voucher = co.id_voucher
 and vi.recorrido = re.id_recorrido
 and vi.micro = mi.id_micro
 and vi.micro = bu.micro
@@ -108,7 +123,20 @@ and bu.numero = ma.Butaca_Nro
 and bu.piso = ma.Butaca_Piso
 and bu.tipo = ma.Butaca_Tipo
 
-
 alter table del_naval.compras 
 drop column aux_migracion;
 
+alter table del_naval.compras_viajes
+add constraint fk_compras_viajes foreign key (voucher) references del_naval.compras (id_voucher)
+
+alter table del_naval.compras_viajes
+add constraint fk_viajes_compras foreign key (viaje) references del_naval.viajes (id_viaje)
+
+alter table del_naval.pasajes
+add constraint fk_pasajes_compras foreign key (voucher) references del_naval.compras (id_voucher)
+
+alter table del_naval.pasajes
+add constraint fk_pasajes_clientes foreign key (pasajero) references del_naval.clientes (id_dni)
+
+alter table del_naval.pasajes
+add constraint fk_pasajes_butacas foreign key (butaca) references del_naval.butacas (id_butaca)
