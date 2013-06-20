@@ -90,7 +90,7 @@ and co.fecha_compra = case when ma.Pasaje_FechaCompra > ma.Paquete_FechaCompra t
 and co.aux_migracion = case when ma.Pasaje_Codigo > ma.Paquete_Codigo then ma.Pasaje_Codigo else ma.Paquete_Codigo end
 
 insert into DEL_NAVAL.encomiendas
-select co.id_voucher, ma.Paquete_KG, 0, ma.Paquete_Precio, ma.Paquete_Codigo
+select co.id_voucher, vi.id_viaje, ma.Paquete_KG, 0, ma.Paquete_Precio, ma.Paquete_Codigo
 from gd_esquema.Maestra ma,
 DEL_NAVAL.compras co, DEL_NAVAL.viajes vi, DEL_NAVAL.recorridos re, DEL_NAVAL.micros mi, DEL_NAVAL.compras_viajes cv
 where cv.viaje = vi.id_viaje
@@ -105,7 +105,7 @@ and ma.Paquete_Codigo = co.aux_migracion
 and ma.Paquete_Codigo <> 0
 
 insert into DEL_NAVAL.pasajes
-select co.id_voucher, ma.Cli_Dni, bu.id_butaca, 0, ma.Pasaje_Precio, ma.Pasaje_Codigo
+select co.id_voucher, vi.id_viaje, ma.Cli_Dni, bu.id_butaca, 0, ma.Pasaje_Precio, ma.Pasaje_Codigo
 from gd_esquema.Maestra ma, DEL_NAVAL.compras_viajes cv,
 DEL_NAVAL.compras co, DEL_NAVAL.viajes vi, DEL_NAVAL.recorridos re, DEL_NAVAL.micros mi, DEL_NAVAL.butacas bu
 where cv.viaje = vi.id_viaje
@@ -134,6 +134,9 @@ add constraint fk_viajes_compras foreign key (viaje) references del_naval.viajes
 
 alter table del_naval.pasajes
 add constraint fk_pasajes_compras foreign key (voucher) references del_naval.compras (id_voucher)
+
+alter table del_naval.encomiendas
+add constraint fk_encomiendas_compras foreign key (voucher) references del_naval.compras (id_voucher)
 
 alter table del_naval.pasajes
 add constraint fk_pasajes_clientes foreign key (pasajero) references del_naval.clientes (id_dni)
