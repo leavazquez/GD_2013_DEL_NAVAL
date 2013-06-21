@@ -40,7 +40,7 @@ select distinct recorrido_codigo, ORIG.id_ciudad as ORI, DEST.id_ciudad as DES, 
  group by recorrido_codigo, ORI, DES, id_servicio
  
  insert into DEL_NAVAL.micros
-select t.id_servicio, Micro_KG_Disponibles, MAX(Butaca_Nro), ma.id_marca, Micro_Modelo, Micro_Patente, 0, 0, null, null, null, null
+select t.id_servicio, Micro_KG_Disponibles, MAX(Butaca_Nro) + 1, ma.id_marca, Micro_Modelo, Micro_Patente, 0, 0, null, null, null, null
 from gd_esquema.Maestra m, DEL_NAVAL.tipos_servicio t, DEL_NAVAL.marcas ma
 where t.nombre_servicio = m.Tipo_Servicio
 and marca = micro_marca
@@ -122,6 +122,15 @@ and ma.Pasaje_Codigo <> 0
 and bu.numero = ma.Butaca_Nro
 and bu.piso = ma.Butaca_Piso
 and bu.tipo = ma.Butaca_Tipo
+
+insert into DEL_NAVAL.butacas_disponibles
+select vi.id_viaje, bu.id_butaca, 1
+from DEL_NAVAL.viajes vi, DEL_NAVAL.pasajes pa, DEL_NAVAL.micros mi, DEL_NAVAL.butacas bu
+where vi.micro = mi.id_micro
+and pa.butaca = bu.id_butaca
+and pa.viaje = vi.id_viaje
+and bu.micro = mi.id_micro
+
 
 alter table del_naval.compras 
 drop column aux_migracion;
