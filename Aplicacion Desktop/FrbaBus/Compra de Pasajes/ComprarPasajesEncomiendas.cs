@@ -7,11 +7,11 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace FrbaBus.Canje_de_Ptos
+namespace FrbaBus.Compra_de_Pasajes
 {
-    public partial class Form1 : Form
+    public partial class ComprarPasajesEncomiendas : Form
     {
-        public Form1()
+        public ComprarPasajesEncomiendas()
         {
             InitializeComponent();
         }

@@ -7,11 +7,11 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace FrbaBus.Abm_Recorrido
+namespace FrbaBus.GenerarViaje
 {
-    public partial class Form1 : Form
+    public partial class GenerarViajes : Form
     {
-        public Form1()
+        public GenerarViajes()
         {
             InitializeComponent();
         }

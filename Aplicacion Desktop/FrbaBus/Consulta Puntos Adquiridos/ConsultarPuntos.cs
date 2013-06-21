@@ -7,11 +7,11 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace FrbaBus.GenerarViaje
+namespace FrbaBus.Consulta_Puntos_Adquiridos
 {
-    public partial class Form1 : Form
+    public partial class ConsultarPuntos : Form
     {
-        public Form1()
+        public ConsultarPuntos()
         {
             InitializeComponent();
         }

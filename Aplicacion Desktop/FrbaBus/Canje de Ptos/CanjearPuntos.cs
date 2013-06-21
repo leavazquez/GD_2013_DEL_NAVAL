@@ -7,11 +7,11 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace FrbaBus
+namespace FrbaBus.Canje_de_Ptos
 {
-    public partial class Form1 : Form
+    public partial class CanjearPuntos : Form
     {
-        public Form1()
+        public CanjearPuntos()
         {
             InitializeComponent();
         }

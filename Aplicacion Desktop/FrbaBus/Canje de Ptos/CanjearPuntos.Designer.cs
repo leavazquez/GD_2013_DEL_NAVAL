@@ -1,6 +1,6 @@
-﻿namespace FrbaBus.Cancelar_Viaje
+﻿namespace FrbaBus.Canje_de_Ptos
 {
-    partial class Form1
+    partial class CanjearPuntos
     {
         /// <summary>
         /// Required designer variable.

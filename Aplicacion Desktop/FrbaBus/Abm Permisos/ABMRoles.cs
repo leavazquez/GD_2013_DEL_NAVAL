@@ -7,11 +7,11 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace FrbaBus.Login
+namespace FrbaBus.Abm_Permisos
 {
-    public partial class Form1 : Form
+    public partial class ABMRoles : Form
     {
-        public Form1()
+        public ABMRoles()
         {
             InitializeComponent();
         }

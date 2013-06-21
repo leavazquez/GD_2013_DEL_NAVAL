@@ -1,6 +1,6 @@
-﻿namespace FrbaBus.Compra_de_Pasajes
+﻿namespace FrbaBus.Consulta_Puntos_Adquiridos
 {
-    partial class Form1
+    partial class ConsultarPuntos
     {
         /// <summary>
         /// Required designer variable.

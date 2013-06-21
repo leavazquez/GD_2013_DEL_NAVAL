@@ -7,11 +7,11 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace FrbaBus.Cancelar_Viaje
+namespace FrbaBus.Registrar_LLegada_Micro
 {
-    public partial class Form1 : Form
+    public partial class RegistrarLlegadasDestino : Form
     {
-        public Form1()
+        public RegistrarLlegadasDestino()
         {
             InitializeComponent();
         }

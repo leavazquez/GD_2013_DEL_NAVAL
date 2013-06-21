@@ -7,11 +7,11 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace FrbaBus.Abm_Permisos
+namespace FrbaBus.Abm_Micro
 {
-    public partial class Form1 : Form
+    public partial class ABMMicros : Form
     {
-        public Form1()
+        public ABMMicros()
         {
             InitializeComponent();
         }

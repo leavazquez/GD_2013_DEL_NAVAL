@@ -7,11 +7,11 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace FrbaBus.Consulta_Puntos_Adquiridos
+namespace FrbaBus.Cancelar_Viaje
 {
-    public partial class Form1 : Form
+    public partial class CancelarPasajesEncomiendas : Form
     {
-        public Form1()
+        public CancelarPasajesEncomiendas()
         {
             InitializeComponent();
         }

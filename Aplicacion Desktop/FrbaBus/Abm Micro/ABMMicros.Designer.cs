@@ -1,6 +1,6 @@
 ﻿namespace FrbaBus.Abm_Micro
 {
-    partial class Form1
+    partial class ABMMicros
     {
         /// <summary>
         /// Required designer variable.

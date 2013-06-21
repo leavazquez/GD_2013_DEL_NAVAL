@@ -1,6 +1,6 @@
 ﻿namespace FrbaBus.GenerarViaje
 {
-    partial class Form1
+    partial class GenerarViajes
     {
         /// <summary>
         /// Required designer variable.

@@ -1,6 +1,6 @@
-﻿namespace FrbaBus.Login
+﻿namespace FrbaBus.Abm_Permisos
 {
-    partial class Form1
+    partial class ABMRoles
     {
         /// <summary>
         /// Required designer variable.

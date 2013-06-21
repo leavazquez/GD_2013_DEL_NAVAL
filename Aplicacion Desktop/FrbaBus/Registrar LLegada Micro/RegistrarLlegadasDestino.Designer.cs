@@ -1,6 +1,6 @@
-﻿namespace FrbaBus.Abm_Recorrido
+﻿namespace FrbaBus.Registrar_LLegada_Micro
 {
-    partial class Form1
+    partial class RegistrarLlegadasDestino
     {
         /// <summary>
         /// Required designer variable.
