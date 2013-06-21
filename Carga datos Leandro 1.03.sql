@@ -1,3 +1,5 @@
+USE GD1C2013
+GO
 
 insert into DEL_NAVAL.marcas
   select distinct micro_marca 
@@ -123,7 +125,7 @@ and bu.numero = ma.Butaca_Nro
 and bu.piso = ma.Butaca_Piso
 and bu.tipo = ma.Butaca_Tipo
 
-insert into DEL_NAVAL.butacas_disponibles
+insert into DEL_NAVAL.butacas_ocupadas
 select vi.id_viaje, bu.id_butaca, 1
 from DEL_NAVAL.viajes vi, DEL_NAVAL.pasajes pa, DEL_NAVAL.micros mi, DEL_NAVAL.butacas bu
 where vi.micro = mi.id_micro
@@ -131,10 +133,181 @@ and pa.butaca = bu.id_butaca
 and pa.viaje = vi.id_viaje
 and bu.micro = mi.id_micro
 
+--Para la migracion hardcodeamos el valor 5 para tomar $5 por cada punto
+insert into del_naval.puntos
+select pasajero, cast (monto / 5 as int),  fecha_llegada, id_pasaje, NULL, 0
+from DEL_NAVAL.pasajes PA, DEL_NAVAL.viajes VI
+where PA.viaje = VI.id_viaje
+union
+select comprador, cast (monto / 5 as int), fecha_llegada, NULL, id_encomienda, 0
+from DEL_NAVAL.encomiendas EN, DEL_NAVAL.viajes VI, DEL_NAVAL.compras CO
+where EN.viaje = VI.id_viaje 
+and   EN.voucher = CO.id_voucher
 
+
+--Se elimina la columna aux_migración que solo se utilizo para poder relacionar uno a uno las compras con las encomiendas o pasajes
 alter table del_naval.compras 
 drop column aux_migracion;
 
+insert into del_naval.productos
+Values 
+('Termo Lu Milagros', 150, 500),
+('Cafetera de bolsillo', 1, 100),
+('Disfraz del hombre invisible',2,1500),
+('Anteojos infrarojos',0,10),
+('Agua pesada (bidon de 5L)',1,50),
+('Tp de Gestion de datos 1C 2013 Completo', 0,20000),
+('Recoge plátanos', 1,20)
+ 
+insert into del_naval.roles
+values
+('Administrador',1), --1=activo
+('Cliente',1) 
+ 
+ insert into DEL_NAVAL.usuarios
+values 
+('Jorge_adm',
+(select id_rol
+ from DEL_NAVAL.roles 
+ where nombre_rol = 'Administrador'),'w23e',0,1),
+ ('Admin',
+(select id_rol
+ from DEL_NAVAL.roles 
+ where nombre_rol = 'Administrador'),'w23e',0,1),
+ ('usr_adm2',
+(select id_rol
+ from DEL_NAVAL.roles 
+ where nombre_rol = 'Administrador'),'w23e',2,1),
+ ('usr_adm3',
+(select id_rol
+ from DEL_NAVAL.roles 
+ where nombre_rol = 'Administrador'),'w23e',3,0),
+  ('client',
+(select id_rol
+ from DEL_NAVAL.roles 
+ where nombre_rol = 'Cliente'),'w23e',3,0),
+  ('cliente2',
+(select id_rol
+ from DEL_NAVAL.roles 
+ where nombre_rol = 'Cliente'),'w23e',0,1)
+ 
+ 
+
+
+insert into del_naval.funcionalidades
+values 
+('ABMRoles'),
+('ABMRecorridos'),
+('ABMMicros'),
+('GenerarViajes'), 
+('RegistrarLlegadasDestino'),
+('ComprarPasajesEncomiendas'),
+('CancelarPasajesEncomiendas'),
+('ConsultarPuntos'),
+('CanjearPuntos'),
+('VerListadoEstadistico')
+
+insert into DEL_NAVAL.roles_funcionalidades
+values
+--alta de funcionalidades administrador
+((select id_rol
+ from DEL_NAVAL.roles 
+ where nombre_rol = 'Administrador'),
+ (select id_funcionalidad
+ from DEL_NAVAL.funcionalidades 
+ where nombre_funcionalidad = 'ABMRoles')),
+ 
+((select id_rol
+ from DEL_NAVAL.roles 
+ where nombre_rol = 'Administrador'),
+  (select id_funcionalidad
+ from DEL_NAVAL.funcionalidades 
+ where nombre_funcionalidad = 'ABMRecorridos')),
+ 
+ ((select id_rol
+ from DEL_NAVAL.roles 
+ where nombre_rol = 'Administrador'),
+  (select id_funcionalidad
+ from DEL_NAVAL.funcionalidades 
+ where nombre_funcionalidad = 'ABMMicros')),
+ 
+ ((select id_rol
+ from DEL_NAVAL.roles 
+ where nombre_rol = 'Administrador'),
+  (select id_funcionalidad
+ from DEL_NAVAL.funcionalidades 
+ where nombre_funcionalidad = 'GenerarViajes')),
+ 
+ ((select id_rol
+ from DEL_NAVAL.roles 
+ where nombre_rol = 'Administrador'),
+  (select id_funcionalidad
+ from DEL_NAVAL.funcionalidades 
+ where nombre_funcionalidad = 'RegistrarLlegadasDestino')),
+ 
+ ((select id_rol
+ from DEL_NAVAL.roles 
+ where nombre_rol = 'Administrador'),
+  (select id_funcionalidad
+ from DEL_NAVAL.funcionalidades 
+ where nombre_funcionalidad = 'ComprarPasajesEncomiendas')),
+ 
+ ((select id_rol
+ from DEL_NAVAL.roles 
+ where nombre_rol = 'Administrador'),
+ (select id_funcionalidad
+ from DEL_NAVAL.funcionalidades 
+ where nombre_funcionalidad = 'CancelarPasajesEncomiendas')),
+ 
+ ((select id_rol
+ from DEL_NAVAL.roles 
+ where nombre_rol = 'Administrador'),
+ (select id_funcionalidad
+ from DEL_NAVAL.funcionalidades 
+ where nombre_funcionalidad = 'ConsultarPuntos')),
+ 
+ ((select id_rol
+ from DEL_NAVAL.roles 
+ where nombre_rol = 'Administrador'),
+ (select id_funcionalidad
+ from DEL_NAVAL.funcionalidades 
+ where nombre_funcionalidad = 'CanjearPuntos')),
+ 
+ ((select id_rol
+ from DEL_NAVAL.roles 
+ where nombre_rol = 'Administrador'),
+ (select id_funcionalidad
+ from DEL_NAVAL.funcionalidades 
+ where nombre_funcionalidad = 'VerListadoEstadistico')),
+
+--alta de funcionalidades cliente
+ ((select id_rol
+ from DEL_NAVAL.roles 
+ where nombre_rol = 'Cliente'),
+  (select id_funcionalidad
+ from DEL_NAVAL.funcionalidades 
+ where nombre_funcionalidad = 'ComprarPasajesEncomiendas')),
+
+ ((select id_rol
+ from DEL_NAVAL.roles 
+ where nombre_rol = 'Cliente'),
+ (select id_funcionalidad
+ from DEL_NAVAL.funcionalidades 
+ where nombre_funcionalidad = 'ConsultarPuntos')),
+ 
+  ((select id_rol
+ from DEL_NAVAL.roles 
+ where nombre_rol = 'Cliente'),
+ (select id_funcionalidad
+ from DEL_NAVAL.funcionalidades 
+ where nombre_funcionalidad = 'CanjearPuntos'))
+ 
+
+
+
+
+
+--Las siguientes claves foráneas se agregan ahora porque de hacerlo previo a la migración de datos cae la performance considerablmente
 alter table del_naval.compras_viajes
 add constraint fk_compras_viajes foreign key (voucher) references del_naval.compras (id_voucher)
 
