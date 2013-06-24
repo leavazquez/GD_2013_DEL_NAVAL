@@ -17,10 +17,27 @@ namespace FrbaBus
         public Inicio()
         {
             InitializeComponent();
-            cargarListafuncionalidadesCliente();
+            cargarListaFuncionalidadesCliente();
+            cargarSeccionLogin();
         }
 
-        private void cargarListafuncionalidadesCliente()
+        private void cargarSeccionLogin()
+        {
+            if (Sesion.Iniciada)
+            {
+                labelInicioSesion.Text = "Sesión Iniciada como: " + Sesion.Nombre_usuario;
+                btnLogin.Text = "Cerrar Sesión";
+
+            }
+            else
+            {
+                labelInicioSesion.Text = "";
+                btnLogin.Text = "Ingresar al Sistema";
+
+            }
+        }
+
+        private void cargarListaFuncionalidadesCliente()
         {
             using (SqlConnection conexion = DAC.CrearConexion())
             {
@@ -53,5 +70,33 @@ namespace FrbaBus
             Form formFuncionalidad = (Form)Activator.CreateInstance(Comun.Funcionalidades[btnFuncionalidad.Tag.ToString()]);
             formFuncionalidad.Show();
         }
+
+        private void btnLogin_Click(object sender, EventArgs e)
+        {
+            if (Sesion.Iniciada)
+            {
+                //testear
+                Sesion.Terminar();
+                cargarListaFuncionalidadesUsuario();
+                cargarSeccionLogin();
+
+            }
+            else
+            {
+                Form formLogin = new Login.Login();
+                DialogResult resultado = formLogin.ShowDialog();
+                if (resultado == DialogResult.OK)
+                {
+                    cargarListaFuncionalidadesUsuario();
+                    cargarSeccionLogin();
+                }
+            }
+        }
+
+        private void cargarListaFuncionalidadesUsuario()
+        {
+            // deberia ser como la de clientes pero con el rol del usuario... hacer la anterior más genérica
+        }
+
     }
 }
