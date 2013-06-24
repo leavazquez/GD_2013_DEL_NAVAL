@@ -38,6 +38,7 @@ namespace FrbaBus.Login
                 string res_id_usuario = "";
                 string res_nombre_usuario = "";
                 string res_pass = "";
+                string res_id_rol = "";
                 int res_intentos = 0;
                 bool res_activo = false;
 
@@ -47,6 +48,7 @@ namespace FrbaBus.Login
                     res_id_usuario = readerUsuario["id_usuario"].ToString();
                     res_nombre_usuario = readerUsuario["nombre_usuario"].ToString();
                     res_pass = readerUsuario["pass"].ToString();
+                    res_id_rol = readerUsuario["rol"].ToString();
                     res_intentos = int.Parse(readerUsuario["intentos"].ToString());
                     res_activo = bool.Parse(readerUsuario["activo"].ToString());
                 }
@@ -61,6 +63,7 @@ namespace FrbaBus.Login
                             Sesion.Iniciada = true;
                             Sesion.IdUsuario = res_id_usuario;
                             Sesion.Nombre_usuario = res_nombre_usuario;
+                            Sesion.IdRol = res_id_rol;
                             MessageBox.Show("Bienvenido");
                             DialogResult = DialogResult.OK;
                             this.Close();

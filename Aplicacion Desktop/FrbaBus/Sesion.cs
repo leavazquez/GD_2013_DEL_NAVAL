@@ -9,6 +9,7 @@ namespace FrbaBus
     {
         private static string nombreUsuario;
         private static string idUsuario;
+        private static string idRol;
         private static bool iniciada;
 
         public static string Nombre_usuario
@@ -21,6 +22,12 @@ namespace FrbaBus
         {
             get { return idUsuario; }
             set { idUsuario = value; }
+        }
+
+        public static string IdRol
+        {
+            get { return idRol; }
+            set { idRol = value; }
         }
 
         public static bool Iniciada

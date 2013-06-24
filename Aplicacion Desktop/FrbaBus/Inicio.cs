@@ -17,7 +17,7 @@ namespace FrbaBus
         public Inicio()
         {
             InitializeComponent();
-            cargarListaFuncionalidadesCliente();
+            cargarListaFuncionalidadesUsuario("cliente");
             cargarSeccionLogin();
         }
 
@@ -37,17 +37,18 @@ namespace FrbaBus
             }
         }
 
-        private void cargarListaFuncionalidadesCliente()
+        private void cargarListaFuncionalidadesUsuario(string rol)
         {
             using (SqlConnection conexion = DAC.CrearConexion())
             {
                 conexion.Open();
                 SqlCommand comando = conexion.CreateCommand();
+                comando.Parameters.Add(new SqlParameter("@rol", rol));
                 comando.CommandText = @"select nombre_funcionalidad
                     from DEL_NAVAL.funcionalidades fu, DEL_NAVAL.roles ro, DEL_NAVAL.roles_funcionalidades rf
                     where fu.id_funcionalidad = rf.funcionalidad
                     and rf.rol = ro.id_rol
-                    and ro.nombre_rol = 'cliente'";
+                    and ro.nombre_rol = @rol";
                 SqlDataReader reader = comando.ExecuteReader();
                 Point puntoInicial = new Point(20, 40);
                 while (reader.Read())
@@ -77,7 +78,7 @@ namespace FrbaBus
             {
                 //testear
                 Sesion.Terminar();
-                cargarListaFuncionalidadesUsuario();
+                cargarListaFuncionalidadesUsuario("cliente");
                 cargarSeccionLogin();
 
             }
@@ -87,16 +88,19 @@ namespace FrbaBus
                 DialogResult resultado = formLogin.ShowDialog();
                 if (resultado == DialogResult.OK)
                 {
-                    cargarListaFuncionalidadesUsuario();
-                    cargarSeccionLogin();
+                    using (SqlConnection conexion = DAC.CrearConexion())
+                    {
+                        string rol = "";
+                        conexion.Open();
+                        SqlCommand comandoRol = conexion.CreateCommand();
+                        comandoRol.Parameters.Add(new SqlParameter("@id_rol", Sesion.IdRol));
+                        comandoRol.CommandText = @"SELECT NOMBRE_ROL FROM DEL_NAVAL.ROLES WHERE ID_ROL = @id_rol";
+                        rol = comandoRol.ExecuteScalar().ToString();
+                        cargarListaFuncionalidadesUsuario(rol);
+                        cargarSeccionLogin();
+                    }
                 }
             }
         }
-
-        private void cargarListaFuncionalidadesUsuario()
-        {
-            // deberia ser como la de clientes pero con el rol del usuario... hacer la anterior más genérica
-        }
-
     }
 }
