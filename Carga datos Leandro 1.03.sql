@@ -169,27 +169,27 @@ values
 ('Jorge_adm',
 (select id_rol
  from DEL_NAVAL.roles 
- where nombre_rol = 'Administrador'),'w23e',0,1),
+ where nombre_rol = 'Administrador'),'E6B87050BFCB8143FCB8DB0170A4DC9ED00D904DDD3E2A4AD1B1E8DC0FDC9BE7',0,1),
  ('Admin',
 (select id_rol
  from DEL_NAVAL.roles 
- where nombre_rol = 'Administrador'),'w23e',0,1),
+ where nombre_rol = 'Administrador'),'E6B87050BFCB8143FCB8DB0170A4DC9ED00D904DDD3E2A4AD1B1E8DC0FDC9BE7',0,1),
  ('usr_adm2',
 (select id_rol
  from DEL_NAVAL.roles 
- where nombre_rol = 'Administrador'),'w23e',2,1),
+ where nombre_rol = 'Administrador'),'E6B87050BFCB8143FCB8DB0170A4DC9ED00D904DDD3E2A4AD1B1E8DC0FDC9BE7',2,1),
  ('usr_adm3',
 (select id_rol
  from DEL_NAVAL.roles 
- where nombre_rol = 'Administrador'),'w23e',3,0),
+ where nombre_rol = 'Administrador'),'E6B87050BFCB8143FCB8DB0170A4DC9ED00D904DDD3E2A4AD1B1E8DC0FDC9BE7',3,0),
   ('client',
 (select id_rol
  from DEL_NAVAL.roles 
- where nombre_rol = 'Cliente'),'w23e',3,0),
+ where nombre_rol = 'Cliente'),'E6B87050BFCB8143FCB8DB0170A4DC9ED00D904DDD3E2A4AD1B1E8DC0FDC9BE7',3,0),
   ('cliente2',
 (select id_rol
  from DEL_NAVAL.roles 
- where nombre_rol = 'Cliente'),'w23e',0,1)
+ where nombre_rol = 'Cliente'),'E6B87050BFCB8143FCB8DB0170A4DC9ED00D904DDD3E2A4AD1B1E8DC0FDC9BE7',0,1)
  
  
 
