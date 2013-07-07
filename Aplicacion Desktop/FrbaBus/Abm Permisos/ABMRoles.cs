@@ -15,5 +15,17 @@ namespace FrbaBus.Abm_Permisos
         {
             InitializeComponent();
         }
+
+        private void btnAlta_Click(object sender, EventArgs e)
+        {
+            CargaRol formAltaRol = new CargaRol();
+            DialogResult resultado = formAltaRol.ShowDialog();
+        }
+
+        private void btnBajaModificacion_Click(object sender, EventArgs e)
+        {
+            ListadoRoles formListadoRoles = new ListadoRoles();
+            DialogResult resultado = formListadoRoles.ShowDialog();
+        }
     }
 }

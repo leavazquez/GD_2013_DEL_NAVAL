@@ -13,6 +13,7 @@ namespace FrbaBus
 {
     public partial class Inicio : Form
     {
+        List<Button> m_btnsFuncionalidades = new List<Button>();
 
         public Inicio()
         {
@@ -39,6 +40,12 @@ namespace FrbaBus
 
         private void cargarListaFuncionalidadesUsuario(string rol)
         {
+            foreach (Button btnFuncionalidad in m_btnsFuncionalidades)
+            {
+                this.Controls.Remove(btnFuncionalidad);
+                btnFuncionalidad.Dispose();
+            }
+            m_btnsFuncionalidades.Clear();
             using (SqlConnection conexion = DAC.CrearConexion())
             {
                 conexion.Open();
@@ -59,9 +66,11 @@ namespace FrbaBus
                     btnFuncionalidad.Tag = funcionalidad;
                     btnFuncionalidad.Click += iniciarFuncionalidad;
                     btnFuncionalidad.Location = puntoInicial;
+                    m_btnsFuncionalidades.Add(btnFuncionalidad);
                     this.Controls.Add(btnFuncionalidad);
                     puntoInicial.Y += 30;
                 }
+                reader.Close();
             }
         }
 

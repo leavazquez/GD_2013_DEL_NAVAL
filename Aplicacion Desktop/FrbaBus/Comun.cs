@@ -21,4 +21,10 @@ namespace FrbaBus
             {"VerListadoEstadistico", typeof(Listado_Estadistico.VerListadoEstadistico)}
         };
     }
+
+    enum Proposito
+    {
+        Alta,
+        Modificacion
+    }
 }

@@ -40,6 +40,7 @@ namespace FrbaBus
         {
             nombreUsuario = "";
             idUsuario = "";
+            idRol = "";
             iniciada = false;
         }
     }
