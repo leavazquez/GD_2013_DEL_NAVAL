@@ -106,7 +106,13 @@ namespace FrbaBus.Abm_Permisos
                 // validar repetición de nombre
                 List<SqlParameter> parametrosNombre = new List<SqlParameter>();
                 parametrosNombre.Add(new SqlParameter("@nombre", txtNombreRol.Text));
-                int cantidad = (int)DAC.ExecuteScalar("SELECT COUNT(*) FROM DEL_NAVAL.ROLES WHERE NOMBRE_ROL = @nombre", parametrosNombre);
+                string queryNombre = "SELECT COUNT(*) FROM DEL_NAVAL.ROLES WHERE NOMBRE_ROL = @nombre";
+                if (proposito == Proposito.Modificacion)
+                {
+                    parametrosNombre.Add(new SqlParameter("@id_rol", rol.id_rol));
+                    queryNombre += " AND ID_ROL <> @id_rol";
+                }
+                int cantidad = (int)DAC.ExecuteScalar(queryNombre, parametrosNombre);
                 if (cantidad > 0)
                 {
                     errorNombre.SetError(txtNombreRol, "Ya existe un rol con este nombre.");
@@ -114,10 +120,30 @@ namespace FrbaBus.Abm_Permisos
                 else
                 {
                     // crear rol
-                    DAC.ExecuteNonQuery("INSERT INTO DEL_NAVAL.ROLES VALUES (@nombre, 1)", parametrosNombre);
+                    switch (proposito)
+                    {
+                        case Proposito.Alta:
+                            DAC.ExecuteNonQuery("INSERT INTO DEL_NAVAL.ROLES VALUES (@nombre, 1)", parametrosNombre);
+                            break;
+                        case Proposito.Modificacion:
+                            DAC.ExecuteNonQuery("UPDATE DEL_NAVAL.ROLES SET NOMBRE_ROL = @nombre WHERE ID_ROL = @id_rol", parametrosNombre);
+                            break;
+                    }
                     // obtener id de rol creado, utilizando atributo unique
-                    string idRol = DAC.ExecuteScalar("SELECT ID_ROL FROM DEL_NAVAL.ROLES WHERE NOMBRE_ROL = @nombre", parametrosNombre).ToString();
+                    string idRol = "";
                     // asignar funcionalidades al rol
+                    switch (proposito)
+                    {
+                        case Proposito.Alta:
+                            idRol = DAC.ExecuteScalar("SELECT ID_ROL FROM DEL_NAVAL.ROLES WHERE NOMBRE_ROL = @nombre", parametrosNombre).ToString();
+                            break;
+                        case Proposito.Modificacion:
+                            idRol = rol.id_rol;
+                            List<SqlParameter> parametrosModificacion = new List<SqlParameter>();
+                            parametrosModificacion.Add(new SqlParameter("@id_rol", idRol));
+                            DAC.ExecuteNonQuery("DELETE FROM DEL_NAVAL.ROLES_FUNCIONALIDADES WHERE ROL = @id_rol", parametrosModificacion);
+                            break;
+                    }
                     foreach (string nombreRol in listBoxFuncionalidades.SelectedItems)
                     {
                         List<SqlParameter> parametrosFuncionalidades = new List<SqlParameter>();
@@ -129,10 +155,6 @@ namespace FrbaBus.Abm_Permisos
                     DialogResult = DialogResult.OK;
                     Close();
                 }
-            }
-            else
-            {
-                MessageBox.Show("Por favor corrija los errores.");
             }
         }
     }

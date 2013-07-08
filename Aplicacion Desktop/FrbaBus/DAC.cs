@@ -72,7 +72,7 @@ namespace FrbaBus
             return ExecuteNonQuery(query, null);
         }
 
-        public static object ExecuteNonQuery(string query, List<SqlParameter> parametros)
+        public static int ExecuteNonQuery(string query, List<SqlParameter> parametros)
         {
             int affected;
             using (SqlConnection conexion = new SqlConnection(Config.String_Conexion))
