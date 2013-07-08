@@ -51,7 +51,7 @@ group by Micro_Patente, Micro_KG_Disponibles, Micro_Marca, ma.id_marca, Micro_Mo
   
   
  insert into del_naval.viajes
-select distinct id_recorrido, id_micro, fechasalida, fechallegada, Fecha_LLegada_Estimada 
+select distinct id_recorrido, id_micro, fechasalida, fechallegada, Fecha_LLegada_Estimada, 0 
 from gd_esquema.Maestra 
 inner join del_naval.micros
 on Micro_Patente = patente

@@ -1,11 +1,22 @@
 use GD1C2013
 go
 
---descomentar drops para primera vez
+--Se hacen drops si los objetos ya existen.
+
+if OBJECT_ID ('PesoLibreEncomiendasXviaje','FN') is not null
 drop function PesoLibreEncomiendasXviaje
+
+if OBJECT_ID ('ButacasDisponiblesXviaje','TF') is not null
 drop function ButacasDisponiblesXviaje 
+
+if OBJECT_ID ('devolverPasaje','P') is not null
 drop procedure devolverPasaje
+
+if OBJECT_ID ('devolverEncomienda','P') is not null
 drop procedure devolverEncomienda
+
+if OBJECT_ID ('DEL_NAVAL.bloqueo_usuarios','TR') is not null
+  drop trigger DEL_NAVAL.bloqueo_usuarios
 
 go
 
@@ -25,14 +36,16 @@ declare @pesoOcupado numeric(18,0)
  set @kilosBodega = (select top 1 MI.kilos_bodega 
  from del_naval.viajes VI, del_naval.micros MI
  where MI.id_micro = VI.micro
- and VI.id_viaje = @viaje)       
+ and VI.id_viaje = @viaje
+ and VI.cancelado = 0
+ )       
  
  set @pesoOcupado = (select SUM (peso)
  from DEL_NAVAL.encomiendas
  where viaje = @viaje
  and cancelado = 0)
  
- return @kilosBodega - @pesoOcupado       
+ return isnull(@kilosBodega - @pesoOcupado,0)       
 End;
 go
 
@@ -59,14 +72,15 @@ Begin
  inner join del_naval.viajes VI
  on VI.id_viaje = @viaje
  and BU.micro = VI.micro
- where (OC.ocupado is null) OR OC.ocupado = 0
+ where ((OC.ocupado is null) OR OC.ocupado = 0)
+ and VI.cancelado = 0
 
 return 
     
 End;
 go
 
---La siguiente funcion realiza las operaciones a nivel BD relacionadas con
+--el siguiente procedimiento realiza las operaciones a nivel BD relacionadas con
 --La devolución de un pasaje
 
 
@@ -150,7 +164,7 @@ go
 
 
 
---La siguiente funcion realiza las operaciones a nivel BD relacionadas con
+--el siguiente procedimiento realiza las operaciones a nivel BD relacionadas con
 --La devolución de una encomienda
 
 create procedure devolverEncomienda
@@ -219,3 +233,21 @@ return 0
 End;
 go
 
+
+
+
+
+create trigger bloqueo_usuarios
+on del_naval.usuarios
+after update
+as 
+ if (select intentos from inserted) >= 3
+ begin
+  update del_naval.usuarios
+   set activo = 0
+   where id_usuario = (select id_usuario from inserted)
+ end  
+ 
+ 
+ 
+ 
