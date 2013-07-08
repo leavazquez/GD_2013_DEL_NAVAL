@@ -90,7 +90,7 @@
             this.btnLimpiar.UseVisualStyleBackColor = true;
             this.btnLimpiar.Click += new System.EventHandler(this.btnLimpiar_Click);
             // 
-            // AltaRol
+            // CargaRol
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -101,8 +101,8 @@
             this.Controls.Add(this.txtNombreRol);
             this.Controls.Add(this.labelFuncionalidades);
             this.Controls.Add(this.labelNombre);
-            this.Name = "AltaRol";
-            this.Text = "AltaRol";
+            this.Name = "CargaRol";
+            this.Text = " de Rol";
             this.ResumeLayout(false);
             this.PerformLayout();
 

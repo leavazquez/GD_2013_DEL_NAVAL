@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using FrbaBus.Filtros;
+using FrbaBus.Entidades;
 
 namespace FrbaBus.Abm_Permisos
 {
@@ -15,7 +16,27 @@ namespace FrbaBus.Abm_Permisos
         public ListadoRoles()
         {
             InitializeComponent();
-            AgregarFiltro(new FiltroExacto("Nombre", "nombre_rol"));
+            this.Query = "SELECT * FROM DEL_NAVAL.ROLES";
+            AgregarFiltro(new FiltroParcial("Nombre", "nombre_rol"));
+        }
+
+        protected override void modificar(DataGridViewCellCollection fila)
+        {
+            Rol rol = new Rol();
+            rol.id_rol = fila["id_rol"].Value.ToString();
+            rol.nombre_rol = fila["nombre_rol"].Value.ToString();
+            Form cargaRol = new CargaRol(rol);
+            cargaRol.Show();
+        }
+
+        protected override void eliminar(DataGridViewCellCollection fila)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override void habilitar(DataGridViewCellCollection fila)
+        {
+            throw new NotImplementedException();
         }
     }
 }

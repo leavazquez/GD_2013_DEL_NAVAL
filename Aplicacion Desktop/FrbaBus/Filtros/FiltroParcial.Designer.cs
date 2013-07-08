@@ -1,6 +1,6 @@
 ﻿namespace FrbaBus.Filtros
 {
-    partial class FiltroExacto
+    partial class FiltroParcial
     {
         /// <summary> 
         /// Required designer variable.

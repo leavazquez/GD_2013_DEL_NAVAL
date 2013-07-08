@@ -121,11 +121,23 @@
     </Compile>
     <Compile Include="DAC.cs" />
     <Compile Include="Entidades\Rol.cs" />
+    <Compile Include="Filtros\Filtro.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Filtros\Filtro.Designer.cs">
+      <DependentUpon>Filtro.cs</DependentUpon>
+    </Compile>
     <Compile Include="Filtros\FiltroExacto.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Filtros\FiltroExacto.Designer.cs">
       <DependentUpon>FiltroExacto.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Filtros\FiltroParcial.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Filtros\FiltroParcial.Designer.cs">
+      <DependentUpon>FiltroParcial.cs</DependentUpon>
     </Compile>
     <Compile Include="Inicio.cs">
       <SubType>Form</SubType>
@@ -174,8 +186,8 @@
     <EmbeddedResource Include="Compra de Pasajes\ComprarPasajesEncomiendas.resx">
       <DependentUpon>ComprarPasajesEncomiendas.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Filtros\FiltroExacto.resx">
-      <DependentUpon>FiltroExacto.cs</DependentUpon>
+    <EmbeddedResource Include="Filtros\Filtro.resx">
+      <DependentUpon>Filtro.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Inicio.resx">
       <DependentUpon>Inicio.cs</DependentUpon>

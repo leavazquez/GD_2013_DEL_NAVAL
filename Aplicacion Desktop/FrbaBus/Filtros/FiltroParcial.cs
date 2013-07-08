@@ -6,28 +6,27 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using FrbaBus.Filtros;
 using System.Data.SqlClient;
 
 namespace FrbaBus.Filtros
 {
-    public partial class FiltroExacto : Filtro
+    public partial class FiltroParcial : Filtro
     {
-        public FiltroExacto()
+        public FiltroParcial()
         {
             InitializeComponent();
         }
 
-        public FiltroExacto(string nombre, string campo) : base(nombre, campo)
+        public FiltroParcial(string nombre, string campo) : base(nombre, campo)
         {
            
         }
 
-        public override SqlParameter Parametro
+        override public SqlParameter Parametro
         {
             get
             {
-                return new SqlParameter("@" + Campo, txtValor.Text);
+                return new SqlParameter("@" + Campo, "%" + txtValor.Text + "%");
             }
         }
 
@@ -35,7 +34,7 @@ namespace FrbaBus.Filtros
         {
             get
             {
-                return Campo + "= @" + Campo;
+                return Campo + " LIKE @" + Campo;
             }
         }
     }

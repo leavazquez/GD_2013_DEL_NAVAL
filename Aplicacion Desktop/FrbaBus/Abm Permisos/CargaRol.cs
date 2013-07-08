@@ -20,18 +20,26 @@ namespace FrbaBus.Abm_Permisos
 
         private Rol rol = new Rol();
 
-        public CargaRol(Rol rol): this()
+        public CargaRol(Rol rol)
         {
-            this.rol = rol;
+            InitializeComponent();
             proposito = Proposito.Modificacion;
+            this.rol = rol;
+
+            // carga de datos
+            txtNombreRol.Text = rol.nombre_rol;
+            cargarListaFuncionalidades();
+            cargarErrores();
         }
 
         public CargaRol()
         {
             InitializeComponent();
+            this.proposito = Proposito.Alta;
+
+            // carga de datos
             cargarListaFuncionalidades();
             cargarErrores();
-            proposito = Proposito.Alta;
         }
 
         private void cargarErrores()
@@ -45,11 +53,30 @@ namespace FrbaBus.Abm_Permisos
 
         private void cargarListaFuncionalidades()
         {
+            DataTable funcionalidadesRol = new DataTable();
+            if (proposito == Proposito.Modificacion)
+            {
+                List<SqlParameter> parametrosFuncionalidadesRol = new List<SqlParameter>();
+                parametrosFuncionalidadesRol.Add(new SqlParameter("@id_rol", rol.id_rol));
+                funcionalidadesRol = DAC.ExecuteReader("SELECT FUNCIONALIDAD FROM DEL_NAVAL.ROLES_FUNCIONALIDADES WHERE ROL = @id_rol",parametrosFuncionalidadesRol);
+
+                DataColumn[] pks = new DataColumn[funcionalidadesRol.Columns.Count];
+                funcionalidadesRol.Columns.CopyTo(pks, 0);
+
+                funcionalidadesRol.PrimaryKey = pks;
+            }
             DataTable results = DAC.ExecuteReader("SELECT * FROM DEL_NAVAL.FUNCIONALIDADES");
             foreach (DataRow row in results.Rows)
             {
                 listBoxFuncionalidades.Items.Add(row["nombre_funcionalidad"].ToString());
                 funcionalidades.Add(row["nombre_funcionalidad"].ToString(), row["id_funcionalidad"].ToString());
+                if (proposito == Proposito.Modificacion)
+                {
+                    if (funcionalidadesRol.Rows.Contains(row["id_funcionalidad"].ToString()))
+                    {
+                        listBoxFuncionalidades.SelectedItems.Add(row["nombre_funcionalidad"].ToString());
+                    }
+                }
             }
         }
 
