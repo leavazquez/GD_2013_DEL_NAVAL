@@ -69,29 +69,29 @@
     <Compile Include="Abm Micro\ABMMicros.Designer.cs">
       <DependentUpon>ABMMicros.cs</DependentUpon>
     </Compile>
-    <Compile Include="Abm Permisos\ABMRoles.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Abm Permisos\ABMRoles.Designer.cs">
-      <DependentUpon>ABMRoles.cs</DependentUpon>
-    </Compile>
     <Compile Include="Abm Permisos\CargaRol.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Abm Permisos\CargaRol.Designer.cs">
       <DependentUpon>CargaRol.cs</DependentUpon>
     </Compile>
-    <Compile Include="Abm Permisos\ListadoRoles.cs">
+    <Compile Include="Abm Permisos\ABMRoles.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Abm Permisos\ListadoRoles.Designer.cs">
-      <DependentUpon>ListadoRoles.cs</DependentUpon>
+    <Compile Include="Abm Permisos\ABMRoles.Designer.cs">
+      <DependentUpon>ABMRoles.cs</DependentUpon>
     </Compile>
     <Compile Include="Abm Recorrido\ABMRecorridos.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Abm Recorrido\ABMRecorridos.Designer.cs">
       <DependentUpon>ABMRecorridos.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Abm Recorrido\CargaRecorrido.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Abm Recorrido\CargaRecorrido.Designer.cs">
+      <DependentUpon>CargaRecorrido.cs</DependentUpon>
     </Compile>
     <Compile Include="Cancelar Viaje\CancelarPasajesEncomiendas.cs">
       <SubType>Form</SubType>
@@ -157,11 +157,11 @@
     <Compile Include="Listado Estadistico\VerListadoEstadistico.Designer.cs">
       <DependentUpon>VerListadoEstadistico.cs</DependentUpon>
     </Compile>
-    <Compile Include="Listado.cs">
+    <Compile Include="ABM.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Listado.Designer.cs">
-      <DependentUpon>Listado.cs</DependentUpon>
+    <Compile Include="ABM.Designer.cs">
+      <DependentUpon>ABM.cs</DependentUpon>
     </Compile>
     <Compile Include="Login\Login.cs">
       <SubType>Form</SubType>
@@ -173,9 +173,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Abm Micro\ABMMicros.resx">
       <DependentUpon>ABMMicros.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Abm Permisos\ABMRoles.resx">
-      <DependentUpon>ABMRoles.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Abm Permisos\CargaRol.resx">
       <DependentUpon>CargaRol.cs</DependentUpon>
@@ -192,8 +189,8 @@
     <EmbeddedResource Include="Inicio.resx">
       <DependentUpon>Inicio.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Listado.resx">
-      <DependentUpon>Listado.cs</DependentUpon>
+    <EmbeddedResource Include="ABM.resx">
+      <DependentUpon>ABM.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Login\Login.resx">
       <DependentUpon>Login.cs</DependentUpon>

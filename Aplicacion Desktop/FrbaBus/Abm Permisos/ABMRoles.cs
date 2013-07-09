@@ -6,26 +6,43 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using FrbaBus.Filtros;
+using FrbaBus.Entidades;
 
 namespace FrbaBus.Abm_Permisos
 {
-    public partial class ABMRoles : Form
+    public partial class ABMRoles : ABM
     {
         public ABMRoles()
         {
             InitializeComponent();
+            this.Query = "SELECT * FROM DEL_NAVAL.ROLES";
+            AgregarFiltro(new FiltroParcial("Nombre", "nombre_rol"));
         }
 
-        private void btnAlta_Click(object sender, EventArgs e)
+        protected override void modificar(DataGridViewCellCollection fila)
         {
-            CargaRol formAltaRol = new CargaRol();
-            DialogResult resultado = formAltaRol.ShowDialog();
+            Rol rol = new Rol();
+            rol.Id_rol = fila["id_rol"].Value.ToString();
+            rol.Nombre_rol = fila["nombre_rol"].Value.ToString();
+            Form cargaRol = new CargaRol(rol);
+            cargaRol.Show();
         }
 
-        private void btnBajaModificacion_Click(object sender, EventArgs e)
+        protected override void crear()
         {
-            ListadoRoles formListadoRoles = new ListadoRoles();
-            DialogResult resultado = formListadoRoles.ShowDialog();
+            CargaRol formCargaRol = new CargaRol();
+            formCargaRol.Show();
+        }
+
+        protected override void eliminar(DataGridViewCellCollection fila)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override void habilitar(DataGridViewCellCollection fila)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace FrbaBus
 {
-    partial class Listado
+    partial class ABM
     {
         /// <summary>
         /// Required designer variable.
@@ -35,6 +35,7 @@
             this.btnModificar = new System.Windows.Forms.Button();
             this.btnEliminar = new System.Windows.Forms.Button();
             this.gbComandos = new System.Windows.Forms.GroupBox();
+            this.btnCrear = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgvResultados)).BeginInit();
             this.gbComandos.SuspendLayout();
             this.SuspendLayout();
@@ -85,7 +86,7 @@
             // 
             // btnModificar
             // 
-            this.btnModificar.Location = new System.Drawing.Point(6, 19);
+            this.btnModificar.Location = new System.Drawing.Point(88, 19);
             this.btnModificar.Name = "btnModificar";
             this.btnModificar.Size = new System.Drawing.Size(75, 23);
             this.btnModificar.TabIndex = 4;
@@ -95,7 +96,7 @@
             // 
             // btnEliminar
             // 
-            this.btnEliminar.Location = new System.Drawing.Point(87, 19);
+            this.btnEliminar.Location = new System.Drawing.Point(169, 19);
             this.btnEliminar.Name = "btnEliminar";
             this.btnEliminar.Size = new System.Drawing.Size(75, 23);
             this.btnEliminar.TabIndex = 5;
@@ -105,16 +106,27 @@
             // 
             // gbComandos
             // 
+            this.gbComandos.Controls.Add(this.btnCrear);
             this.gbComandos.Controls.Add(this.btnModificar);
             this.gbComandos.Controls.Add(this.btnEliminar);
             this.gbComandos.Location = new System.Drawing.Point(13, 113);
             this.gbComandos.Name = "gbComandos";
-            this.gbComandos.Size = new System.Drawing.Size(176, 51);
+            this.gbComandos.Size = new System.Drawing.Size(253, 51);
             this.gbComandos.TabIndex = 6;
             this.gbComandos.TabStop = false;
             this.gbComandos.Text = "Comandos";
             // 
-            // Listado
+            // btnCrear
+            // 
+            this.btnCrear.Location = new System.Drawing.Point(7, 19);
+            this.btnCrear.Name = "btnCrear";
+            this.btnCrear.Size = new System.Drawing.Size(75, 23);
+            this.btnCrear.TabIndex = 6;
+            this.btnCrear.Text = "Crear";
+            this.btnCrear.UseVisualStyleBackColor = true;
+            this.btnCrear.Click += new System.EventHandler(this.btnCrear_Click);
+            // 
+            // ABM
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -124,7 +136,7 @@
             this.Controls.Add(this.btnBuscar);
             this.Controls.Add(this.btnLimpiar);
             this.Controls.Add(this.gbFiltros);
-            this.Name = "Listado";
+            this.Name = "ABM";
             this.Text = "Listado";
             ((System.ComponentModel.ISupportInitialize)(this.dgvResultados)).EndInit();
             this.gbComandos.ResumeLayout(false);
@@ -141,5 +153,6 @@
         private System.Windows.Forms.Button btnModificar;
         private System.Windows.Forms.Button btnEliminar;
         private System.Windows.Forms.GroupBox gbComandos;
+        private System.Windows.Forms.Button btnCrear;
     }
 }

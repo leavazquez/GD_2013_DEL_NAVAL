@@ -11,16 +11,19 @@ using FrbaBus.Filtros;
 
 namespace FrbaBus
 {
-    public abstract partial class Listado : Form
+    public abstract partial class ABM : Form
     {
         private List<Control> filtros = new List<Control>();
         private List<Button> comandos = new List<Button>();
         protected string Query;
+        protected string Condicion = "";
         protected string CampoBaja;
 
-        public Listado()
+        public ABM()
         {
             InitializeComponent();
+            btnEliminar.Enabled = false;
+            btnModificar.Enabled = false;
             comandos.Add(btnEliminar);
             comandos.Add(btnModificar);
         }
@@ -41,8 +44,9 @@ namespace FrbaBus
         {
             List<SqlParameter> parametros = new List<SqlParameter>();
             string nuevaQuery = this.Query;
-            
-            bool primero = true;
+
+            bool primero = this.Condicion == "";
+            nuevaQuery += this.Condicion != "" ? " WHERE " + this.Condicion : "" ;
             foreach (Filtro filtro in filtros) // usar clase base de fltros
             {
                 if (filtro.Valor != "")
@@ -89,6 +93,11 @@ namespace FrbaBus
             }
         }
 
+        private void btnCrear_Click(object sender, EventArgs e)
+        {
+            crear();
+        }
+
         private void btnModificar_Click(object sender, EventArgs e)
         {
             modificar(dgvResultados.SelectedRows[0].Cells);
@@ -106,6 +115,7 @@ namespace FrbaBus
             btnBuscar.PerformClick();
         }
 
+        protected abstract void crear();
         protected abstract void modificar(DataGridViewCellCollection fila);
         protected abstract void eliminar(DataGridViewCellCollection fila);
         protected abstract void habilitar(DataGridViewCellCollection fila);

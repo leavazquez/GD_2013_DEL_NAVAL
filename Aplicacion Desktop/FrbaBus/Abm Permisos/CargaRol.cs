@@ -27,7 +27,7 @@ namespace FrbaBus.Abm_Permisos
             this.rol = rol;
 
             // carga de datos
-            txtNombreRol.Text = rol.nombre_rol;
+            txtNombreRol.Text = rol.Nombre_rol;
             cargarListaFuncionalidades();
             cargarErrores();
         }
@@ -57,7 +57,7 @@ namespace FrbaBus.Abm_Permisos
             if (proposito == Proposito.Modificacion)
             {
                 List<SqlParameter> parametrosFuncionalidadesRol = new List<SqlParameter>();
-                parametrosFuncionalidadesRol.Add(new SqlParameter("@id_rol", rol.id_rol));
+                parametrosFuncionalidadesRol.Add(new SqlParameter("@id_rol", rol.Id_rol));
                 funcionalidadesRol = DAC.ExecuteReader("SELECT FUNCIONALIDAD FROM DEL_NAVAL.ROLES_FUNCIONALIDADES WHERE ROL = @id_rol",parametrosFuncionalidadesRol);
 
                 DataColumn[] pks = new DataColumn[funcionalidadesRol.Columns.Count];
@@ -84,12 +84,11 @@ namespace FrbaBus.Abm_Permisos
         {
             txtNombreRol.Text = "";
             listBoxFuncionalidades.SelectedItem = null;
-            // deseleccionar funcionalidades
         }
 
         private void btnGuardar_Click(object sender, EventArgs e)
         {
-            // validar! no repetido tmb!
+            // validar
             bool isValid = true;
             if (txtNombreRol.Text == String.Empty)
             {
@@ -109,7 +108,7 @@ namespace FrbaBus.Abm_Permisos
                 string queryNombre = "SELECT COUNT(*) FROM DEL_NAVAL.ROLES WHERE NOMBRE_ROL = @nombre";
                 if (proposito == Proposito.Modificacion)
                 {
-                    parametrosNombre.Add(new SqlParameter("@id_rol", rol.id_rol));
+                    parametrosNombre.Add(new SqlParameter("@id_rol", rol.Id_rol));
                     queryNombre += " AND ID_ROL <> @id_rol";
                 }
                 int cantidad = (int)DAC.ExecuteScalar(queryNombre, parametrosNombre);
@@ -138,7 +137,7 @@ namespace FrbaBus.Abm_Permisos
                             idRol = DAC.ExecuteScalar("SELECT ID_ROL FROM DEL_NAVAL.ROLES WHERE NOMBRE_ROL = @nombre", parametrosNombre).ToString();
                             break;
                         case Proposito.Modificacion:
-                            idRol = rol.id_rol;
+                            idRol = rol.Id_rol;
                             List<SqlParameter> parametrosModificacion = new List<SqlParameter>();
                             parametrosModificacion.Add(new SqlParameter("@id_rol", idRol));
                             DAC.ExecuteNonQuery("DELETE FROM DEL_NAVAL.ROLES_FUNCIONALIDADES WHERE ROL = @id_rol", parametrosModificacion);

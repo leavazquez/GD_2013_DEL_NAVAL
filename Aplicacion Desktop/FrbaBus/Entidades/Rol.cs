@@ -7,7 +7,7 @@ namespace FrbaBus.Entidades
 {
     public class Rol
     {
-        public string id_rol;
-        public string nombre_rol;
+        public string Id_rol;
+        public string Nombre_rol;
     }
 }
