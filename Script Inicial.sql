@@ -649,6 +649,14 @@ drop procedure devolverEncomienda
 if OBJECT_ID ('DEL_NAVAL.bloqueo_usuarios','TR') is not null
   drop trigger DEL_NAVAL.bloqueo_usuarios
 
+if OBJECT_ID ('cancelarViaje','P') is not null
+ drop procedure cancelarViaje
+ 
+ 
+if OBJECT_ID ('inhabilitar_rol','P') is not null
+ drop procedure inhabilitar_rol
+
+
 go
 
 --Devuelve espacio libre en bodega para un viaje determinado
@@ -872,29 +880,24 @@ create trigger bloqueo_usuarios
 on del_naval.usuarios
 after update
 as 
- if (select intentos from inserted) >= 3
+ if (select top 1 intentos from inserted) >= 3
  begin
   update del_naval.usuarios
    set activo = 0
-   where id_usuario = (select id_usuario from inserted)
+   where id_usuario = (select top 1 id_usuario from inserted)
  end  
  
- 
+ go
  
  -----------------------------------------------------------------------------------------------
 
 
-
-use GD1C2013
-go
 --el siguiente procedimiento realiza las operaciones a nivel BD relacionadas con
 --La cancelacion de un viaje, realizando ademas las cancelaciones correspondientes 
 --de todos sus pasajes y encomiendas asociados, 
 --utilizando para esto los procedimientos ya creados
 
-if OBJECT_ID ('cancelarViaje','P') is not null
-drop procedure cancelarViaje
-go
+
 
 create procedure cancelarViaje
 (@viaje int,
@@ -962,3 +965,24 @@ End;
 go
 
 
+
+create procedure inhabilitar_rol
+(@rol int)
+as
+begin
+begin transaction
+
+update DEL_NAVAL.roles
+set activo = 0
+where id_rol = @rol
+
+--Desasignamos los roles a los usuarios y deshabilitamos los usuarios 
+--para evitar que un usuario sin rol pueda logearse en el sistema
+update DEL_NAVAL.usuarios
+set activo = 0,
+    rol = NULL
+where rol = @rol
+
+commit
+end;
+go
