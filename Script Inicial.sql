@@ -124,6 +124,7 @@ create table del_naval.recorridos (
 	tipo_servicio int,
 	precio_base_pasaje numeric(18,2),
 	precio_kg_encomienda numeric(18,2),
+	cancelado bit,
 	constraint pk_recorridos primary key (id_recorrido),
     constraint fk_origen foreign key (origen) references del_naval.ciudades (id_ciudad),
     constraint fk_destino foreign key (destino) references del_naval.ciudades (id_ciudad),
@@ -325,7 +326,7 @@ from gd_esquema.Maestra
 
 
 insert into del_naval.recorridos
-select distinct recorrido_codigo, ORI, DES, id_servicio, sum(recorrido_precio_basepasaje), sum(Recorrido_Precio_BaseKG)
+select distinct recorrido_codigo, ORI, DES, id_servicio, sum(recorrido_precio_basepasaje), sum(Recorrido_Precio_BaseKG), 0
 from(
 
 select distinct recorrido_codigo, ORIG.id_ciudad as ORI, DEST.id_ciudad as DES, id_servicio, recorrido_precio_basepasaje, Recorrido_Precio_BaseKG
