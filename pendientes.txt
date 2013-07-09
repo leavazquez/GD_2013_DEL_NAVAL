@@ -1,0 +1,6 @@
+-- trigger inhabilitar rol
+-- trigger cancelacion de pasajes ante baja de recorrido
+-- trigger actualizar asientos y fecha_alta al dar de alta un micro
+-- trigger liberar asientos/espacio y devolver plata
+
+
