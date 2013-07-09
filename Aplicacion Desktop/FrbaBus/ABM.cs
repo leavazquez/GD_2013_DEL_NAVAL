@@ -96,11 +96,13 @@ namespace FrbaBus
         private void btnCrear_Click(object sender, EventArgs e)
         {
             crear();
+            btnBuscar.PerformClick();
         }
 
         private void btnModificar_Click(object sender, EventArgs e)
         {
             modificar(dgvResultados.SelectedRows[0].Cells);
+            btnBuscar.PerformClick();
         }
 
         private void btnEliminar_Click(object sender, EventArgs e)

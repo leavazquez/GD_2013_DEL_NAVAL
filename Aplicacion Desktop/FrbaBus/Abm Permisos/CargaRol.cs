@@ -150,7 +150,7 @@ namespace FrbaBus.Abm_Permisos
                         parametrosFuncionalidades.Add(new SqlParameter("@id_funcionalidad", funcionalidades[nombreRol]));
                         DAC.ExecuteNonQuery("INSERT INTO DEL_NAVAL.ROLES_FUNCIONALIDADES VALUES (@id_rol, @id_funcionalidad)", parametrosFuncionalidades);
                     }
-                    MessageBox.Show("Rol creado con éxito.");
+                    MessageBox.Show(proposito.ToString() + " de Rol realizada con éxito");
                     DialogResult = DialogResult.OK;
                     Close();
                 }

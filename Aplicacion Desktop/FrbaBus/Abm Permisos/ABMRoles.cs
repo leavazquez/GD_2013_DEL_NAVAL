@@ -8,6 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using FrbaBus.Filtros;
 using FrbaBus.Entidades;
+using System.Data.SqlClient;
 
 namespace FrbaBus.Abm_Permisos
 {
@@ -37,7 +38,9 @@ namespace FrbaBus.Abm_Permisos
 
         protected override void eliminar(DataGridViewCellCollection fila)
         {
-            throw new NotImplementedException();
+            List<SqlParameter> parametros = new List<SqlParameter>();
+            parametros.Add(new SqlParameter("@id_rol", fila["id_rol"].Value.ToString()));
+            DAC.ExecuteNonQuery("exec dbo.inhabilitar_rol @id_rol", parametros);
         }
 
         protected override void habilitar(DataGridViewCellCollection fila)
