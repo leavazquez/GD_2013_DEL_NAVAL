@@ -120,6 +120,7 @@
       <DependentUpon>ConsultarPuntos.cs</DependentUpon>
     </Compile>
     <Compile Include="DAC.cs" />
+    <Compile Include="Entidades\Recorrido.cs" />
     <Compile Include="Entidades\Rol.cs" />
     <Compile Include="Filtros\Filtro.cs">
       <SubType>UserControl</SubType>
@@ -176,6 +177,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Abm Permisos\CargaRol.resx">
       <DependentUpon>CargaRol.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Abm Recorrido\CargaRecorrido.resx">
+      <DependentUpon>CargaRecorrido.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Cancelar Viaje\CancelarPasajesEncomiendas.resx">
       <DependentUpon>CancelarPasajesEncomiendas.cs</DependentUpon>
