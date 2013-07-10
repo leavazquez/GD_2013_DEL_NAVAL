@@ -1,13 +1,17 @@
--- procedure inhabilitar rol y usuarios asociados
+
+OK- procedure inhabilitar rol y usuarios asociados
 
 OK- trigger cancelacion de pasajes ante baja de recorrido
-
--- trigger actualizar asientos y fecha_alta al dar de alta un micro
 
 OK- trigger liberar asientos/espacio y devolver plata
 
 ok-eliminar recorrido
 
+-- Implementar validacion de butacas en reemplazo de micro.
 
+--revisar comportamiento de bit de baja por servicio (cuando lo ponemos en 0)
 
+-- para un micro y una fecha determinar si estará disponible (hacer select)
+
+-- agregar campo int numero de micro en tabla micros
 
