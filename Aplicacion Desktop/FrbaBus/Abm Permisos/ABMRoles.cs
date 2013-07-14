@@ -45,7 +45,7 @@ namespace FrbaBus.Abm_Permisos
         {
             List<SqlParameter> parametros = new List<SqlParameter>();
             parametros.Add(new SqlParameter("@id_rol", fila["id_rol"].Value.ToString()));
-            DAC.ExecuteNonQuery("exec dbo.inhabilitar_rol @id_rol", parametros);
+            DAC.ExecuteNonQuery("exec del_naval.dbo.inhabilitar_rol @id_rol", parametros);
             MessageBox.Show("Rol eliminado");
         }
 

@@ -87,7 +87,7 @@ namespace FrbaBus.Abm_Micro
             parametros.Add(new SqlParameter("@id_micro", fila["ID_MICRO"].Value.ToString()));
             parametros.Add(new SqlParameter("@fecha", Config.FechaSistema));
             int codigoRetorno = (int)DAC.ExecuteScalar(@"declare @retorno int
-                exec intentarBajarMicro @id_micro, @fecha, NULL, @retorno output
+                exec del_naval.intentarBajarMicro @id_micro, @fecha, NULL, @retorno output
                 select @retorno ", parametros);
             switch (codigoRetorno)
             {
@@ -103,7 +103,7 @@ namespace FrbaBus.Abm_Micro
                     else
                     {
                         int segundoCodigoRetorno = (int)DAC.ExecuteScalar(@"declare @retorno int
-                            exec intentarBajarMicro @id_micro, @fecha, NULL, @retorno output
+                            exec del_naval.intentarBajarMicro @id_micro, @fecha, NULL, @retorno output
                             select @retorno ", parametros);
                         if (segundoCodigoRetorno == -1)
                         {
@@ -120,7 +120,7 @@ namespace FrbaBus.Abm_Micro
                     else
                     {
                         int segundoCodigoRetorno = (int)DAC.ExecuteScalar(@"declare @retorno int
-                            exec intentarBajarMicro @id_micro, @fecha, NULL, @retorno output
+                            exec del_naval.intentarBajarMicro @id_micro, @fecha, NULL, @retorno output
                             select @retorno ", parametros);
                         if (segundoCodigoRetorno == -1)
                         {

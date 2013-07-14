@@ -45,7 +45,7 @@ namespace FrbaBus.Abm_Micro
             parametros.Add(new SqlParameter("@fecha", Config.FechaSistema));
             parametros.Add(new SqlParameter("@codigo_cancelacion", Aleatorio.Nuevo(20)));
             parametros.Add(new SqlParameter("@motivo", "Cancelado por baja/servicio de micro"));
-            DAC.ExecuteNonQuery("exec cancelarViajesDeUnMicro @id_micro, @fecha, null, @codigo_cancelacion, @fecha, @motivo", parametros);
+            DAC.ExecuteNonQuery("exec del_naval.cancelarViajesDeUnMicro @id_micro, @fecha, null, @codigo_cancelacion, @fecha, @motivo", parametros);
             MessageBox.Show("Viajes cancelados");
             this.DialogResult = DialogResult.OK;
             this.Close();
@@ -67,13 +67,13 @@ namespace FrbaBus.Abm_Micro
                 if (this.Desde == DateTime.MinValue && this.Hasta == DateTime.MinValue)
                 {
                     parametros.Add(new SqlParameter("@desde", Config.FechaSistema));
-                    DAC.ExecuteNonQuery("exec reemplazarMicro @id_micro, @id_micro_reemplazo, @desde, null", parametros);
+                    DAC.ExecuteNonQuery("exec del_naval.reemplazarMicro @id_micro, @id_micro_reemplazo, @desde, null", parametros);
                 }
                 else
                 {
                     parametros.Add(new SqlParameter("@desde", this.Desde));
                     parametros.Add(new SqlParameter("@hasta", this.Hasta));
-                    DAC.ExecuteNonQuery("exec reemplazarMicro @id_micro, @id_micro_reemplazo, @desde, @hasta", parametros);
+                    DAC.ExecuteNonQuery("exec del_naval.reemplazarMicro @id_micro, @id_micro_reemplazo, @desde, @hasta", parametros);
                 }
                 MessageBox.Show("Viajes reemplazados");
                 this.DialogResult = DialogResult.OK;
