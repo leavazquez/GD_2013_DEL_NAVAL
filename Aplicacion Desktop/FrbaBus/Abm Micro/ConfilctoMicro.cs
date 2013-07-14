@@ -46,6 +46,13 @@ namespace FrbaBus.Abm_Micro
             parametros.Add(new SqlParameter("@codigo_cancelacion", Aleatorio.Nuevo(20)));
             parametros.Add(new SqlParameter("@motivo", "Cancelado por baja de micro"));
             DAC.ExecuteNonQuery("exec cancelarViajesDeUnMicro @id_micro, @fecha, null, @codigo_cancelacion, @fecha, @motivo", parametros);
+            int codigoRetorno = (int)DAC.ExecuteScalar(@"declare @retorno int
+                exec intentarBajarMicro @id_micro, @fecha, NULL, @retorno output
+                select @retorno ", parametros);
+            if (codigoRetorno == -1)
+            {
+                MessageBox.Show("Viajes cancelados y micro dado de baja");
+            }
         }
 
         private void btnCrearReemplazar_Click(object sender, EventArgs e)

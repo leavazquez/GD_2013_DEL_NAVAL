@@ -28,6 +28,7 @@ namespace FrbaBus
             {
                 conexion.Open();
                 SqlCommand comando = new SqlCommand(query, conexion);
+                comando.CommandTimeout = 600;
                 if (parametros != null)
                 {
                     foreach (SqlParameter parametro in parametros)
@@ -54,6 +55,7 @@ namespace FrbaBus
             {
                 conexion.Open();
                 SqlCommand comando = new SqlCommand(query, conexion);
+                comando.CommandTimeout = 600;
                 if (parametros != null)
                 {
                     foreach (SqlParameter parametro in parametros)
@@ -79,6 +81,7 @@ namespace FrbaBus
             {
                 conexion.Open();
                 SqlCommand comando = new SqlCommand(query, conexion);
+                comando.CommandTimeout = 600;
                 if (parametros != null)
                 {
                     foreach (SqlParameter parametro in parametros)
