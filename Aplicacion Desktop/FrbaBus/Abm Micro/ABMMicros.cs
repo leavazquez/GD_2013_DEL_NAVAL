@@ -8,6 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using FrbaBus.Filtros;
 using FrbaBus.Entidades;
+using System.Data.SqlClient;
 
 namespace FrbaBus.Abm_Micro
 {
@@ -79,7 +80,27 @@ namespace FrbaBus.Abm_Micro
 
         protected override void eliminar(DataGridViewCellCollection fila)
         {
-            throw new NotImplementedException();
+            List<SqlParameter> parametros = new List<SqlParameter>();
+            parametros.Add(new SqlParameter("@id_micro", fila["ID_MICRO"].Value.ToString()));
+            parametros.Add(new SqlParameter("@fecha", Config.FechaSistema));
+            int codigoRetorno = (int)DAC.ExecuteScalar(@"declare @retorno int
+                exec intentarBajarMicro @id_micro, @fecha, NULL, @retorno output
+                select @retorno ", parametros);
+            switch (codigoRetorno)
+            {
+                case -1:
+                    MessageBox.Show("Baja de micro realizada con éxito");
+                    break;
+                case -2:
+                    Form conflictoMicroAlta = new ConfilctoMicro(int.Parse(fila["ID_MICRO"].Value.ToString()));
+                    conflictoMicroAlta.ShowDialog();
+                    break;
+                default:
+                    Form conflictoMicroReemplazo = new ConfilctoMicro(int.Parse(fila["ID_MICRO"].Value.ToString()), codigoRetorno);
+                    conflictoMicroReemplazo.ShowDialog();
+                    break;
+            }
+            
         }
 
         protected override void habilitar(DataGridViewCellCollection fila)

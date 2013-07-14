@@ -75,6 +75,12 @@
     <Compile Include="Abm Micro\CargaMicro.Designer.cs">
       <DependentUpon>CargaMicro.cs</DependentUpon>
     </Compile>
+    <Compile Include="Abm Micro\ConfilctoMicro.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Abm Micro\ConfilctoMicro.Designer.cs">
+      <DependentUpon>ConfilctoMicro.cs</DependentUpon>
+    </Compile>
     <Compile Include="Abm Permisos\CargaRol.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -190,6 +196,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Abm Micro\CargaMicro.resx">
       <DependentUpon>CargaMicro.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Abm Micro\ConfilctoMicro.resx">
+      <DependentUpon>ConfilctoMicro.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Abm Permisos\CargaRol.resx">
       <DependentUpon>CargaRol.cs</DependentUpon>
