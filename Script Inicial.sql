@@ -637,47 +637,51 @@ go
 
 --Se hacen drops si los objetos ya existen.
 
-if OBJECT_ID ('PesoLibreEncomiendasXviaje','FN') is not null
-drop function PesoLibreEncomiendasXviaje
+if OBJECT_ID ('del_naval.PesoLibreEncomiendasXviaje','FN') is not null
+drop function del_naval.PesoLibreEncomiendasXviaje
 
-if OBJECT_ID ('ButacasDisponiblesXviaje','TF') is not null
-drop function ButacasDisponiblesXviaje 
+if OBJECT_ID ('del_naval.ButacasDisponiblesXviaje','TF') is not null
+drop function del_naval.ButacasDisponiblesXviaje 
 
-if OBJECT_ID ('devolverPasaje','P') is not null
-drop procedure devolverPasaje
+if OBJECT_ID ('del_naval.devolverPasaje','P') is not null
+drop procedure del_naval.devolverPasaje
 
-if OBJECT_ID ('devolverEncomienda','P') is not null
-drop procedure devolverEncomienda
+if OBJECT_ID ('del_naval.devolverEncomienda','P') is not null
+drop procedure del_naval.devolverEncomienda
 
 if OBJECT_ID ('DEL_NAVAL.bloqueo_usuarios','TR') is not null
   drop trigger DEL_NAVAL.bloqueo_usuarios
 
-if OBJECT_ID ('cancelarViaje','P') is not null
- drop procedure cancelarViaje
+if OBJECT_ID ('del_naval.cancelarViaje','P') is not null
+ drop procedure del_naval.cancelarViaje
  
-if OBJECT_ID ('inhabilitar_rol','P') is not null
- drop procedure inhabilitar_rol
+if OBJECT_ID ('del_naval.inhabilitar_rol','P') is not null
+ drop procedure del_naval.inhabilitar_rol
 
-if OBJECT_ID ('cancelarRecorrido','P') is not null
- drop procedure cancelarRecorrido
+if OBJECT_ID ('del_naval.cancelarRecorrido','P') is not null
+ drop procedure del_naval.cancelarRecorrido
 
-if OBJECT_ID ('intentarBajarMicro','P') is not null
-drop procedure intentarBajarMicro 
+if OBJECT_ID ('del_naval.intentarBajarMicro','P') is not null
+drop procedure del_naval.intentarBajarMicro 
 
-if OBJECT_ID ('bajaOserviceMicro','P') is not null
-drop procedure bajaOserviceMicro 
+if OBJECT_ID ('del_naval.bajaOserviceMicro','P') is not null
+drop procedure del_naval.bajaOserviceMicro 
 
-if OBJECT_ID ('cancelarViajesDeUnMicro','P') is not null
- drop procedure cancelarViajesDeUnMicro
+if OBJECT_ID ('del_naval.cancelarViajesDeUnMicro','P') is not null
+ drop procedure del_naval.cancelarViajesDeUnMicro
 
 if OBJECT_ID ('DEL_NAVAL.actualizar_butacas_ocupadas','TR') is not null
-  drop trigger DEL_NAVAL.actualizar_butacas_ocupadas
+  drop trigger DEL_NAVAL.actualizar_butacas_ocupadas   
    
+if OBJECT_ID ('del_naval.reemplazarMicro','P') is not null
+ drop procedure del_naval.reemplazarMicro
+go 
+
 
 go
 
 --Devuelve espacio libre en bodega para un viaje determinado
-create function PesoLibreEncomiendasXviaje 
+create function del_naval.PesoLibreEncomiendasXviaje 
 
 (@viaje int)
 
@@ -705,7 +709,7 @@ declare @pesoOcupado numeric(18,0)
 End;
 go
 
-create function ButacasDisponiblesXviaje 
+create function del_naval.ButacasDisponiblesXviaje 
 (@viaje int)
 
 returns @butacas_disponibles TABLE
@@ -739,7 +743,7 @@ go
 --La devolución de un pasaje
 
 
-create procedure devolverPasaje
+create procedure del_naval.devolverPasaje
 (@pasaje int,
 @codigo_devolucion nvarchar(255),
 @fecha_devolucion datetime,
@@ -820,7 +824,7 @@ go
 --el siguiente procedimiento realiza las operaciones a nivel BD relacionadas con
 --La devolución de una encomienda
 
-create procedure devolverEncomienda
+create procedure del_naval.devolverEncomienda
 (@encomienda int,
 @codigo_devolucion nvarchar(255),
 @fecha_devolucion datetime,
@@ -890,7 +894,7 @@ go
 
 
 
-create trigger bloqueo_usuarios
+create trigger del_naval.bloqueo_usuarios
 on del_naval.usuarios
 after update
 as 
@@ -913,7 +917,7 @@ as
 
 
 
-create procedure cancelarViaje
+create procedure del_naval.cancelarViaje
 (@viaje int,
 @codigo_cancelacion nvarchar(255),
 @fecha_cancelacion datetime,
@@ -980,7 +984,7 @@ go
 
 
 
-create procedure inhabilitar_rol
+create procedure del_naval.inhabilitar_rol
 (@rol int)
 as
 begin
@@ -1007,7 +1011,7 @@ go
 
 --Cancela todos los viajes que aun no han partido, para un mismo recorrido
 --(y q no hayan sidos cancelados con anterioridad)
-create procedure cancelarRecorrido
+create procedure del_naval.cancelarRecorrido
 (@recorrido int,
 @codigo_cancelacion nvarchar(255),
 @fecha_cancelacion datetime,
@@ -1063,7 +1067,7 @@ go
 --Este procedimiento no suele llamarse individualmente
 --sino que se llama desde otros procedimientos, se usa simplemente
 --para delegar funcionalidad
-create procedure bajaOserviceMicro
+create procedure del_naval.bajaOserviceMicro
 (@micro int,
  @desde datetime,
  @hasta datetime)
@@ -1108,7 +1112,7 @@ go
 
 --Solo el caso A tiene efecto de lado.
 
-create procedure intentarBajarMicro
+create procedure del_naval.intentarBajarMicro
 (@micro int, 
  @desde datetime,
  @hasta datetime,
@@ -1197,7 +1201,7 @@ return
 
 
 --cancela todos los viajes para liberar a un micro entre dos fechas determinadas
-create procedure cancelarViajesDeUnMicro
+create procedure del_naval.cancelarViajesDeUnMicro
 (@micro int, 
  @desde datetime,
  @hasta datetime,
@@ -1258,7 +1262,7 @@ go
        
 
 
-create trigger actualizar_butacas_ocupadas
+create trigger del_naval.actualizar_butacas_ocupadas
 on del_naval.pasajes
 after insert
 as 
@@ -1277,3 +1281,109 @@ as
         
         
  go                         
+ 
+ 
+ 
+
+
+--reemplaza un micro "origen" por otro que "destino" en un periodo 
+--determinado. Acepta null como fecha "hasta" lo cual significa que lo reemplaza
+--en todos los viajes. 
+--ESTE PROCEDIMIENTO NO REALIZA VALIDACION, DEBE VALIDARSE PREVIAMENTE
+--EL REEMPLAZO CON EL PROCEDIMIENTO intentarBajarMicro
+create procedure del_naval.reemplazarMicro
+(@orig int,
+@dest int,
+@desde datetime,
+@hasta datetime
+)
+
+as
+begin
+
+ --en el caso de que venga NULL por parametro se reemplaza de aqui en adelante
+ set @hasta = ISNULL(@hasta, '31/12/9999')
+ 
+-- asigna micro nuevo a viaje para poder contar ya con la funcionalidad
+-- de la funcion "butacas disponibles x viaje"
+
+begin transaction
+
+update DEL_NAVAL.viajes 
+set micro = @dest --micro destino
+where id_viaje in (select id_viaje
+ from DEL_NAVAL.viajes
+ where micro = @orig --micro origen
+ and fecha_salida >= @desde
+ and fecha_estimada <= @hasta
+ and cancelado = 0 )
+
+--libera todas las butacas ocupadas en los viajes que involucran 
+--al micro que acabamos de sustituir
+ delete DEL_NAVAL.butacas_ocupadas 
+  where viaje in (select id_viaje
+ from DEL_NAVAL.viajes
+ where micro = @dest --micro destino (porque lo acabo de actualizar)
+ and fecha_salida >= @desde
+ and fecha_estimada <= @hasta
+ and cancelado = 0 )
+
+
+
+--actualiza butacas en pasajes y les cambia el status a ocupadas
+declare @pasaje int, @viaje int
+
+declare cPasajes cursor for
+  select id_pasaje, viaje
+   from DEL_NAVAL.pasajes
+   where viaje in (select id_viaje
+ from DEL_NAVAL.viajes
+ where micro = @dest --micro destino (porque lo acabo de actualizar)
+ and fecha_salida >= @desde
+ and fecha_estimada <= @hasta
+ and cancelado = 0 ) 
+                     
+ open cPasajes 
+ fetch cPasajes into @pasaje, @viaje
+ 
+ while (@@FETCH_STATUS = 0)
+ begin
+  
+
+--obtengo la primer butaca disponible (corresponden al nuevo micro)
+--de la lista de disponibles para ese viaje
+declare @butaca int
+set @butaca = (select top 1 id_butaca from ButacasDisponiblesXviaje (@viaje))
+
+--actualizo la butaca del pasaje con la butaca disponible del nuevo micro
+update DEL_NAVAL.pasajes 
+set butaca = @butaca
+where id_pasaje = @pasaje  
+
+--si la butaca figura como desocupada para ese viaje, lo actualiza a ocupada
+--poniendola en la tabla correspondiente
+  if not exists (select * 
+                  from del_naval.butacas_ocupadas 
+                  where butaca = @butaca
+                   and  viaje =  @viaje)    
+      insert into del_naval.butacas_ocupadas
+        values(@viaje,@butaca)         
+ 
+  
+  fetch cPasajes into @pasaje, @viaje
+ end
+ 
+commit
+
+
+ close cPasajes
+ deallocate cPasajes
+
+return 0 
+ end
+ go
+
+
+
+            
+               
