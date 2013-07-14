@@ -1067,7 +1067,9 @@ create procedure bajaOserviceMicro
  @hasta datetime)
 as
 begin
- if @desde is not null and @hasta is null
+
+--si se trata de una baja
+ if @desde is not null and (@hasta is null or @hasta = '31/12/9999')
   begin
   -- baja
   update DEL_NAVAL.micros
@@ -1113,6 +1115,8 @@ create procedure intentarBajarMicro
  as
  begin
  --en el caso de que venga NULL por parametro se trata de una baja
+
+
  set @hasta = ISNULL(@hasta, '31/12/9999')
  
 if (select COUNT (*)
@@ -1202,6 +1206,7 @@ create procedure cancelarViajesDeUnMicro
 
 as
 begin
+
 
  --en el caso de que venga NULL por parametro se trata de una baja
  set @hasta = ISNULL(@hasta, '31/12/9999')
