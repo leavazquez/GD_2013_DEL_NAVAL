@@ -1058,6 +1058,40 @@ go
 
 
 
+--Este procedimiento no suele llamarse individualmente
+--sino que se llama desde otros procedimientos, se usa simplemente
+--para delegar funcionalidad
+create procedure bajaOserviceMicro
+(@micro int,
+ @desde datetime,
+ @hasta datetime)
+as
+begin
+ if @desde is not null and @hasta is null
+  begin
+  -- baja
+  update DEL_NAVAL.micros
+  set baja_fin_vida_util = 1,
+      fecha_baja = @desde
+  where id_micro = @micro    
+  end
+ else 
+  begin
+  -- servicio
+    update DEL_NAVAL.micros
+  set baja_servicio = 1,
+      fecha_servicio_desde  = @desde,
+      fecha_servicio_hasta  = @hasta
+  where id_micro = @micro    
+  end
+   
+
+end;
+go
+
+
+
+
 -- A- si no hay viajes asociados a ese micro en esa fecha
 -- realiza la baja (ya sea definitiva o por service) y devuelve -1 
 
@@ -1141,38 +1175,6 @@ return
  
 
 
-
-
---Este procedimiento no suele llamarse individualmente
---sino que se llama desde otros procedimientos, se usa simplemente
---para delegar funcionalidad
-create procedure bajaOserviceMicro
-(@micro int,
- @desde datetime,
- @hasta datetime)
-as
-begin
- if @desde is not null and @hasta is null
-  begin
-  -- baja
-  update DEL_NAVAL.micros
-  set baja_fin_vida_util = 1,
-      fecha_baja = @desde
-  where id_micro = @micro    
-  end
- else 
-  begin
-  -- servicio
-    update DEL_NAVAL.micros
-  set baja_servicio = 1,
-      fecha_servicio_desde  = @desde,
-      fecha_servicio_hasta  = @hasta
-  where id_micro = @micro    
-  end
-   
-
-end;
-go
 
 
 
