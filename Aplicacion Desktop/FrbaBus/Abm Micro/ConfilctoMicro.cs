@@ -44,15 +44,11 @@ namespace FrbaBus.Abm_Micro
             parametros.Add(new SqlParameter("@id_micro", this.idMicro));
             parametros.Add(new SqlParameter("@fecha", Config.FechaSistema));
             parametros.Add(new SqlParameter("@codigo_cancelacion", Aleatorio.Nuevo(20)));
-            parametros.Add(new SqlParameter("@motivo", "Cancelado por baja de micro"));
+            parametros.Add(new SqlParameter("@motivo", "Cancelado por baja/servicio de micro"));
             DAC.ExecuteNonQuery("exec cancelarViajesDeUnMicro @id_micro, @fecha, null, @codigo_cancelacion, @fecha, @motivo", parametros);
-            int codigoRetorno = (int)DAC.ExecuteScalar(@"declare @retorno int
-                exec intentarBajarMicro @id_micro, @fecha, NULL, @retorno output
-                select @retorno ", parametros);
-            if (codigoRetorno == -1)
-            {
-                MessageBox.Show("Viajes cancelados y micro dado de baja");
-            }
+            MessageBox.Show("Viajes cancelados");
+            this.DialogResult = DialogResult.OK;
+            this.Close();
         }
 
         private void btnCrearReemplazar_Click(object sender, EventArgs e)
@@ -68,7 +64,15 @@ namespace FrbaBus.Abm_Micro
             }
             else
             {
-                //reemplazar viajes por X micro
+                List<SqlParameter> parametros = new List<SqlParameter>();
+                parametros.Add(new SqlParameter("@id_micro", this.idMicro));
+                parametros.Add(new SqlParameter("@id_micro_reemplazo", this.idMicroReemplazo));
+                parametros.Add(new SqlParameter("@desde", this.Desde));
+                parametros.Add(new SqlParameter("@hasta", this.Hasta));
+                DAC.ExecuteNonQuery("exec reemplazarMicro @id_micro, @id_micro_reemplazo, @desde, @hasta", parametros);
+                MessageBox.Show("Viajes cancelados");
+                this.DialogResult = DialogResult.OK;
+                this.Close();
             }
         }
     }

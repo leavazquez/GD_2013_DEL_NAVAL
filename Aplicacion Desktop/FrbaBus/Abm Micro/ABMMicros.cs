@@ -19,7 +19,7 @@ namespace FrbaBus.Abm_Micro
             InitializeComponent();
             this.Text = "ABM de Micros";
             this.Size = new Size(974, 536);
-            this.Query = @"SELECT MI.ID_MICRO, MI.PATENTE PATENTE, MI.NUMERO, MA.MARCA MARCA, MODELO, TS.NOMBRE_SERVICIO SERVICIO, MI.CANTIDAD_ASIENTOS ASIENTOS, MI.KILOS_BODEGA BODEGA, MI.FECHA_ALTA ALTA, MI.BAJA_SERVICIO BAJA_SERVICIO, MI.FECHA_SERVICIO_DESDE SERVICIO_DESDE, MI.FECHA_SERVICIO_HASTA SERVICIO_HASTA, MI.BAJA_FIN_VIDA_UTIL BAJA, MI.FECHA_BAJA FECHA_BAJA, MI.TIPO_SERVICIO, MI.MARCA, MI.NUMERO
+            this.Query = @"SELECT MI.ID_MICRO, MI.PATENTE PATENTE, MI.NUMERO, MA.MARCA MARCA, MODELO, TS.NOMBRE_SERVICIO SERVICIO, MI.CANTIDAD_ASIENTOS ASIENTOS, MI.KILOS_BODEGA BODEGA, MI.BAJA_SERVICIO EN_SERVICIO, MI.FECHA_ALTA ALTA, MI.BAJA_SERVICIO BAJA_SERVICIO, MI.FECHA_SERVICIO_DESDE SERVICIO_DESDE, MI.FECHA_SERVICIO_HASTA SERVICIO_HASTA, MI.BAJA_FIN_VIDA_UTIL BAJA, MI.FECHA_BAJA FECHA_BAJA, MI.TIPO_SERVICIO, MI.MARCA, MI.NUMERO
                 FROM DEL_NAVAL.MICROS MI, DEL_NAVAL.TIPOS_SERVICIO TS , DEL_NAVAL.MARCAS MA";
             this.Condicion = @"TS.ID_SERVICIO = TIPO_SERVICIO
                 AND MA.ID_MARCA = MI.MARCA";
@@ -33,6 +33,7 @@ namespace FrbaBus.Abm_Micro
             columnasVisibles.Add("ASIENTOS", "Cantidad de Asientos");
             columnasVisibles.Add("BODEGA", "Capacidad de la bodega");
             columnasVisibles.Add("ALTA", "Fecha de Alta");
+            columnasVisibles.Add("EN_SERVICIO", "En servicio");
             columnasVisibles.Add("SERVICIO_DESDE", "En servicio desde");
             columnasVisibles.Add("SERVICIO_HASTA", "En servicio hasta");
             columnasVisibles.Add("FECHA_BAJA", "Fecha de baja");
@@ -93,11 +94,37 @@ namespace FrbaBus.Abm_Micro
                     break;
                 case -2:
                     Form conflictoMicroAlta = new ConfilctoMicro(int.Parse(fila["ID_MICRO"].Value.ToString()));
-                    conflictoMicroAlta.ShowDialog();
+                    if (conflictoMicroAlta.ShowDialog() != DialogResult.OK)
+                    {
+                        return;
+                    }
+                    else
+                    {
+                        int segundoCodigoRetorno = (int)DAC.ExecuteScalar(@"declare @retorno int
+                            exec intentarBajarMicro @id_micro, @fecha, NULL, @retorno output
+                            select @retorno ", parametros);
+                        if (segundoCodigoRetorno == -1)
+                        {
+                            MessageBox.Show("Micro dado de baja");
+                        }
+                    }
                     break;
                 default:
                     Form conflictoMicroReemplazo = new ConfilctoMicro(int.Parse(fila["ID_MICRO"].Value.ToString()), codigoRetorno);
-                    conflictoMicroReemplazo.ShowDialog();
+                    if (conflictoMicroReemplazo.ShowDialog() != DialogResult.OK)
+                    {
+                        return;
+                    }
+                    else
+                    {
+                        int segundoCodigoRetorno = (int)DAC.ExecuteScalar(@"declare @retorno int
+                            exec intentarBajarMicro @id_micro, @fecha, NULL, @retorno output
+                            select @retorno ", parametros);
+                        if (segundoCodigoRetorno == -1)
+                        {
+                            MessageBox.Show("Micro dado de baja");
+                        }
+                    }
                     break;
             }
             

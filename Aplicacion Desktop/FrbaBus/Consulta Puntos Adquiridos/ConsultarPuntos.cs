@@ -15,7 +15,7 @@ namespace FrbaBus.Consulta_Puntos_Adquiridos
         public ConsultarPuntos()
         {
             InitializeComponent();
-            this.Query = "SELECT P.CLIENTE CLIENTE FROM DEL_NAVAL.PUNTOS P, DEL_NAVAL.CANJES C";
+            this.Query = "SELECT DEL_NAVAL.PUNTOS.CLIENTE CLIENTE FROM DEL_NAVAL.PUNTOS P, DEL_NAVAL.CANJES C";
             this.Condicion = "P.CLIENTE = C.CLIENTE";
         }
     }

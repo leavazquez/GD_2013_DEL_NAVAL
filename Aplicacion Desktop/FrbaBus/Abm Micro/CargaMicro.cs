@@ -13,6 +13,7 @@ namespace FrbaBus.Abm_Micro
 {
     public partial class CargaMicro : Form
     {
+        public string ReemplazaA;
         private Micro micro = new Micro();
         private Proposito proposito;
         private Dictionary<string, string> servicios = new Dictionary<string, string>();
@@ -193,6 +194,11 @@ namespace FrbaBus.Abm_Micro
                 isValid = false;
                 errorBodega.SetError(txtBodega, "Valor inválido");
             }
+            if (checkFueraServicio.Checked && dtpDesde.Value.Date > dtpHasta.Value.Date)
+            {
+                isValid = false;
+                errorFechas.SetError(checkFueraServicio, "Rango de fechas inválido");
+            }
             int butacasValidas = 0;
             foreach (DataGridViewRow fila in dgvButacas.Rows)
             {
@@ -235,8 +241,8 @@ namespace FrbaBus.Abm_Micro
                     if (checkFueraServicio.Checked)
                     {
                         parametros.Add(new SqlParameter("@baja_servicio", checkFueraServicio.Checked));
-                        parametros.Add(new SqlParameter("@servicio_desde", dtpDesde.Value));
-                        parametros.Add(new SqlParameter("@servicio_hasta", dtpHasta.Value));
+                        parametros.Add(new SqlParameter("@servicio_desde", dtpDesde.Value.Date));
+                        parametros.Add(new SqlParameter("@servicio_hasta", dtpHasta.Value.Date));
                     }
                     else
                     {
@@ -273,11 +279,53 @@ namespace FrbaBus.Abm_Micro
                         case Proposito.Modificacion:
                             if (checkFueraServicio.Checked)
                             {
-                                DAC.ExecuteNonQuery("UPDATE DEL_NAVAL.MICROS SET NUMERO = @numero, TIPO_SERVICIO = @servicio, KILOS_BODEGA = @bodega, CANTIDAD_ASIENTOS = @asientos, MARCA= @marca, MODELO = @modelo, PATENTE = @patente, BAJA_FIN_VIDA_UTIL = 0, BAJA_SERVICIO = @baja_servicio, FECHA_ALTA = @alta, FECHA_SERVICIO_DESDE = @servicio_desde, FECHA_SERVICIO_HASTA = @servicio_hasta, FECHA_BAJA = null WHERE ID_MICRO = @id_micro", parametros);
+                                List<SqlParameter> parametrosServicio = new List<SqlParameter>();
+                                parametrosServicio.Add(new SqlParameter("@id_micro", micro.Id_micro));
+                                parametrosServicio.Add(new SqlParameter("@desde", dtpDesde.Value.Date));
+                                parametrosServicio.Add(new SqlParameter("@hasta", dtpHasta.Value.Date));
+                                int codigoRetorno = (int)DAC.ExecuteScalar(@"declare @retorno int
+                                    exec intentarBajarMicro @id_micro, @desde, @hasta, @retorno output
+                                    select @retorno ", parametrosServicio);
+                                switch (codigoRetorno)
+                                {
+                                    case -1:
+                                        
+                                        break;
+                                    case -2:
+                                        Form conflictoMicroAlta = new ConfilctoMicro(int.Parse(micro.Id_micro));
+                                        if (conflictoMicroAlta.ShowDialog() != DialogResult.OK)
+                                        {
+                                            return;
+                                        }
+                                        else
+                                        {
+                                            int segundoCodigoRetorno = (int)DAC.ExecuteScalar(@"declare @retorno int
+                                                exec intentarBajarMicro @id_micro, @desde, @hasta, @retorno output
+                                                select @retorno ", parametrosServicio);
+                                        }
+                                        break;
+                                    default:
+                                        ConfilctoMicro conflictoMicroReemplazo = new ConfilctoMicro(int.Parse(micro.Id_micro), codigoRetorno);
+                                        conflictoMicroReemplazo.Desde = dtpDesde.Value.Date;
+                                        conflictoMicroReemplazo.Hasta = dtpHasta.Value.Date;
+                                        if (conflictoMicroReemplazo.ShowDialog() != DialogResult.OK)
+                                        {
+                                            return;
+                                        }
+                                        else
+                                        {
+                                            int segundoCodigoRetorno = (int)DAC.ExecuteScalar(@"declare @retorno int
+                                                exec intentarBajarMicro @id_micro, @desde, @hasta, @retorno output
+                                                select @retorno ", parametros);
+                                        }
+                                        break;
+                                }
+
+                                DAC.ExecuteNonQuery("UPDATE DEL_NAVAL.MICROS SET NUMERO = @numero, TIPO_SERVICIO = @servicio, KILOS_BODEGA = @bodega, CANTIDAD_ASIENTOS = @asientos, MARCA= @marca, MODELO = @modelo, PATENTE = @patente, BAJA_FIN_VIDA_UTIL = 0, BAJA_SERVICIO = @baja_servicio, FECHA_SERVICIO_DESDE = @servicio_desde, FECHA_SERVICIO_HASTA = @servicio_hasta, FECHA_BAJA = null WHERE ID_MICRO = @id_micro", parametros);
                             }
                             else
                             {
-                                DAC.ExecuteNonQuery("UPDATE DEL_NAVAL.MICROS SET NUMERO = @numero, TIPO_SERVICIO = @servicio, KILOS_BODEGA = @bodega, CANTIDAD_ASIENTOS = @asientos, MARCA= @marca, MODELO = @modelo, PATENTE = @patente, BAJA_FIN_VIDA_UTIL = 0, BAJA_SERVICIO = 0, FECHA_ALTA = @alta, FECHA_SERVICIO_DESDE = null, FECHA_SERVICIO_HASTA = null, FECHA_BAJA = null WHERE ID_MICRO = @id_micro", parametros);
+                                DAC.ExecuteNonQuery("UPDATE DEL_NAVAL.MICROS SET NUMERO = @numero, TIPO_SERVICIO = @servicio, KILOS_BODEGA = @bodega, CANTIDAD_ASIENTOS = @asientos, MARCA= @marca, MODELO = @modelo, PATENTE = @patente, BAJA_FIN_VIDA_UTIL = 0, BAJA_SERVICIO = 0, FECHA_SERVICIO_DESDE = null, FECHA_SERVICIO_HASTA = null, FECHA_BAJA = null WHERE ID_MICRO = @id_micro", parametros);
                             }
                             break;
                     }
