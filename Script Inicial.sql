@@ -1145,14 +1145,15 @@ set @tipo_servicio = (select tipo_servicio from DEL_NAVAL.micros where id_micro 
 set @kilos_bodega = (select kilos_bodega from DEL_NAVAL.micros where id_micro = @micro)
 set @cantidad_asientos = (select cantidad_asientos from DEL_NAVAL.micros where id_micro = @micro)
 set @marca = (select marca from DEL_NAVAL.micros where id_micro = @micro)
-set @fecha_servicio_desde = (select isnull(fecha_servicio_desde,'31/12/9999') from DEL_NAVAL.micros where id_micro = @micro)
-set @fecha_servicio_hasta = (select isnull(fecha_servicio_hasta,'01/01/1900') from DEL_NAVAL.micros where id_micro = @micro)
+
 
 -- retorna el primer micro que cumple con las condiciones de reemplazo 
 -- o null en caso de que no haya ninguno que cumpla
        
             
- set @retorno = (select top 1 id_micro
+ set @retorno = (      
+            
+select top 1 id_micro
  from DEL_NAVAL.micros
  where tipo_servicio = @tipo_servicio
  and kilos_bodega >= @kilos_bodega
@@ -1162,8 +1163,17 @@ set @fecha_servicio_hasta = (select isnull(fecha_servicio_hasta,'01/01/1900') fr
  and id_micro <> @micro
  -- pido que el micro reemplazante tenga un servicio que finalice 
  -- antes de la fecha en que lo necesito o que comienze despues 
- and (isnull(fecha_servicio_hasta,'01/01/1900') < @fecha_servicio_desde  
-      OR isnull(fecha_servicio_desde,'31/12/9999') > @fecha_servicio_hasta))
+ and (isnull(fecha_servicio_hasta,'01/01/1900') < @desde  
+      OR isnull(fecha_servicio_desde,'31/12/9999') > @hasta)
+ -- y que no este en la lista de micros ocupados para esa fecha
+ and not exists (select micro
+ from DEL_NAVAL.viajes
+ where micro = id_micro
+ and fecha_salida >= @desde
+ and fecha_estimada <= @hasta
+ and cancelado = 0 )
+           
+ )
  
 set @retorno = isnull(@retorno, -2)
 
@@ -1193,6 +1203,10 @@ create procedure cancelarViajesDeUnMicro
 as
 begin
 
+ --en el caso de que venga NULL por parametro se trata de una baja
+ set @hasta = ISNULL(@hasta, '31/12/9999')
+ 
+ 
 --utilizamos un cursor para ir cancelando uno a uno los viajes
 --pertenecientes a este micro que estamos cancelando.
 --Atencion, cancelar viajes para  un micro con un rango de fechas amplio que involucre

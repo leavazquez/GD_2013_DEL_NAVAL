@@ -13,6 +13,6 @@ select *
  
  
 
-exec cancelarViajesDeUnMicro 7,'27/01/2013','12/07/9999', 'LiberaMicro_codigo','11/07/2012','LiberaMicro_motivo'
+exec cancelarViajesDeUnMicro 7,'27/01/2013',NULL, 'LiberaMicro_codigo','11/07/2012','LiberaMicro_motivo'
  
 
