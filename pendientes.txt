@@ -7,7 +7,7 @@ OK- trigger liberar asientos/espacio y devolver plata
 
 ok-eliminar recorrido
 
--- Implementar validacion de butacas en reemplazo de micro.
+OK- Implementar validacion de butacas en reemplazo de micro.
 
 --revisar comportamiento de bit de baja por servicio (cuando lo ponemos en 0)
 
@@ -21,14 +21,13 @@ OK- agregar en la busqueda de viajes a cancelar en "cancelar recorrido" una cond
 
 -- probar trigger de insert butacas ocupadas
 
-
---en "intentarbajarmicro" esta mal la forma en que obtiene el micro disponible, deberia ademas 
+OK-en "intentarbajarmicro" esta mal la forma en que obtiene el micro disponible, deberia ademas 
 no tener viajes asignados en esas fechas
 
 OK- en procedure de "butacasdisponiblesxviaje", ver de el problema del left join seguido de un join
 
 -- Eliminar o minimizar sentencias con '31/12/9999'
 
-testear de nuevo:
-butacas disponibles por viaje
-OK- devolver pasaje
+OK- testear de nuevo:
+     butacas disponibles por viaje
+     devolver pasaje
