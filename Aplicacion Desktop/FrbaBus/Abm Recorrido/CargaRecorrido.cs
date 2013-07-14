@@ -31,6 +31,7 @@ namespace FrbaBus.Abm_Recorrido
             InitializeComponent();
 
             proposito = Proposito.Alta;
+            this.Text = proposito + " de Recorrido";
             cargaCiudades();
             cargaComboCiudad(cbOrigen);
             cargaComboCiudad(cbDestino);
@@ -43,6 +44,7 @@ namespace FrbaBus.Abm_Recorrido
 
             proposito = Proposito.Modificacion;
             this.recorrido = recorrido;
+            this.Text = proposito + " de Recorrido";
 
             cargaCiudades();
             cargaComboCiudad(cbOrigen);
@@ -154,7 +156,7 @@ namespace FrbaBus.Abm_Recorrido
                     switch (proposito)
                     {
                         case Proposito.Alta:
-                            DAC.ExecuteNonQuery("INSERT INTO DEL_NAVAL.RECORRIDOS VALUES (@cod_rec, @id_origen, @id_destino, @id_servicio, @precio_pasaje, @precio_encomienda)", parametrosRecorrido);
+                            DAC.ExecuteNonQuery("INSERT INTO DEL_NAVAL.RECORRIDOS VALUES (@cod_rec, @id_origen, @id_destino, @id_servicio, @precio_pasaje, @precio_encomienda, 0)", parametrosRecorrido);
                             break;
                         case Proposito.Modificacion:
                             DAC.ExecuteNonQuery("UPDATE DEL_NAVAL.RECORRIDOS SET CODIGO_RECORRIDO = @cod_rec, ORIGEN = @id_origen, DESTINO = @id_destino, TIPO_SERVICIO = @id_servicio, PRECIO_BASE_PASAJE = @precio_pasaje, PRECIO_KG_ENCOMIENDA = @precio_encomienda WHERE ID_RECORRIDO = @id_rec", parametrosRecorrido);

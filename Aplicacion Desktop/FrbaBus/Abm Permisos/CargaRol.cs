@@ -25,6 +25,7 @@ namespace FrbaBus.Abm_Permisos
             InitializeComponent();
             proposito = Proposito.Modificacion;
             this.rol = rol;
+            this.Text = proposito + " de Rol";
 
             // carga de datos
             txtNombreRol.Text = rol.Nombre_rol;
@@ -36,6 +37,7 @@ namespace FrbaBus.Abm_Permisos
         {
             InitializeComponent();
             this.proposito = Proposito.Alta;
+            this.Text = proposito + " de Rol";
 
             // carga de datos
             cargarListaFuncionalidades();

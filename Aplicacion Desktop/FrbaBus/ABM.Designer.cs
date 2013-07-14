@@ -44,14 +44,14 @@
             // 
             this.gbFiltros.Location = new System.Drawing.Point(13, 13);
             this.gbFiltros.Name = "gbFiltros";
-            this.gbFiltros.Size = new System.Drawing.Size(505, 94);
+            this.gbFiltros.Size = new System.Drawing.Size(933, 124);
             this.gbFiltros.TabIndex = 0;
             this.gbFiltros.TabStop = false;
             this.gbFiltros.Text = "Filtros de Búsuqeda";
             // 
             // btnLimpiar
             // 
-            this.btnLimpiar.Location = new System.Drawing.Point(362, 132);
+            this.btnLimpiar.Location = new System.Drawing.Point(778, 162);
             this.btnLimpiar.Name = "btnLimpiar";
             this.btnLimpiar.Size = new System.Drawing.Size(75, 23);
             this.btnLimpiar.TabIndex = 1;
@@ -61,7 +61,7 @@
             // 
             // btnBuscar
             // 
-            this.btnBuscar.Location = new System.Drawing.Point(443, 132);
+            this.btnBuscar.Location = new System.Drawing.Point(871, 162);
             this.btnBuscar.Name = "btnBuscar";
             this.btnBuscar.Size = new System.Drawing.Size(75, 23);
             this.btnBuscar.TabIndex = 2;
@@ -74,13 +74,13 @@
             this.dgvResultados.AllowUserToAddRows = false;
             this.dgvResultados.AllowUserToDeleteRows = false;
             this.dgvResultados.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvResultados.Location = new System.Drawing.Point(13, 170);
+            this.dgvResultados.Location = new System.Drawing.Point(13, 209);
             this.dgvResultados.MultiSelect = false;
             this.dgvResultados.Name = "dgvResultados";
             this.dgvResultados.ReadOnly = true;
             this.dgvResultados.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvResultados.ShowEditingIcon = false;
-            this.dgvResultados.Size = new System.Drawing.Size(505, 228);
+            this.dgvResultados.Size = new System.Drawing.Size(933, 277);
             this.dgvResultados.TabIndex = 3;
             this.dgvResultados.RowStateChanged += new System.Windows.Forms.DataGridViewRowStateChangedEventHandler(this.dgvResultados_RowStateChanged);
             // 
@@ -109,7 +109,7 @@
             this.gbComandos.Controls.Add(this.btnCrear);
             this.gbComandos.Controls.Add(this.btnModificar);
             this.gbComandos.Controls.Add(this.btnEliminar);
-            this.gbComandos.Location = new System.Drawing.Point(13, 113);
+            this.gbComandos.Location = new System.Drawing.Point(13, 143);
             this.gbComandos.Name = "gbComandos";
             this.gbComandos.Size = new System.Drawing.Size(253, 51);
             this.gbComandos.TabIndex = 6;
@@ -130,7 +130,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(530, 410);
+            this.ClientSize = new System.Drawing.Size(958, 498);
             this.Controls.Add(this.gbComandos);
             this.Controls.Add(this.dgvResultados);
             this.Controls.Add(this.btnBuscar);
@@ -152,7 +152,7 @@
         private System.Windows.Forms.DataGridView dgvResultados;
         private System.Windows.Forms.Button btnModificar;
         private System.Windows.Forms.Button btnEliminar;
-        private System.Windows.Forms.GroupBox gbComandos;
         private System.Windows.Forms.Button btnCrear;
+        protected System.Windows.Forms.GroupBox gbComandos;
     }
 }

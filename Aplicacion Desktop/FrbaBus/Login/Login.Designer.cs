@@ -38,7 +38,7 @@
             // labelNombre
             // 
             this.labelNombre.AutoSize = true;
-            this.labelNombre.Location = new System.Drawing.Point(13, 38);
+            this.labelNombre.Location = new System.Drawing.Point(14, 33);
             this.labelNombre.Name = "labelNombre";
             this.labelNombre.Size = new System.Drawing.Size(98, 13);
             this.labelNombre.TabIndex = 0;
@@ -47,7 +47,7 @@
             // labelContraseña
             // 
             this.labelContraseña.AutoSize = true;
-            this.labelContraseña.Location = new System.Drawing.Point(16, 76);
+            this.labelContraseña.Location = new System.Drawing.Point(14, 71);
             this.labelContraseña.Name = "labelContraseña";
             this.labelContraseña.Size = new System.Drawing.Size(61, 13);
             this.labelContraseña.TabIndex = 1;
@@ -82,7 +82,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(284, 262);
+            this.ClientSize = new System.Drawing.Size(236, 146);
             this.Controls.Add(this.btnIniciar);
             this.Controls.Add(this.txtPassword);
             this.Controls.Add(this.txtNombre);

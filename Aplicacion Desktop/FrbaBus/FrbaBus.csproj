@@ -69,6 +69,12 @@
     <Compile Include="Abm Micro\ABMMicros.Designer.cs">
       <DependentUpon>ABMMicros.cs</DependentUpon>
     </Compile>
+    <Compile Include="Abm Micro\CargaMicro.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Abm Micro\CargaMicro.Designer.cs">
+      <DependentUpon>CargaMicro.cs</DependentUpon>
+    </Compile>
     <Compile Include="Abm Permisos\CargaRol.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -120,6 +126,7 @@
       <DependentUpon>ConsultarPuntos.cs</DependentUpon>
     </Compile>
     <Compile Include="DAC.cs" />
+    <Compile Include="Entidades\Micro.cs" />
     <Compile Include="Entidades\Recorrido.cs" />
     <Compile Include="Entidades\Rol.cs" />
     <Compile Include="Filtros\Filtro.cs">
@@ -164,6 +171,12 @@
     <Compile Include="ABM.Designer.cs">
       <DependentUpon>ABM.cs</DependentUpon>
     </Compile>
+    <Compile Include="Listado.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Listado.Designer.cs">
+      <DependentUpon>Listado.cs</DependentUpon>
+    </Compile>
     <Compile Include="Login\Login.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -174,6 +187,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Abm Micro\ABMMicros.resx">
       <DependentUpon>ABMMicros.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Abm Micro\CargaMicro.resx">
+      <DependentUpon>CargaMicro.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Abm Permisos\CargaRol.resx">
       <DependentUpon>CargaRol.cs</DependentUpon>

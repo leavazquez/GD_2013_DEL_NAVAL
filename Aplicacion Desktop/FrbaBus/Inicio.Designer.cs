@@ -45,17 +45,17 @@
             // labelInicioSesion
             // 
             this.labelInicioSesion.AutoSize = true;
-            this.labelInicioSesion.Location = new System.Drawing.Point(156, 236);
+            this.labelInicioSesion.Location = new System.Drawing.Point(147, 359);
             this.labelInicioSesion.Name = "labelInicioSesion";
             this.labelInicioSesion.Size = new System.Drawing.Size(35, 13);
             this.labelInicioSesion.TabIndex = 1;
             this.labelInicioSesion.Text = "label1";
-            this.labelInicioSesion.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            this.labelInicioSesion.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // btnLogin
             // 
             this.btnLogin.AutoSize = true;
-            this.btnLogin.Location = new System.Drawing.Point(198, 226);
+            this.btnLogin.Location = new System.Drawing.Point(23, 354);
             this.btnLogin.Name = "btnLogin";
             this.btnLogin.Size = new System.Drawing.Size(75, 23);
             this.btnLogin.TabIndex = 2;
@@ -67,7 +67,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(284, 262);
+            this.ClientSize = new System.Drawing.Size(349, 389);
             this.Controls.Add(this.btnLogin);
             this.Controls.Add(this.labelInicioSesion);
             this.Controls.Add(this.labelBienvenida);

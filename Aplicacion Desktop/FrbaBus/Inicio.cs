@@ -66,6 +66,7 @@ namespace FrbaBus
                     btnFuncionalidad.Tag = funcionalidad;
                     btnFuncionalidad.Click += iniciarFuncionalidad;
                     btnFuncionalidad.Location = puntoInicial;
+                    btnFuncionalidad.AutoSize = true;
                     m_btnsFuncionalidades.Add(btnFuncionalidad);
                     this.Controls.Add(btnFuncionalidad);
                     puntoInicial.Y += 30;
@@ -78,7 +79,7 @@ namespace FrbaBus
         {
             Button btnFuncionalidad = sender as Button;
             Form formFuncionalidad = (Form)Activator.CreateInstance(Comun.Funcionalidades[btnFuncionalidad.Tag.ToString()]);
-            formFuncionalidad.Show();
+            formFuncionalidad.ShowDialog();
         }
 
         private void btnLogin_Click(object sender, EventArgs e)

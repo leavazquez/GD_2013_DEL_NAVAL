@@ -27,4 +27,17 @@ namespace FrbaBus
         Alta,
         Modificacion
     }
+
+    public static class Aleatorio
+    {
+        public static string Nuevo(int longitud)
+        {
+            var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            var random = new Random();
+            return new string(
+                Enumerable.Repeat(chars, longitud)
+                          .Select(s => s[random.Next(s.Length)])
+                          .ToArray());
+        }
+    }
 }

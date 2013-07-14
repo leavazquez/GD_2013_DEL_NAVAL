@@ -18,6 +18,9 @@ namespace FrbaBus
         protected string Query;
         protected string Condicion = "";
         protected string CampoBaja;
+        protected bool CondicionCampoBaja;
+        protected Dictionary<string, string> columnasVisibles = new Dictionary<string, string>();
+        private Point puntoInicialFiltros = new Point(20,25);
 
         public ABM()
         {
@@ -30,8 +33,18 @@ namespace FrbaBus
 
         public void AgregarFiltro (Control filtro)
         {
-            gbFiltros.Controls.Add(filtro);
+            filtro.Location = new Point(puntoInicialFiltros.X, puntoInicialFiltros.Y);
             filtros.Add(filtro);
+            if (filtros.Count % 3 == 0)
+            {
+                puntoInicialFiltros.Y -= 60;
+                puntoInicialFiltros.X += 250;
+            }
+            else
+            {
+                puntoInicialFiltros.Y += 30;
+            }
+            gbFiltros.Controls.Add(filtro);
         }
 
         public void AgregarComando(Button comando)
@@ -60,6 +73,21 @@ namespace FrbaBus
             DataTable resultados = DAC.ExecuteReader(nuevaQuery, parametros);
             // ejecutar quey y llenar el datatable
             dgvResultados.DataSource = resultados;
+            if (columnasVisibles.Count > 0)
+            {
+                foreach (DataGridViewColumn columna in dgvResultados.Columns)
+                {
+                    columna.Visible = false;
+                }
+                foreach (DataColumn columna in resultados.Columns)
+                {
+                    if (columnasVisibles.Keys.Contains<string>(columna.ColumnName))
+                    {
+                        dgvResultados.Columns[columna.ColumnName].HeaderText = columnasVisibles[columna.ColumnName];
+                        dgvResultados.Columns[columna.ColumnName].Visible = true;
+                    }
+                }
+            }
         }
 
         private void btnLimpiar_Click(object sender, EventArgs e)
@@ -83,11 +111,17 @@ namespace FrbaBus
                 btnEliminar.Enabled = true;
                 btnModificar.Enabled = true;
 
+                string condicion = this.CondicionCampoBaja ? "True" : "False";
                 if (this.CampoBaja != null)
                 {
-                    if (dgvResultados.SelectedRows[0].Cells[this.CampoBaja].ToString() == "true")
+                    if (dgvResultados.SelectedRows[0].Cells[this.CampoBaja].Value.ToString() == condicion)
                     {
                         btnEliminar.Text = "Habilitar";
+                        btnModificar.Enabled = false;
+                    }
+                    else
+                    {
+                        btnEliminar.Text = "Eliminar";
                     }
                 }
             }

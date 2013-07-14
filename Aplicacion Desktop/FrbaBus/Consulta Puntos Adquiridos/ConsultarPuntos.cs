@@ -6,14 +6,17 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using FrbaBus.Filtros;
 
 namespace FrbaBus.Consulta_Puntos_Adquiridos
 {
-    public partial class ConsultarPuntos : Form
+    public partial class ConsultarPuntos : Listado
     {
         public ConsultarPuntos()
         {
             InitializeComponent();
+            this.Query = "SELECT P.CLIENTE CLIENTE FROM DEL_NAVAL.PUNTOS P, DEL_NAVAL.CANJES C";
+            this.Condicion = "P.CLIENTE = C.CLIENTE";
         }
     }
 }
