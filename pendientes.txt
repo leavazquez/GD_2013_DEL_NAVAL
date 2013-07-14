@@ -27,7 +27,7 @@ no tener viajes asignados en esas fechas
 
 OK- en procedure de "butacasdisponiblesxviaje", ver de el problema del left join seguido de un join
 
-
+-- Eliminar o minimizar sentencias con '31/12/9999'
 
 testear de nuevo:
 butacas disponibles por viaje

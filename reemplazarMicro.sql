@@ -1,55 +1,40 @@
 
 
-set dateformat dmy
-go
+if OBJECT_ID ('reemplazarMicro','P') is not null
+ drop procedure reemplazarMicro
+go 
 
-select *
- from DEL_NAVAL.viajes
- where micro = 3
- and fecha_salida >= '27/01/2013'
- and fecha_estimada <= '12/07/9999'
- and cancelado = 0 
+
+--reemplaza un micro "origen" por otro que "destino" en un periodo 
+--determinado. Acepta null como fecha "hasta" lo cual significa que lo reemplaza
+--en todos los viajes. 
+--ESTE PROCEDIMIENTO NO REALIZA VALIDACION, DEBE VALIDARSE PREVIAMENTE
+--EL REEMPLAZO CON EL PROCEDIMIENTO intentarBajarMicro
+create procedure reemplazarMicro
+(@orig int,
+@dest int,
+@desde datetime,
+@hasta datetime
+)
+
+as
+begin
+
+ --en el caso de que venga NULL por parametro se reemplaza de aqui en adelante
+ set @hasta = ISNULL(@hasta, '31/12/9999')
  
-
-select *
- from DEL_NAVAL.pasajes
- where viaje = 532
-
-
-
-select cantidad_asientos 
-from DEL_NAVAL.micros
-where id_micro = 7
-
-
-
-select cantidad_asientos
-from DEL_NAVAL.micros 
-where id_micro = 3
-
-select * 
-from del_naval.butacas_ocupadas 
-where viaje = 532 or viaje = 3799
-
-
-
-select * from ButacasDisponiblesXviaje (532)
-
-select * from ButacasDisponiblesXviaje (3799)
-
-
-
-
 -- asigna micro nuevo a viaje para poder contar ya con la funcionalidad
 -- de la funcion "butacas disponibles x viaje"
 
+begin transaction
+
 update DEL_NAVAL.viajes 
-set micro = 3 --micro destino
+set micro = @dest --micro destino
 where id_viaje in (select id_viaje
  from DEL_NAVAL.viajes
- where micro = 7 --micro origen
- and fecha_salida >= '27/01/2013'
- and fecha_estimada <= '12/07/9999'
+ where micro = @orig --micro origen
+ and fecha_salida >= @desde
+ and fecha_estimada <= @hasta
  and cancelado = 0 )
 
 --libera todas las butacas ocupadas en los viajes que involucran 
@@ -57,9 +42,9 @@ where id_viaje in (select id_viaje
  delete DEL_NAVAL.butacas_ocupadas 
   where viaje in (select id_viaje
  from DEL_NAVAL.viajes
- where micro = 7 --micro origen
- and fecha_salida >= '27/01/2013'
- and fecha_estimada <= '12/07/9999'
+ where micro = @dest --micro destino (porque lo acabo de actualizar)
+ and fecha_salida >= @desde
+ and fecha_estimada <= @hasta
  and cancelado = 0 )
 
 
@@ -72,9 +57,9 @@ declare cPasajes cursor for
    from DEL_NAVAL.pasajes
    where viaje in (select id_viaje
  from DEL_NAVAL.viajes
- where micro = 7 --micro origen
- and fecha_salida >= '27/01/2013'
- and fecha_estimada <= '12/07/9999'
+ where micro = @dest --micro destino (porque lo acabo de actualizar)
+ and fecha_salida >= @desde
+ and fecha_estimada <= @hasta
  and cancelado = 0 ) 
                      
  open cPasajes 
@@ -107,21 +92,17 @@ where id_pasaje = @pasaje
   fetch cPasajes into @pasaje, @viaje
  end
  
+commit
+
+
  close cPasajes
  deallocate cPasajes
 
+return 0 
+ end
+ go
 
 
 
- select BU.id_butaca, BU.micro, BU.tipo, BU.piso, BU.numero
- from del_naval.butacas BU
- left join del_naval.butacas_ocupadas OC
-  on OC.viaje = 532
- and OC.butaca = BU.id_butaca
- left join del_naval.viajes VI
- on VI.id_viaje = 532
- and BU.micro = VI.micro
- where VI.cancelado = 0
-                              
-                                       
+            
                

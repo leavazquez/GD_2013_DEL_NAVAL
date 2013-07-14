@@ -720,14 +720,15 @@ returns @butacas_disponibles TABLE
 Begin
  insert @butacas_disponibles
  select BU.id_butaca, BU.micro, BU.tipo, BU.piso, BU.numero
- from del_naval.butacas BU
- left join del_naval.butacas_ocupadas OC
-  on OC.viaje = @viaje
- and OC.butaca = BU.id_butaca
- left join del_naval.viajes VI
- on VI.id_viaje = @viaje
- and BU.micro = VI.micro
- where VI.cancelado = 0
+ from del_naval.butacas BU, del_naval.viajes VI
+ where BU.micro = VI.micro
+ and VI.cancelado = 0
+ and VI.id_viaje = @viaje
+ --Que no este en la tabla de ocupadas para ese viaje
+ and not exists (select * 
+                  from DEL_NAVAL.butacas_ocupadas
+                  where viaje = VI.id_viaje
+                  and butaca = BU.id_butaca )
 
 return 
     
@@ -809,7 +810,7 @@ begin
                   where id_pasaje = @pasaje) 
                   
 commit                  
-return 0
+return 
 End;
 go
 
@@ -973,7 +974,7 @@ declare cEncomiendas cursor for
    where id_viaje = @viaje               
                   
 commit                  
-Return 
+Return 0
 End;
 go
 
@@ -997,6 +998,7 @@ set activo = 0,
 where rol = @rol
 
 commit
+return 0
 end;
 go
 
@@ -1051,7 +1053,7 @@ declare cViajes cursor for
    where id_recorrido = @recorrido               
                   
 commit                  
-Return 
+Return 0
 End;
 go
 
