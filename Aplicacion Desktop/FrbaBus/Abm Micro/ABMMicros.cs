@@ -23,6 +23,8 @@ namespace FrbaBus.Abm_Micro
                 FROM DEL_NAVAL.MICROS MI, DEL_NAVAL.TIPOS_SERVICIO TS , DEL_NAVAL.MARCAS MA";
             this.Condicion = @"TS.ID_SERVICIO = TIPO_SERVICIO
                 AND MA.ID_MARCA = MI.MARCA";
+            this.CampoBaja = "BAJA";
+            this.CondicionCampoBaja = true;
             FiltroParcial patente = new FiltroParcial("Patente", "patente");
             AgregarFiltro(patente);
             columnasVisibles.Add("PATENTE", "Patente");
@@ -132,7 +134,10 @@ namespace FrbaBus.Abm_Micro
 
         protected override void habilitar(DataGridViewCellCollection fila)
         {
-            throw new NotImplementedException();
+            List<SqlParameter> parametros = new List<SqlParameter>();
+            parametros.Add(new SqlParameter("@id_micro", fila["ID_MICRO"].Value.ToString()));
+            DAC.ExecuteNonQuery("UPDATE DEL_NAVAL.MICROS SET BAJA_FIN_VIDA_UTIL = 0, FECHA_BAJA = NULL WHERE ID_MICRO = @id_micro", parametros);
+            MessageBox.Show("Micro habilitado");
         }
     }
 }

@@ -316,7 +316,7 @@ namespace FrbaBus.Abm_Micro
                                         {
                                             int segundoCodigoRetorno = (int)DAC.ExecuteScalar(@"declare @retorno int
                                                 exec intentarBajarMicro @id_micro, @desde, @hasta, @retorno output
-                                                select @retorno ", parametros);
+                                                select @retorno ", parametrosServicio);
                                         }
                                         break;
                                 }

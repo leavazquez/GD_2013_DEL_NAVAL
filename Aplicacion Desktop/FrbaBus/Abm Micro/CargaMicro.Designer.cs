@@ -57,9 +57,9 @@
             this.labelPatente.AutoSize = true;
             this.labelPatente.Location = new System.Drawing.Point(13, 13);
             this.labelPatente.Name = "labelPatente";
-            this.labelPatente.Size = new System.Drawing.Size(44, 13);
+            this.labelPatente.Size = new System.Drawing.Size(98, 13);
             this.labelPatente.TabIndex = 0;
-            this.labelPatente.Text = "Patente";
+            this.labelPatente.Text = "Patente (LLL-NNN)";
             // 
             // labelNumero
             // 
@@ -131,7 +131,7 @@
             this.dgvButacas.Location = new System.Drawing.Point(12, 204);
             this.dgvButacas.Name = "dgvButacas";
             this.dgvButacas.RowHeadersVisible = false;
-            this.dgvButacas.Size = new System.Drawing.Size(240, 154);
+            this.dgvButacas.Size = new System.Drawing.Size(361, 154);
             this.dgvButacas.TabIndex = 9;
             // 
             // labelCapacidad
@@ -165,7 +165,7 @@
             // 
             // txtPatente
             // 
-            this.txtPatente.Location = new System.Drawing.Point(154, 13);
+            this.txtPatente.Location = new System.Drawing.Point(245, 14);
             this.txtPatente.MaxLength = 7;
             this.txtPatente.Name = "txtPatente";
             this.txtPatente.Size = new System.Drawing.Size(100, 20);
@@ -173,7 +173,7 @@
             // 
             // txtNumero
             // 
-            this.txtNumero.Location = new System.Drawing.Point(154, 40);
+            this.txtNumero.Location = new System.Drawing.Point(245, 41);
             this.txtNumero.Name = "txtNumero";
             this.txtNumero.Size = new System.Drawing.Size(100, 20);
             this.txtNumero.TabIndex = 14;
@@ -182,14 +182,14 @@
             // 
             this.cbMarca.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbMarca.FormattingEnabled = true;
-            this.cbMarca.Location = new System.Drawing.Point(154, 71);
+            this.cbMarca.Location = new System.Drawing.Point(245, 72);
             this.cbMarca.Name = "cbMarca";
             this.cbMarca.Size = new System.Drawing.Size(121, 21);
             this.cbMarca.TabIndex = 15;
             // 
             // txtModelo
             // 
-            this.txtModelo.Location = new System.Drawing.Point(154, 97);
+            this.txtModelo.Location = new System.Drawing.Point(245, 98);
             this.txtModelo.Name = "txtModelo";
             this.txtModelo.Size = new System.Drawing.Size(100, 20);
             this.txtModelo.TabIndex = 16;
@@ -198,14 +198,14 @@
             // 
             this.cbServicio.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbServicio.FormattingEnabled = true;
-            this.cbServicio.Location = new System.Drawing.Point(154, 124);
+            this.cbServicio.Location = new System.Drawing.Point(245, 125);
             this.cbServicio.Name = "cbServicio";
             this.cbServicio.Size = new System.Drawing.Size(121, 21);
             this.cbServicio.TabIndex = 17;
             // 
             // txtBodega
             // 
-            this.txtBodega.Location = new System.Drawing.Point(154, 156);
+            this.txtBodega.Location = new System.Drawing.Point(245, 157);
             this.txtBodega.Name = "txtBodega";
             this.txtBodega.Size = new System.Drawing.Size(100, 20);
             this.txtBodega.TabIndex = 18;
@@ -239,7 +239,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(284, 504);
+            this.ClientSize = new System.Drawing.Size(385, 504);
             this.Controls.Add(this.checkFueraServicio);
             this.Controls.Add(this.dtpHasta);
             this.Controls.Add(this.dtpDesde);

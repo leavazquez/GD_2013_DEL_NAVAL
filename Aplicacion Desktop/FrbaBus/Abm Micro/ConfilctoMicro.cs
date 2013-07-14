@@ -13,8 +13,8 @@ namespace FrbaBus.Abm_Micro
 {
     public partial class ConfilctoMicro : Form
     {
-        public DateTime Desde;
-        public DateTime Hasta;
+        public DateTime Desde = DateTime.MinValue;
+        public DateTime Hasta = DateTime.MinValue;
 
         private int idMicroReemplazo = -1;
         private string patenteMicroReemplazo;
@@ -57,20 +57,25 @@ namespace FrbaBus.Abm_Micro
             {
                 Form cargaMicro = new CargaMicro();
                 DialogResult resultado = cargaMicro.ShowDialog();
-                if (resultado == DialogResult.OK)
-                {
-                    Close();
-                }
+                Close();
             }
             else
             {
                 List<SqlParameter> parametros = new List<SqlParameter>();
                 parametros.Add(new SqlParameter("@id_micro", this.idMicro));
                 parametros.Add(new SqlParameter("@id_micro_reemplazo", this.idMicroReemplazo));
-                parametros.Add(new SqlParameter("@desde", this.Desde));
-                parametros.Add(new SqlParameter("@hasta", this.Hasta));
-                DAC.ExecuteNonQuery("exec reemplazarMicro @id_micro, @id_micro_reemplazo, @desde, @hasta", parametros);
-                MessageBox.Show("Viajes cancelados");
+                if (this.Desde == DateTime.MinValue && this.Hasta == DateTime.MinValue)
+                {
+                    parametros.Add(new SqlParameter("@desde", Config.FechaSistema));
+                    DAC.ExecuteNonQuery("exec reemplazarMicro @id_micro, @id_micro_reemplazo, @desde, null", parametros);
+                }
+                else
+                {
+                    parametros.Add(new SqlParameter("@desde", this.Desde));
+                    parametros.Add(new SqlParameter("@hasta", this.Hasta));
+                    DAC.ExecuteNonQuery("exec reemplazarMicro @id_micro, @id_micro_reemplazo, @desde, @hasta", parametros);
+                }
+                MessageBox.Show("Viajes reemplazados");
                 this.DialogResult = DialogResult.OK;
                 this.Close();
             }
