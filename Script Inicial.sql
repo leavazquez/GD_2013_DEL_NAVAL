@@ -141,6 +141,7 @@ create table del_naval.marcas (
 
 create table del_naval.micros (
 	id_micro int identity (1,1),
+	numero int,
 	tipo_servicio int,
 	kilos_bodega numeric(18,0),
 	cantidad_asientos int,
@@ -184,8 +185,7 @@ create table del_naval.viajes (
 create table del_naval.butacas_ocupadas (
 	id_butaca_ocupada int identity (1,1),
 	viaje int,
-	butaca int,
-	ocupado bit,
+	butaca int,	
 	constraint pk_butacas_ocupadas primary key (id_butaca_ocupada),
 	constraint fk_butacas_ocupada_viajes foreign key (viaje) references del_naval.viajes (id_viaje),
 	constraint fk_butacas_ocupada_butacas foreign key (butaca) references del_naval.butacas (id_butaca)
@@ -345,7 +345,7 @@ select distinct recorrido_codigo, ORIG.id_ciudad as ORI, DEST.id_ciudad as DES, 
  group by recorrido_codigo, ORI, DES, id_servicio
  
  insert into DEL_NAVAL.micros
-select t.id_servicio, Micro_KG_Disponibles, MAX(Butaca_Nro) + 1, ma.id_marca, Micro_Modelo, Micro_Patente, 0, 0, null, null, null, null
+select NULL, t.id_servicio, Micro_KG_Disponibles, MAX(Butaca_Nro) + 1, ma.id_marca, Micro_Modelo, Micro_Patente, 0, 0, null, null, null, null
 from gd_esquema.Maestra m, DEL_NAVAL.tipos_servicio t, DEL_NAVAL.marcas ma
 where t.nombre_servicio = m.Tipo_Servicio
 and marca = micro_marca
@@ -429,7 +429,7 @@ and bu.piso = ma.Butaca_Piso
 and bu.tipo = ma.Butaca_Tipo
 
 insert into DEL_NAVAL.butacas_ocupadas
-select vi.id_viaje, bu.id_butaca, 1
+select vi.id_viaje, bu.id_butaca
 from DEL_NAVAL.viajes vi, DEL_NAVAL.pasajes pa, DEL_NAVAL.micros mi, DEL_NAVAL.butacas bu
 where vi.micro = mi.id_micro
 and pa.butaca = bu.id_butaca
@@ -655,10 +655,24 @@ if OBJECT_ID ('DEL_NAVAL.bloqueo_usuarios','TR') is not null
 if OBJECT_ID ('cancelarViaje','P') is not null
  drop procedure cancelarViaje
  
- 
 if OBJECT_ID ('inhabilitar_rol','P') is not null
  drop procedure inhabilitar_rol
 
+if OBJECT_ID ('cancelarRecorrido','P') is not null
+ drop procedure cancelarRecorrido
+
+if OBJECT_ID ('intentarBajarMicro','P') is not null
+drop procedure intentarBajarMicro 
+
+if OBJECT_ID ('bajaOserviceMicro','P') is not null
+drop procedure bajaOserviceMicro 
+
+if OBJECT_ID ('cancelarViajesDeUnMicro','P') is not null
+ drop procedure cancelarViajesDeUnMicro
+
+if OBJECT_ID ('DEL_NAVAL.actualizar_butacas_ocupadas','TR') is not null
+  drop trigger DEL_NAVAL.actualizar_butacas_ocupadas
+   
 
 go
 
@@ -701,12 +715,11 @@ returns @butacas_disponibles TABLE
   piso numeric(18,0),
   numero numeric(18,0)
   )
-  --,ocupado bit )
-  --no traigo el campo ocupado, ya q solo traigo los desocupados
+  
  as
 Begin
  insert @butacas_disponibles
- select BU.id_butaca, BU.micro, BU.tipo, BU.piso, BU.numero --,OC.ocupado 
+ select BU.id_butaca, BU.micro, BU.tipo, BU.piso, BU.numero
  from del_naval.butacas BU
  left join del_naval.butacas_ocupadas OC
   on OC.viaje = @viaje
@@ -714,8 +727,7 @@ Begin
  inner join del_naval.viajes VI
  on VI.id_viaje = @viaje
  and BU.micro = VI.micro
- where ((OC.ocupado is null) OR OC.ocupado = 0)
- and VI.cancelado = 0
+ where VI.cancelado = 0
 
 return 
     
@@ -781,9 +793,8 @@ begin
    
                   
                   
-   update DEL_NAVAL.butacas_ocupadas 
-    set ocupado = 0
-    where viaje = @viaje 
+   delete DEL_NAVAL.butacas_ocupadas 
+      where viaje = @viaje 
       and butaca = @butaca
     
    
@@ -792,7 +803,6 @@ begin
    where id_pasaje = @pasaje
    
  
-
   
  set @monto = ( select monto
                   from DEL_NAVAL.pasajes 
@@ -989,3 +999,258 @@ where rol = @rol
 commit
 end;
 go
+
+
+
+
+--Cancela todos los viajes que aun no han partido, para un mismo recorrido
+--(y q no hayan sidos cancelados con anterioridad)
+create procedure cancelarRecorrido
+(@recorrido int,
+@codigo_cancelacion nvarchar(255),
+@fecha_cancelacion datetime,
+@motivo nvarchar(255)
+)
+
+as
+begin
+
+--utilizamos un cursor para ir cancelando uno a uno los viajes
+--pertenecientes a este recorrido que estamos cancelando.
+--Atencion, cancelar un recorrido de los datos migrados, con todos sus viajes
+--demora muchos minutos.
+
+
+begin transaction
+
+--cancelacion viajes
+declare @viaje int
+
+declare cViajes cursor for
+  select id_viaje 
+   from DEL_NAVAL.viajes
+   where recorrido = @recorrido 
+   and fecha_salida >= @fecha_cancelacion
+   and cancelado = 0
+                     
+ open cViajes 
+ fetch cViajes into @viaje
+ 
+ while (@@FETCH_STATUS = 0)
+ begin
+  exec cancelarViaje @viaje,@codigo_cancelacion,@fecha_cancelacion,@motivo 
+  fetch cViajes into @viaje
+ end
+ 
+ close cViajes
+ deallocate cViajes
+ 
+                  
+   update DEL_NAVAL.recorridos 
+   set cancelado = 1
+   where id_recorrido = @recorrido               
+                  
+commit                  
+Return 
+End;
+go
+
+
+
+
+-- A- si no hay viajes asociados a ese micro en esa fecha
+-- realiza la baja (ya sea definitiva o por service) y devuelve -1 
+
+-- B- si hay viajes pero no encuentra micro de reemplazo, devuelve -2
+-- (no hace ninguna baja ni reemplazo)
+
+-- C- si hay viajes y encuentra micro de reemplazo, devuelve el id de micro
+-- (pero no realiza el reemplazo aun, solo informa el micro que podria 
+-- funcionar como reemplazante)
+
+--Solo el caso A tiene efecto de lado.
+
+create procedure intentarBajarMicro
+(@micro int, 
+ @desde datetime,
+ @hasta datetime,
+ @retorno int output)
+
+ as
+ begin
+ --en el caso de que venga NULL por parametro se trata de una baja
+ set @hasta = ISNULL(@hasta, '31/12/9999')
+ 
+if (select COUNT (*)
+ from DEL_NAVAL.viajes
+ where micro = @micro
+ and fecha_salida >= @desde
+ and fecha_estimada <= @hasta
+ and cancelado = 0 ) = 0 
+begin 
+ -- si no hay viajes afectados da la baja 
+ -- o el ingreso a servicio segun corresponda y retorna -1
+  exec bajaOserviceMicro @micro, @desde,@hasta
+ 
+ set @retorno = -1
+ return  
+end 
+ 
+ 
+
+
+declare
+@tipo_servicio int,
+@kilos_bodega numeric(18,0),
+@cantidad_asientos int,
+@marca int,
+@fecha_servicio_desde datetime,
+@fecha_servicio_hasta datetime
+
+set @tipo_servicio = (select tipo_servicio from DEL_NAVAL.micros where id_micro = @micro)
+set @kilos_bodega = (select kilos_bodega from DEL_NAVAL.micros where id_micro = @micro)
+set @cantidad_asientos = (select cantidad_asientos from DEL_NAVAL.micros where id_micro = @micro)
+set @marca = (select marca from DEL_NAVAL.micros where id_micro = @micro)
+set @fecha_servicio_desde = (select isnull(fecha_servicio_desde,'31/12/9999') from DEL_NAVAL.micros where id_micro = @micro)
+set @fecha_servicio_hasta = (select isnull(fecha_servicio_hasta,'01/01/1900') from DEL_NAVAL.micros where id_micro = @micro)
+
+-- retorna el primer micro que cumple con las condiciones de reemplazo 
+-- o null en caso de que no haya ninguno que cumpla
+       
+            
+ set @retorno = (select top 1 id_micro
+ from DEL_NAVAL.micros
+ where tipo_servicio = @tipo_servicio
+ and kilos_bodega >= @kilos_bodega
+ and cantidad_asientos >= @cantidad_asientos
+ and marca = @marca
+ and baja_fin_vida_util = 0
+ and id_micro <> @micro
+ -- pido que el micro reemplazante tenga un servicio que finalice 
+ -- antes de la fecha en que lo necesito o que comienze despues 
+ and (isnull(fecha_servicio_hasta,'01/01/1900') < @fecha_servicio_desde  
+      OR isnull(fecha_servicio_desde,'31/12/9999') > @fecha_servicio_hasta))
+ 
+set @retorno = isnull(@retorno, -2)
+
+return
+ 
+ 
+ end;
+ go
+ 
+
+
+
+
+--Este procedimiento no suele llamarse individualmente
+--sino que se llama desde otros procedimientos, se usa simplemente
+--para delegar funcionalidad
+create procedure bajaOserviceMicro
+(@micro int,
+ @desde datetime,
+ @hasta datetime)
+as
+begin
+ if @desde is not null and @hasta is null
+  begin
+  -- baja
+  update DEL_NAVAL.micros
+  set baja_fin_vida_util = 1,
+      fecha_baja = @desde
+  where id_micro = @micro    
+  end
+ else 
+  begin
+  -- servicio
+    update DEL_NAVAL.micros
+  set baja_servicio = 1,
+      fecha_servicio_desde  = @desde,
+      fecha_servicio_hasta  = @hasta
+  where id_micro = @micro    
+  end
+   
+
+end;
+go
+
+
+
+
+
+--cancela todos los viajes para liberar a un micro entre dos fechas determinadas
+create procedure cancelarViajesDeUnMicro
+(@micro int, 
+ @desde datetime,
+ @hasta datetime,
+ @codigo_cancelacion nvarchar(255),
+ @fecha_cancelacion datetime,
+ @motivo nvarchar(255)
+)
+
+as
+begin
+
+--utilizamos un cursor para ir cancelando uno a uno los viajes
+--pertenecientes a este micro que estamos cancelando.
+--Atencion, cancelar viajes para  un micro con un rango de fechas amplio que involucre
+--muchos viaje demora muchos minutos.
+
+begin transaction
+
+--cancelacion viajes
+declare @viaje int
+
+declare cViajes cursor for
+  select id_viaje 
+   from DEL_NAVAL.viajes
+   where micro=@micro 
+    and fecha_salida >= @desde
+    and fecha_estimada <= @hasta
+    and cancelado = 0
+   
+                        
+ open cViajes 
+ fetch cViajes into @viaje
+ 
+ while (@@FETCH_STATUS = 0)
+ begin
+  exec cancelarViaje @viaje,@codigo_cancelacion,@fecha_cancelacion,@motivo 
+  fetch cViajes into @viaje
+ end
+ 
+ close cViajes
+ deallocate cViajes
+ 
+                  
+
+commit                  
+Return 0
+End;
+go
+
+
+
+
+       
+
+
+create trigger actualizar_butacas_ocupadas
+on del_naval.pasajes
+after insert
+as 
+
+   declare @butaca int, @viaje int
+   set @butaca =(select top 1 butaca from inserted)
+   set @viaje = (select top 1 viaje from inserted)
+
+ 
+  if not exists (select * 
+                  from del_naval.butacas_ocupadas 
+                  where butaca = @butaca
+                   and  viaje =  @viaje)
+      insert into del_naval.butacas_ocupadas
+        values(@viaje,@butaca)
+        
+        
+ go                         

@@ -15,3 +15,19 @@ ok-eliminar recorrido
 
 -- agregar campo int numero de micro en tabla micros
 
+OK- agregar en la busqueda de viajes a cancelar en "cancelar recorrido" una condicion que evite cancelar viajes que ya fueron cancelados.
+
+-- set dateformat dmy antes de cada sentencia q incolucre fechas
+
+-- probar trigger de insert butacas ocupadas
+
+
+testear de nuevo:
+butacas disponibles por viaje
+devolver pasaje
+
+
+--en "intentarbajamicro" esta mal la forma en que obtiene el micro disponible, deberia ademas 
+no tener viajes asignados en esas fechas
+
+
