@@ -27,7 +27,9 @@ butacas disponibles por viaje
 devolver pasaje
 
 
---en "intentarbajamicro" esta mal la forma en que obtiene el micro disponible, deberia ademas 
+--en "intentarbajarmicro" esta mal la forma en que obtiene el micro disponible, deberia ademas 
 no tener viajes asignados en esas fechas
+
+-- en procedure de "butacasdisponiblesxviaje", ver de el problema del left join seguido de un join
 
 

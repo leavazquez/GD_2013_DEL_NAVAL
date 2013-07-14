@@ -724,7 +724,7 @@ Begin
  left join del_naval.butacas_ocupadas OC
   on OC.viaje = @viaje
  and OC.butaca = BU.id_butaca
- inner join del_naval.viajes VI
+ left join del_naval.viajes VI
  on VI.id_viaje = @viaje
  and BU.micro = VI.micro
  where VI.cancelado = 0
