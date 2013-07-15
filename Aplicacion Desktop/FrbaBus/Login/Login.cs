@@ -20,8 +20,7 @@ namespace FrbaBus.Login
 
         private void btnIniciar_Click(object sender, EventArgs e)
         {
-            //SHA256 encriptador = SHA256Managed.Create();
-            SHA256CryptoServiceProvider encriptador = new SHA256CryptoServiceProvider();
+            SHA256 encriptador = SHA256Managed.Create();
             string nombreUsuario = txtNombre.Text;
             byte[] passwordBytes = encriptador.ComputeHash(Encoding.UTF8.GetBytes(txtPassword.Text));
             string password = BitConverter.ToString((passwordBytes)).Replace("-", "");
