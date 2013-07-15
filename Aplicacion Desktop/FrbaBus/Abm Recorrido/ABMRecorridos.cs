@@ -61,7 +61,8 @@ namespace FrbaBus.Abm_Recorrido
             parametros.Add(new SqlParameter("@id_rec", fila["ID_RECORRIDO"].Value.ToString()));
             parametros.Add(new SqlParameter("@cod_cancelacion", codigoCancelacion));
             parametros.Add(new SqlParameter("@fecha",Config.FechaSistema));
-            DAC.ExecuteNonQuery("exec del_naval.cancelarRecorrido @id_rec, @cod_cancelacion, @fecha, 'Baja de recorrido'", parametros);
+            DAC.ExecuteNonQuery(@"set dateformat dmy
+                exec del_naval.cancelarRecorrido @id_rec, @cod_cancelacion, @fecha, 'Baja de recorrido'", parametros);
             MessageBox.Show("Recorrido eliminado");
         }
 

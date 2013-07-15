@@ -283,7 +283,8 @@ namespace FrbaBus.Abm_Micro
                                 parametrosServicio.Add(new SqlParameter("@id_micro", micro.Id_micro));
                                 parametrosServicio.Add(new SqlParameter("@desde", dtpDesde.Value.Date));
                                 parametrosServicio.Add(new SqlParameter("@hasta", dtpHasta.Value.Date));
-                                int codigoRetorno = (int)DAC.ExecuteScalar(@"declare @retorno int
+                                int codigoRetorno = (int)DAC.ExecuteScalar(@"set dateformat dmy
+                                    declare @retorno int
                                     exec del_naval.intentarBajarMicro @id_micro, @desde, @hasta, @retorno output
                                     select @retorno ", parametrosServicio);
                                 switch (codigoRetorno)
@@ -299,7 +300,8 @@ namespace FrbaBus.Abm_Micro
                                         }
                                         else
                                         {
-                                            int segundoCodigoRetorno = (int)DAC.ExecuteScalar(@"declare @retorno int
+                                            int segundoCodigoRetorno = (int)DAC.ExecuteScalar(@"set dateformat dmy
+                                                declare @retorno int
                                                 exec del_naval.intentarBajarMicro @id_micro, @desde, @hasta, @retorno output
                                                 select @retorno ", parametrosServicio);
                                         }
@@ -314,7 +316,8 @@ namespace FrbaBus.Abm_Micro
                                         }
                                         else
                                         {
-                                            int segundoCodigoRetorno = (int)DAC.ExecuteScalar(@"declare @retorno int
+                                            int segundoCodigoRetorno = (int)DAC.ExecuteScalar(@"set dateformat dmy
+                                                declare @retorno int
                                                 exec del_naval.intentarBajarMicro @id_micro, @desde, @hasta, @retorno output
                                                 select @retorno ", parametrosServicio);
                                         }
