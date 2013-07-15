@@ -945,7 +945,7 @@ declare cPasajes cursor for
  
  while (@@FETCH_STATUS = 0)
  begin
-  exec devolverPasaje @pasaje,@codigo_cancelacion,@fecha_cancelacion,@motivo,-1 
+  exec del_naval.devolverPasaje @pasaje,@codigo_cancelacion,@fecha_cancelacion,@motivo,-1 
   fetch cPasajes into @pasaje
  end
  
@@ -966,7 +966,7 @@ declare cEncomiendas cursor for
  
  while (@@FETCH_STATUS = 0)
  begin
-  exec devolverEncomienda @encomienda,@codigo_cancelacion,@fecha_cancelacion,@motivo,-1 
+  exec del_naval.devolverEncomienda @encomienda,@codigo_cancelacion,@fecha_cancelacion,@motivo,-1 
   fetch cEncomiendas into @encomienda
  end
  
@@ -1044,7 +1044,7 @@ declare cViajes cursor for
  
  while (@@FETCH_STATUS = 0)
  begin
-  exec cancelarViaje @viaje,@codigo_cancelacion,@fecha_cancelacion,@motivo 
+  exec del_naval.cancelarViaje @viaje,@codigo_cancelacion,@fecha_cancelacion,@motivo 
   fetch cViajes into @viaje
  end
  
@@ -1134,7 +1134,7 @@ if (select COUNT (*)
 begin 
  -- si no hay viajes afectados da la baja 
  -- o el ingreso a servicio segun corresponda y retorna -1
-  exec bajaOserviceMicro @micro, @desde,@hasta
+  exec del_naval.bajaOserviceMicro @micro, @desde,@hasta
  
  set @retorno = -1
  return  
@@ -1242,7 +1242,7 @@ declare cViajes cursor for
  
  while (@@FETCH_STATUS = 0)
  begin
-  exec cancelarViaje @viaje,@codigo_cancelacion,@fecha_cancelacion,@motivo 
+  exec del_naval.cancelarViaje @viaje,@codigo_cancelacion,@fecha_cancelacion,@motivo 
   fetch cViajes into @viaje
  end
  
@@ -1353,7 +1353,7 @@ declare cPasajes cursor for
 --obtengo la primer butaca disponible (corresponden al nuevo micro)
 --de la lista de disponibles para ese viaje
 declare @butaca int
-set @butaca = (select top 1 id_butaca from ButacasDisponiblesXviaje (@viaje))
+set @butaca = (select top 1 id_butaca from del_naval.ButacasDisponiblesXviaje (@viaje))
 
 --actualizo la butaca del pasaje con la butaca disponible del nuevo micro
 update DEL_NAVAL.pasajes 

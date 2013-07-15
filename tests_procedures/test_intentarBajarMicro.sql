@@ -23,7 +23,7 @@ select * from ButacasDisponiblesXviaje (3663)
 go
 
 declare @retorno int
-exec intentarBajarMicro 1,'01/01/2013','02/01/2013', @retorno output
+exec del_naval.intentarBajarMicro 7,'27/01/2013',NULL, @retorno output
 select @retorno 
  
  exec bajaOserviceMicro 4,'01/05/2012', NULL
