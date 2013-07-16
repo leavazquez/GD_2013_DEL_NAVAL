@@ -1,7 +1,10 @@
 use GD1C2013
 go
 
-exec devolverPasaje 8043,'RANDOM',"07/30/2011",'TEST', -1
+
+declare @outp numeric(18,2)
+exec del_naval.devolverPasaje 7300,'RANDOM',"07/30/2012",'TEST', @outp output 
+select @outp
 
 select  *
 from DEL_NAVAL.pasajes PA, DEL_NAVAL.butacas_ocupadas BO, del_naval.viajes VI

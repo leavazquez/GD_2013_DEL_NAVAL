@@ -7,4 +7,4 @@ where PA.viaje = VI.id_viaje
 and   EN.viaje = VI.id_viaje
 and   VI.id_viaje = 12
 
-exec cancelarViaje 12,'RANDOM',"07/25/2011",'cancelarViaje'
+exec del_naval.cancelarViaje 92,'RANDOM',"07/25/2012",'cancelarViaje'

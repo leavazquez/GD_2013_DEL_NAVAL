@@ -31,3 +31,9 @@ OK- en procedure de "butacasdisponiblesxviaje", ver de el problema del left join
 OK- testear de nuevo:
      butacas disponibles por viaje
      devolver pasaje
+
+-- Validar fecha_cancelacion < fecha_salida del viaje en cancelarViaje, recorridos y viajes de un micro para que sea consistente con devolverPasaje
+
+-- Optimizar devolucion de pasajes, encomiendas, viajes,  recorridos, y viajes de un micro.
+
+
