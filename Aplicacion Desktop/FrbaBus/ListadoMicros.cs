@@ -41,7 +41,6 @@ namespace FrbaBus
             columnasVisibles.Add("EN_SERVICIO", "En servicio");
             columnasVisibles.Add("SERVICIO_DESDE", "En servicio desde");
             columnasVisibles.Add("SERVICIO_HASTA", "En servicio hasta");
-            columnasVisibles.Add("FECHA_BAJA", "Fecha de baja");
         }
 
         protected override void seleccionar(object sender, EventArgs e)
