@@ -64,7 +64,7 @@ namespace FrbaBus.GenerarViaje
             if (dtpSalida.Value < Config.FechaSistema || dtpLlegada.Value < Config.FechaSistema)
             {
                 isValid = false;
-                errorFechas.SetError(dtpSalida, "La fechas deben ser futura");
+                errorFechas.SetError(dtpSalida, "La fechas deben ser futuras");
                 return;
             }
             if (dtpLlegada.Value < dtpSalida.Value)
@@ -95,10 +95,10 @@ namespace FrbaBus.GenerarViaje
                         MessageBox.Show("Viaje generado con éxito");
                         Close();
                         break;
-                    case 1:
+                    case -1:
                         errorMicro.SetError(btnMicro, "Micro no disponible para la fecha seleccionada");
                         break;
-                    case 2:
+                    case -2:
                         errorMicro.SetError(btnMicro, "Incompatibilidad entre tipos de serivicio de micro y recorrido");
                         break;
                 }

@@ -22,6 +22,9 @@ namespace FrbaBus
             btnSeleccionar.Click += seleccionar;
             dgvResultados.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvResultados.MultiSelect = false;
+
+            btnSeleccionar.Left += 20;
+            btnSeleccionar.Top += 20;
         }
 
         protected abstract void seleccionar(object sender, EventArgs e);

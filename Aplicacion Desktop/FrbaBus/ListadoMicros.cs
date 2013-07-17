@@ -46,9 +46,16 @@ namespace FrbaBus
 
         protected override void seleccionar(object sender, EventArgs e)
         {
-            this.IdMicro = dgvResultados.SelectedRows[0].Cells["ID_MICRO"].Value.ToString();
-            this.Patente = dgvResultados.SelectedRows[0].Cells["PATENTE"].Value.ToString();
-            Close();
+            if (dgvResultados.SelectedRows.Count > 0)
+            {
+                this.IdMicro = dgvResultados.SelectedRows[0].Cells["ID_MICRO"].Value.ToString();
+                this.Patente = dgvResultados.SelectedRows[0].Cells["PATENTE"].Value.ToString();
+                Close();
+            }
+            else
+            {
+                MessageBox.Show("Seleccione un micro");
+            }
         }
 
     }

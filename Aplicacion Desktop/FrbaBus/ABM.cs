@@ -14,7 +14,7 @@ namespace FrbaBus
     public abstract partial class ABM : Form
     {
         private List<Control> filtros = new List<Control>();
-        private List<Button> comandos = new List<Button>();
+        protected List<Button> comandos = new List<Button>();
         protected string Query;
         protected string Condicion = "";
         protected string CampoBaja;

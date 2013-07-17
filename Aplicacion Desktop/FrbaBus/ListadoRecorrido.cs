@@ -36,9 +36,16 @@ namespace FrbaBus
 
         protected override void seleccionar(object sender, EventArgs e)
         {
-            this.idRecorrido = dgvResultados.SelectedRows[0].Cells["ID_RECORRIDO"].Value.ToString();
-            this.Recorrido = dgvResultados.SelectedRows[0].Cells["CIUDAD_ORIGEN"].Value.ToString() + " - " + dgvResultados.SelectedRows[0].Cells["CIUDAD_DESTINO"].Value.ToString() + " - " + dgvResultados.SelectedRows[0].Cells["NOMBRE_SERVICIO"].Value.ToString();
-            Close();
+            if (dgvResultados.SelectedRows.Count > 0)
+            {
+                this.idRecorrido = dgvResultados.SelectedRows[0].Cells["ID_RECORRIDO"].Value.ToString();
+                this.Recorrido = dgvResultados.SelectedRows[0].Cells["CIUDAD_ORIGEN"].Value.ToString() + " - " + dgvResultados.SelectedRows[0].Cells["CIUDAD_DESTINO"].Value.ToString() + " - " + dgvResultados.SelectedRows[0].Cells["NOMBRE_SERVICIO"].Value.ToString();
+                Close();
+            }
+            else
+            {
+                MessageBox.Show("Seleccione un recorrido");
+            }
         }
     }
 }
