@@ -9,28 +9,22 @@ using System.Windows.Forms;
 
 namespace FrbaBus
 {
-    public partial class Listado : ABM
+    public abstract partial class Listado : ABM
     {
-        public Listado(): this(false)
-        {
-
-        }
-        public Listado(bool seleccionable)
+        public Listado()
         {
             InitializeComponent();
             this.gbComandos.Controls.Clear();
-            if (seleccionable)
-            {
-                Button btnSeleccionar = new Button();
-                btnSeleccionar.Text = "Seleccionar";
-                btnSeleccionar.AutoSize = true;
-                this.gbComandos.Controls.Add(btnSeleccionar);
-            }
-            else
-            {
-                gbComandos.Visible = false;
-            }
+            Button btnSeleccionar = new Button();
+            btnSeleccionar.Text = "Seleccionar";
+            btnSeleccionar.AutoSize = true;
+            this.gbComandos.Controls.Add(btnSeleccionar);
+            btnSeleccionar.Click += seleccionar;
+            dgvResultados.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvResultados.MultiSelect = false;
         }
+
+        protected abstract void seleccionar(object sender, EventArgs e);
 
         protected override void habilitar(DataGridViewCellCollection fila)
         {

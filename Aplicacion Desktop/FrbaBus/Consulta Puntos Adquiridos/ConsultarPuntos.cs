@@ -18,5 +18,10 @@ namespace FrbaBus.Consulta_Puntos_Adquiridos
             this.Query = "SELECT DEL_NAVAL.PUNTOS.CLIENTE CLIENTE FROM DEL_NAVAL.PUNTOS P, DEL_NAVAL.CANJES C";
             this.Condicion = "P.CLIENTE = C.CLIENTE";
         }
+
+        protected override void seleccionar(object sender, EventArgs e)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

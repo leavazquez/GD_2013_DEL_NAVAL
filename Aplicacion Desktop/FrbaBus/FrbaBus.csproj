@@ -183,6 +183,18 @@
     <Compile Include="Listado.Designer.cs">
       <DependentUpon>Listado.cs</DependentUpon>
     </Compile>
+    <Compile Include="ListadoMicros.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ListadoMicros.Designer.cs">
+      <DependentUpon>ListadoMicros.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ListadoRecorrido.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ListadoRecorrido.Designer.cs">
+      <DependentUpon>ListadoRecorrido.cs</DependentUpon>
+    </Compile>
     <Compile Include="Login\Login.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -214,6 +226,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Filtros\Filtro.resx">
       <DependentUpon>Filtro.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GenerarViaje\GenerarViajes.resx">
+      <DependentUpon>GenerarViajes.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Inicio.resx">
       <DependentUpon>Inicio.cs</DependentUpon>
