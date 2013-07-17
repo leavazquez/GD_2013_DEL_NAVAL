@@ -7,6 +7,9 @@ if OBJECT_ID ('DEL_NAVAL.destinos_comprados','TF') is not null
 if OBJECT_ID ('DEL_NAVAL.destinos_micros_vacios','TF') is not null
  drop function DEL_NAVAL.destinos_micros_vacios
  
+if OBJECT_ID ('DEL_NAVAL.clientes_mayor_puntaje','TF') is not null
+ drop function DEL_NAVAL.clientes_mayor_puntaje
+ 
 if OBJECT_ID ('DEL_NAVAL.destinos_pasajes_cancelados','TF') is not null
  drop function DEL_NAVAL.destinos_pasajes_cancelados
 
@@ -78,6 +81,32 @@ select CI.nombre_ciudad as ciudad, count(BU.id_butaca) as butacas_libres
 end
 go
 
+
+
+create function DEL_NAVAL.clientes_mayor_puntaje
+(@desde datetime,
+ @hasta datetime)
+returns @clientes_mayor_puntaje table (
+cliente int,
+puntaje int
+)
+as
+begin
+
+
+insert @clientes_mayor_puntaje
+select cliente, sum(puntos) as puntaje
+ from  DEL_NAVAL.puntos
+ where fecha between @desde and @hasta
+ group by cliente
+ order by puntaje desc
+ 
+ 
+
+ 
+ return
+end
+go
 
 
 
