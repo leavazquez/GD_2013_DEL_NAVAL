@@ -36,4 +36,15 @@ OK- testear de nuevo:
 
 -- Optimizar devolucion de pasajes, encomiendas, viajes,  recorridos, y viajes de un micro.
 
+-- en intentarBajarMicro arreglar esto:
+
+  and not exists (select micro
+ from DEL_NAVAL.viajes
+ where micro = id_micro
+ and fecha_salida >= @desde
+ and fecha_estimada <= @hasta
+ and cancelado = 0 )  
+
+
+-- arreglar rangos en estadisticas
 

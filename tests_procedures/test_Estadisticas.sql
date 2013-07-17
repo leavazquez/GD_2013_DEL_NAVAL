@@ -22,14 +22,19 @@ and fecha_compra between '01/07/2012' and '02/07/2012'
 
 select *
 from del_naval.pasajes 
-where voucher = 162110 or
- voucher = 162203
+where id_pasaje = 120297 OR
+      ID_PASAJE = 183746
+     
  
 
 select *
+from DEL_NAVAL.puntos
+where cliente = 89165804
+and fecha between '01/07/2012' and '02/07/2012'
+
+select *
 from del_naval.encomiendas 
-where voucher = 162110 or
- voucher = 162203
+where id_encomienda = 70996
 
 update DEL_NAVAL.micros
 set fecha_servicio_desde = '01/07/2012',

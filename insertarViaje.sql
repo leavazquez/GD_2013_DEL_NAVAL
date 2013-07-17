@@ -26,8 +26,11 @@ if exists (select top 1 id_micro
  and not exists (select micro
  from DEL_NAVAL.viajes
  where micro = id_micro
- and fecha_salida >= @salida
- and fecha_estimada <= @llegada_estimada
+ and ((fecha_salida >= @salida and fecha_estimada <= @llegada_estimada) or
+      (@salida between fecha_salida and fecha_estimada)   or
+      (@llegada_estimada between fecha_salida and fecha_estimada) 
+      )
+ 
  and cancelado = 0 ))
  
  begin --begin del if
