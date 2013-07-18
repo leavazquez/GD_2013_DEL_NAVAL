@@ -11,9 +11,21 @@ namespace FrbaBus.Compra_de_Pasajes
 {
     public partial class ComprarPasajesEncomiendas : Form
     {
+        private string idViaje;
+
         public ComprarPasajesEncomiendas()
         {
             InitializeComponent();
+        }
+
+        private void btnViaje_Click(object sender, EventArgs e)
+        {
+            ListadoViajes listadoViajes = new ListadoViajes();
+            listadoViajes.ShowDialog();
+            if (listadoViajes.IdViaje != null)
+            {
+                btnViaje.Text = listadoViajes.Viaje;
+            }
         }
     }
 }

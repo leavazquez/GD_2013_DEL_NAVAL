@@ -35,7 +35,7 @@ namespace FrbaBus.Filtros
             get;
         }
 
-        public string Valor
+        public virtual string Valor
         {
             get
             {

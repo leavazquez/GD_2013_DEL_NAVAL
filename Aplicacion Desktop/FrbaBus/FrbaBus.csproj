@@ -147,11 +147,23 @@
     <Compile Include="Filtros\FiltroExacto.Designer.cs">
       <DependentUpon>FiltroExacto.cs</DependentUpon>
     </Compile>
+    <Compile Include="Filtros\FiltroFecha.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Filtros\FiltroFecha.Designer.cs">
+      <DependentUpon>FiltroFecha.cs</DependentUpon>
+    </Compile>
     <Compile Include="Filtros\FiltroParcial.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Filtros\FiltroParcial.Designer.cs">
       <DependentUpon>FiltroParcial.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Filtros\FiltroSeleccion.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Filtros\FiltroSeleccion.Designer.cs">
+      <DependentUpon>FiltroSeleccion.cs</DependentUpon>
     </Compile>
     <Compile Include="Inicio.cs">
       <SubType>Form</SubType>
@@ -195,6 +207,12 @@
     <Compile Include="ListadoRecorrido.Designer.cs">
       <DependentUpon>ListadoRecorrido.cs</DependentUpon>
     </Compile>
+    <Compile Include="ListadoViajes.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ListadoViajes.Designer.cs">
+      <DependentUpon>ListadoViajes.cs</DependentUpon>
+    </Compile>
     <Compile Include="Login\Login.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -226,6 +244,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Filtros\Filtro.resx">
       <DependentUpon>Filtro.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Filtros\FiltroFecha.resx">
+      <DependentUpon>FiltroFecha.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GenerarViaje\GenerarViajes.resx">
       <DependentUpon>GenerarViajes.cs</DependentUpon>

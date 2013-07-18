@@ -1,6 +1,6 @@
 ﻿namespace FrbaBus.Filtros
 {
-    partial class Filtro
+    partial class FiltroFecha
     {
         /// <summary> 
         /// Required designer variable.
@@ -28,42 +28,17 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.Nombre = new System.Windows.Forms.Label();
-            this.txtValor = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
-            // Nombre
-            // 
-            this.Nombre.AutoSize = true;
-            this.Nombre.Location = new System.Drawing.Point(3, 7);
-            this.Nombre.Name = "Nombre";
-            this.Nombre.Size = new System.Drawing.Size(35, 13);
-            this.Nombre.TabIndex = 0;
-            this.Nombre.Text = "label1";
-            // 
-            // txtValor
-            // 
-            this.txtValor.Location = new System.Drawing.Point(147, 4);
-            this.txtValor.Name = "txtValor";
-            this.txtValor.Size = new System.Drawing.Size(100, 20);
-            this.txtValor.TabIndex = 1;
-            // 
-            // Filtro
+            // FiltroFecha
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.txtValor);
-            this.Controls.Add(this.Nombre);
-            this.Name = "Filtro";
-            this.Size = new System.Drawing.Size(275, 35);
+            this.Name = "FiltroFecha";
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
         #endregion
-
-        protected System.Windows.Forms.Label Nombre;
-        protected System.Windows.Forms.TextBox txtValor;
     }
 }

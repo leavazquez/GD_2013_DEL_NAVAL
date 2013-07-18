@@ -17,6 +17,7 @@ namespace FrbaBus
         protected List<Button> comandos = new List<Button>();
         protected string Query;
         protected string Condicion = "";
+        protected string GroupBy = "";
         protected string CampoBaja;
         protected bool CondicionCampoBaja;
         protected Dictionary<string, string> columnasVisibles = new Dictionary<string, string>();
@@ -69,6 +70,10 @@ namespace FrbaBus
                     nuevaQuery += filtro.Condicion;
                     parametros.Add(filtro.Parametro);
                 }
+            }
+            if (this.GroupBy != "")
+            {
+                nuevaQuery += " " + this.GroupBy;
             }
             DataTable resultados = DAC.ExecuteReader(nuevaQuery, parametros);
             // ejecutar quey y llenar el datatable
