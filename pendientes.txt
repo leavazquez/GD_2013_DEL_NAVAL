@@ -36,7 +36,7 @@ OK- testear de nuevo:
 
 -- Optimizar devolucion de pasajes, encomiendas, viajes,  recorridos, y viajes de un micro.
 
--- en intentarBajarMicro arreglar esto:
+OK- en intentarBajarMicro arreglar esto:
 
   and not exists (select micro
  from DEL_NAVAL.viajes
@@ -45,6 +45,13 @@ OK- testear de nuevo:
  and fecha_estimada <= @hasta
  and cancelado = 0 )  
 
+-- Probar punto anterior
+-- arreglar rangos en estadisticas (union select day('27/01/2013') = 27)
 
--- arreglar rangos en estadisticas
+-------------------------------------------------------------------------
 
+--implementar registrar puntos en registrarLlegada
+
+--poner en la estrategia cuestiones de migracion (codigo de anulacion, codigo de pasaje, encomienda y voucher)
+
+-- en registrarLlegada validar fecha hora de salida + 24 horas

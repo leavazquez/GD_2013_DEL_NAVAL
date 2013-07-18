@@ -1192,9 +1192,10 @@ select top 1 id_micro
  and not exists (select micro
  from DEL_NAVAL.viajes
  where micro = id_micro
- and fecha_salida >= @desde
- and fecha_estimada <= @hasta
- and cancelado = 0 )
+ and ((fecha_salida >= @desde and fecha_estimada <= @hasta) or
+      (@desde between fecha_salida and fecha_estimada)   or
+      (@hasta between fecha_salida and fecha_estimada)) 
+ and cancelado = 0  )
            
  )
  

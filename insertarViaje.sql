@@ -28,9 +28,7 @@ if exists (select top 1 id_micro
  where micro = id_micro
  and ((fecha_salida >= @salida and fecha_estimada <= @llegada_estimada) or
       (@salida between fecha_salida and fecha_estimada)   or
-      (@llegada_estimada between fecha_salida and fecha_estimada) 
-      )
- 
+      (@llegada_estimada between fecha_salida and fecha_estimada)) 
  and cancelado = 0 ))
  
  begin --begin del if
