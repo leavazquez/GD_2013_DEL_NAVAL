@@ -12,7 +12,7 @@ namespace FrbaBus.Filtros
 {
     public partial class FiltroSeleccion : Filtro
     {
-        private ComboBox cbValor = new ComboBox();
+        public ComboBox cbValor = new ComboBox();
 
         public FiltroSeleccion()
         {

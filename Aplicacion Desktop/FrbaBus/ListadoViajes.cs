@@ -17,6 +17,8 @@ namespace FrbaBus
         public int AsientosDisponibles;
         public int KilosDisponibles;
         public string Viaje;
+        public string Destino;
+        public string DestinoObligado;
 
         public ListadoViajes()
         {
@@ -51,6 +53,11 @@ namespace FrbaBus
             AgregarFiltro(origen);
             FiltroSeleccion destino = new FiltroSeleccion("Destino", "d.nombre_ciudad", ciudades);
             AgregarFiltro(destino);
+            if (this.DestinoObligado != null)
+            {
+                destino.cbValor.SelectedItem = this.DestinoObligado;
+                destino.cbValor.Enabled = false;
+            }
         }
 
         protected override void seleccionar(object sender, EventArgs e)
@@ -61,6 +68,7 @@ namespace FrbaBus
                 this.Viaje = dgvResultados.SelectedRows[0].Cells["ORIGEN"].Value.ToString() + " - " + dgvResultados.SelectedRows[0].Cells["DESTINO"].Value.ToString() + " - " + dgvResultados.SelectedRows[0].Cells["SERVICIO"].Value.ToString() + " - " + dgvResultados.SelectedRows[0].Cells["SALIDA"].Value.ToString();
                 this.AsientosDisponibles = int.Parse(dgvResultados.SelectedRows[0].Cells["BUTACAS_DISPONIBLES"].Value.ToString());
                 this.KilosDisponibles = int.Parse(dgvResultados.SelectedRows[0].Cells["KILOS_DISPONIBLES"].Value.ToString());
+                this.Destino = dgvResultados.SelectedRows[0].Cells["DESTINO"].Value.ToString();
                 Close();
             }
             else

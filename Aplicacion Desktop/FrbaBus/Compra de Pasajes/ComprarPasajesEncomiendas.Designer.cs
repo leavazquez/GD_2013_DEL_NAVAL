@@ -35,7 +35,7 @@
             this.btnAsignarPasajero = new System.Windows.Forms.Button();
             this.labelKilos = new System.Windows.Forms.Label();
             this.txtKilos = new System.Windows.Forms.TextBox();
-            this.txtOcupar = new System.Windows.Forms.Button();
+            this.btnOcupar = new System.Windows.Forms.Button();
             this.dgvCompras = new System.Windows.Forms.DataGridView();
             this.btnComprar = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgvCompras)).BeginInit();
@@ -84,6 +84,7 @@
             this.btnAsignarPasajero.TabIndex = 4;
             this.btnAsignarPasajero.Text = "Asignar pasajeros";
             this.btnAsignarPasajero.UseVisualStyleBackColor = true;
+            this.btnAsignarPasajero.Click += new System.EventHandler(this.btnAsignarPasajero_Click);
             // 
             // labelKilos
             // 
@@ -101,14 +102,15 @@
             this.txtKilos.Size = new System.Drawing.Size(88, 20);
             this.txtKilos.TabIndex = 6;
             // 
-            // txtOcupar
+            // btnOcupar
             // 
-            this.txtOcupar.Location = new System.Drawing.Point(288, 112);
-            this.txtOcupar.Name = "txtOcupar";
-            this.txtOcupar.Size = new System.Drawing.Size(143, 23);
-            this.txtOcupar.TabIndex = 7;
-            this.txtOcupar.Text = "Ocupar";
-            this.txtOcupar.UseVisualStyleBackColor = true;
+            this.btnOcupar.Location = new System.Drawing.Point(288, 112);
+            this.btnOcupar.Name = "btnOcupar";
+            this.btnOcupar.Size = new System.Drawing.Size(143, 23);
+            this.btnOcupar.TabIndex = 7;
+            this.btnOcupar.Text = "Ocupar";
+            this.btnOcupar.UseVisualStyleBackColor = true;
+            this.btnOcupar.Click += new System.EventHandler(this.btnOcupar_Click);
             // 
             // dgvCompras
             // 
@@ -117,6 +119,7 @@
             this.dgvCompras.Name = "dgvCompras";
             this.dgvCompras.Size = new System.Drawing.Size(419, 135);
             this.dgvCompras.TabIndex = 8;
+            this.dgvCompras.RowsAdded += new System.Windows.Forms.DataGridViewRowsAddedEventHandler(this.dgvCompras_RowsAdded);
             // 
             // btnComprar
             // 
@@ -134,7 +137,7 @@
             this.ClientSize = new System.Drawing.Size(444, 357);
             this.Controls.Add(this.btnComprar);
             this.Controls.Add(this.dgvCompras);
-            this.Controls.Add(this.txtOcupar);
+            this.Controls.Add(this.btnOcupar);
             this.Controls.Add(this.txtKilos);
             this.Controls.Add(this.labelKilos);
             this.Controls.Add(this.btnAsignarPasajero);
@@ -159,7 +162,7 @@
         private System.Windows.Forms.Button btnAsignarPasajero;
         private System.Windows.Forms.Label labelKilos;
         private System.Windows.Forms.TextBox txtKilos;
-        private System.Windows.Forms.Button txtOcupar;
+        private System.Windows.Forms.Button btnOcupar;
         private System.Windows.Forms.DataGridView dgvCompras;
         private System.Windows.Forms.Button btnComprar;
     }
