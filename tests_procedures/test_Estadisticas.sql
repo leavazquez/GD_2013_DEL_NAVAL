@@ -11,7 +11,7 @@ select top 5 * from DEL_NAVAL.clientes_mayor_puntaje ('01/07/2012', '02/07/2012'
 
 select top 5 * from DEL_NAVAL.destinos_pasajes_cancelados ('01/07/2012', '31/12/2013')
 
-select top 5 * from DEL_NAVAL.micros_fuera_servicio('01/07/2012', '30/07/2012') 
+select top 5 * from DEL_NAVAL.micros_fuera_servicio('01/07/2012', '31/03/2013') 
 
 
 

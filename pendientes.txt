@@ -61,3 +61,10 @@ OK- en intentarBajarMicro arreglar esto:
 -- validar superposicion de bajas servicio micro
 
 -- explicar que las bajas de servicio solo registran historico para fines estadistico, y que la que figura en el dato maestro del micro es la actual, la ultima que se usa para validar disponibilidad del micro
+
+
+
+OBLIGATORIO
+----------
+
+agregar campo remitente en encomiendas y considerarlo en la migracion

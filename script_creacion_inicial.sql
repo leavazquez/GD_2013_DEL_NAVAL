@@ -691,6 +691,16 @@ if OBJECT_ID ('DEL_NAVAL.destinos_pasajes_cancelados','TF') is not null
 if OBJECT_ID ('DEL_NAVAL.micros_fuera_servicio','TF') is not null
  drop function DEL_NAVAL.micros_fuera_servicio
  
+if OBJECT_ID ('del_naval.insertarViaje','P') is not null
+drop procedure del_naval.insertarViaje
+
+if OBJECT_ID ('DEL_NAVAL.actualizar_servicios_microUPD','TR') is not null
+  drop trigger DEL_NAVAL.actualizar_servicios_microUPD    
+ 
+ if OBJECT_ID ('DEL_NAVAL.actualizar_servicios_microINS','TR') is not null
+  drop trigger DEL_NAVAL.actualizar_servicios_microINS     
+
+ 
 go
 
 --Devuelve espacio libre en bodega para un viaje determinado
@@ -1539,36 +1549,48 @@ begin
 -- Usa union para considerar las diferentes condiciones de frontera que pueden darse
 -- entre los rangos ingresados por parametros y los de fecha de servicio en la tabla micro
 -- seleccionando el minimo de las cotas superior y el maximo de las cotas inferiores:
-/*
-min fecha_servicio_hasta   @hasta
 
-max fecha_servicio_desde    @desde*/
 
 insert  @micros_fuera_servicio
 
 
-select  id_micro, patente, sum(day(fecha_servicio_hasta - fecha_servicio_desde)) as dias_fuera_servicio
- from  del_naval.micros 
+--[ ] representa rango de busqueda @desde a @hasta
+-- () representa rango de servicio efectivo fecha_servicio_desde a fecha_servicio_desde
+
+-- [ () ]
+
+
+select  MI.id_micro, MI.patente, sum(day(SE.fecha_hasta - SE.fecha_desde)) as dias_fuera_servicio
+ from  del_naval.micros MI, del_naval.servicios_micro SE
  where fecha_servicio_desde >= @desde
  and fecha_servicio_hasta <= @hasta
+ and mi.id_micro = SE.micro
  group by id_micro, patente
 union
+
+--( [ ) ]   -- caso sin interseccion () []
+
  select id_micro, patente, sum(day(fecha_servicio_hasta - @desde)) as dias_fuera_servicio
- from  del_naval.micros 
+ from  del_naval.micros MI, del_naval.servicios_micro SE
  where fecha_servicio_desde < @desde
- and fecha_servicio_hasta <= @hasta
+ and (fecha_servicio_hasta <= @hasta and fecha_servicio_hasta > @desde)--esto ultimo para que haya interseccion
+ and mi.id_micro = SE.micro
  group by id_micro, patente
 union
+-- [ ( ] )   -- caso sin interseccion [] () 
  select id_micro, patente, sum(day(@hasta - fecha_servicio_desde)) as dias_fuera_servicio
- from  del_naval.micros 
- where fecha_servicio_desde > @desde
+ from  del_naval.micros MI, del_naval.servicios_micro SE 
+ where (fecha_servicio_desde > @desde and fecha_servicio_desde <  @hasta) --esto ultimo para que haya interseccion
  and fecha_servicio_hasta > @hasta
+ and mi.id_micro = SE.micro
  group by id_micro, patente
 union
+-- ( [ ] ) 
  select id_micro, patente, sum(day(@hasta - @desde)) as dias_fuera_servicio
- from  del_naval.micros 
+ from  del_naval.micros MI, del_naval.servicios_micro SE
  where fecha_servicio_desde < @desde
  and fecha_servicio_hasta > @hasta
+ and mi.id_micro = SE.micro
  group by id_micro, patente
  order by dias_fuera_servicio desc
 
@@ -1576,4 +1598,127 @@ union
  return 
 end
 go           
+      
+      
+
+
+create procedure del_naval.insertarViaje
+(@recorrido int,
+@micro int,
+@salida datetime, 
+@llegada_estimada datetime, 
+@retorno int output
+)
+as
+begin
+--verifica disponibilidad del micro
+if exists (select top 1 id_micro
+ from DEL_NAVAL.micros
+ where  id_micro = @micro
+ -- pido que el micro a utilizar tenga un servicio que finalice 
+ -- antes de la fecha en que lo necesito o que comienze despues 
+ -- o q no tenga servicio
+ and (isnull(fecha_servicio_hasta,'01/01/1900') < @salida  
+      OR isnull(fecha_servicio_desde,'31/12/9999') > @llegada_estimada)
+ -- y que no este en la lista de micros ocupados para esa fecha
+ and not exists (select micro
+ from DEL_NAVAL.viajes
+ where micro = id_micro
+ and ((fecha_salida >= @salida and fecha_estimada <= @llegada_estimada) or
+      (@salida between fecha_salida and fecha_estimada)   or
+      (@llegada_estimada between fecha_salida and fecha_estimada)) 
+ and cancelado = 0 ))
+ 
+ begin --begin del if
+  --verifica que el micro y el recorrido tengan mismo tipo de servicio
+  if exists (select top 1 * 
+  from DEL_NAVAL.recorridos RE, DEL_NAVAL.micros MI
+  where RE.id_recorrido = @recorrido 
+  and MI.id_micro = @micro 
+  and RE.tipo_servicio = MI.tipo_servicio)
+    begin --beginif
+      insert DEL_NAVAL.viajes
+      values (@recorrido, @micro, @salida, NULL , @llegada_estimada, 0)
+      set @retorno = 0
+      return 
+    end --endif
+  else
+   begin
+   set @retorno = -2
+   return  --micro no cubre tipo de servicio de ese recorrido
+   end
+ end --endif
+ else
+ begin
+  set @retorno = -1
+  return --micro no disponible       
+ end     
+      
+
+
+
+end;
+go
+
+
+
+--El siguiente trigger se encarga de registrar las bajas por servicio de un micro
+--en la tabla de historico de bajas por servicio
+  
+create trigger del_naval.actualizar_servicios_microUPD 
+on del_naval.micros
+after update
+as 
+
+   declare @micro int, @desdenuevo datetime, @hastanuevo datetime,
+                       @desdeviejo datetime, @hastaviejo datetime
+   
+   set @micro = (select top 1 id_micro from inserted)
+   set @desdenuevo = (select top 1 fecha_servicio_desde from inserted)
+   set @hastanuevo = (select top 1 fecha_servicio_hasta from inserted)
+   
+   set @desdeviejo = (select top 1 fecha_servicio_desde from deleted)
+   set @hastaviejo = (select top 1 fecha_servicio_hasta from deleted)
+   
+   --si el rango de fechas de servicio no es null...
+  if (@desdenuevo is not null and @hastanuevo is not null)
+  
+  --se fija que si el rango viejo no era null y hay variacion, hace el insert en el registro 
+  -- historico. O si estaba en null el registro anterior, tmb hace el insert  
+   if  ((@desdeviejo is not null and @hastaviejo is not null)
+      and (@desdenuevo <> @desdeviejo) and (@hastanuevo <> @hastaviejo))
+       OR 
+      (@desdeviejo is null and @hastaviejo is null)
+   
+       insert into del_naval.servicios_micro
+        values(@micro,@desdenuevo,@hastanuevo)   
+                
+ go           
+ 
+ 
+
+ 
+--El siguiente trigger se encarga de registrar las bajas por servicio de un micro
+--en la tabla de historico de bajas por servicio
+  
+create trigger del_naval.actualizar_servicios_microINS 
+on del_naval.micros
+after insert
+as 
+
+   declare @micro int, @desdenuevo datetime, @hastanuevo datetime
+          
+   
+   set @micro = (select top 1 id_micro from inserted)
+   set @desdenuevo = (select top 1 fecha_servicio_desde from inserted)
+   set @hastanuevo = (select top 1 fecha_servicio_hasta from inserted)
+
+   --si el rango de fechas de servicio no es null...
+  if (@desdenuevo is not null and @hastanuevo is not null) 
+
+       insert into del_naval.servicios_micro
+        values(@micro,@desdenuevo,@hastanuevo)   
+                
+ go                   
+ 
                
