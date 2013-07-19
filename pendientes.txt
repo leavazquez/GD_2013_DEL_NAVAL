@@ -55,3 +55,9 @@ OK- en intentarBajarMicro arreglar esto:
 --poner en la estrategia cuestiones de migracion (codigo de anulacion, codigo de pasaje, encomienda y voucher)
 
 -- en registrarLlegada validar fecha hora de salida + 24 horas
+
+-- convertir todo a datet donde sea necesario (o sumarle un dia)
+
+-- validar superposicion de bajas servicio micro
+
+-- explicar que las bajas de servicio solo registran historico para fines estadistico, y que la que figura en el dato maestro del micro es la actual, la ultima que se usa para validar disponibilidad del micro
