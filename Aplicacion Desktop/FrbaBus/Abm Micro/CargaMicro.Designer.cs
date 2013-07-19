@@ -229,9 +229,9 @@
             this.checkFueraServicio.AutoSize = true;
             this.checkFueraServicio.Location = new System.Drawing.Point(12, 369);
             this.checkFueraServicio.Name = "checkFueraServicio";
-            this.checkFueraServicio.Size = new System.Drawing.Size(109, 17);
+            this.checkFueraServicio.Size = new System.Drawing.Size(197, 17);
             this.checkFueraServicio.TabIndex = 21;
-            this.checkFueraServicio.Text = "Fuera de Servicio";
+            this.checkFueraServicio.Text = "Establecer período fuera de servicio";
             this.checkFueraServicio.UseVisualStyleBackColor = true;
             this.checkFueraServicio.CheckedChanged += new System.EventHandler(this.CargaMicro_Click);
             // 

@@ -122,13 +122,18 @@ namespace FrbaBus.Abm_Recorrido
                 errorServicio.SetError(cbServicio, "Seleccione un tipo de servicio");
             }
             float precioPasaje = 0;
-            if (txtPrecioBase.Text == "" || !float.TryParse(txtPrecioBase.Text, out precioPasaje))
+            if (txtPrecioBase.Text == "" || !float.TryParse(txtPrecioBase.Text, out precioPasaje) || precioPasaje <= 0)
             {
                 isValid = false;
                 errorPrecioPasaje.SetError(txtPrecioBase, "Precio inválido");
             }
+            if (cbOrigen.SelectedItem == cbDestino.SelectedItem)
+            {
+                isValid = false;
+                errorDestino.SetError(cbDestino, "El destino no puede ser igual al origen");
+            }
             float precioEncomienda = 0;
-            if (txtPrecioEncomienda.Text == "" || !float.TryParse(txtPrecioEncomienda.Text, out precioEncomienda))
+            if (txtPrecioEncomienda.Text == "" || !float.TryParse(txtPrecioEncomienda.Text, out precioEncomienda) || precioEncomienda <= 0)
             {
                 isValid = false;
                 errorPrecioEncomienda.SetError(txtPrecioEncomienda, "Precio inválido");
@@ -143,14 +148,18 @@ namespace FrbaBus.Abm_Recorrido
                 parametrosRecorrido.Add(new SqlParameter("@id_servicio", servicios[cbServicio.SelectedItem.ToString()]));
                 parametrosRecorrido.Add(new SqlParameter("@precio_pasaje", precioPasaje));
                 parametrosRecorrido.Add(new SqlParameter("@precio_encomienda", precioEncomienda));
-                string queryUnicidad = "SELECT COUNT(*) FROM DEL_NAVAL.RECORRIDOS WHERE (CODIGO_RECORRIDO =  @cod_rec OR (ORIGEN = @id_origen AND DESTINO = @id_destino AND TIPO_SERVICIO = @id_servicio))";
+                string queryUnicidadId = "SELECT COUNT(*) FROM DEL_NAVAL.RECORRIDOS WHERE CODIGO_RECORRIDO =  @cod_rec ";
                 if (proposito == Proposito.Modificacion)
                 {
                     parametrosRecorrido.Add( new SqlParameter("@id_rec", recorrido.Id_recorrido));
-                    queryUnicidad += " AND ID_RECORRIDO <> @id_rec";
+                    queryUnicidadId += " AND ID_RECORRIDO <> @id_rec";
                 }
-                int cantidad = (int)DAC.ExecuteScalar(queryUnicidad, parametrosRecorrido);
-                if (cantidad == 0)
+                int cantidadId = (int)DAC.ExecuteScalar(queryUnicidadId, parametrosRecorrido);
+
+                string queryUnicidadRecorrido = "SELECT COUNT(*) FROM DEL_NAVAL.RECORRIDOS WHERE ORIGEN = @id_origen AND DESTINO = @id_destino AND TIPO_SERVICIO = @id_servicio";
+                int cantidadRecorrido = (int)DAC.ExecuteScalar(queryUnicidadRecorrido, parametrosRecorrido);
+
+                if (cantidadId == 0 && cantidadRecorrido == 0)
                 {
                     // Crear/Modificar recorrido
                     switch (proposito)
@@ -165,10 +174,23 @@ namespace FrbaBus.Abm_Recorrido
                     MessageBox.Show(proposito.ToString() + " de Recorrido realizada con éxito");
                     DialogResult = DialogResult.OK;
                     Close();
+               
+                    
+                
                 }
                 else
                 {
-                    errorCodigo.SetError(txtCodigo, "Un recorrido con ese código ya existe");
+                    if (cantidadRecorrido > 0)
+                    {
+                        string errorTuplaRecorrido = "Un recorrido con idéntico origen, destino y tipo de servicio ya existe";
+                        errorOrigen.SetError(cbOrigen, errorTuplaRecorrido);
+                        errorDestino.SetError(cbDestino, errorTuplaRecorrido);
+                        errorServicio.SetError(cbServicio, errorTuplaRecorrido);
+                    }
+                    if (cantidadId > 0)
+                    {
+                        errorCodigo.SetError(txtCodigo, "Un recorrido con ese código ya existe");
+                    }
                 }
             }
         }

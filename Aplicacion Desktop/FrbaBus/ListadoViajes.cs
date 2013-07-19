@@ -58,7 +58,7 @@ namespace FrbaBus
             if (dgvResultados.SelectedRows.Count > 0)
             {
                 this.IdViaje = dgvResultados.SelectedRows[0].Cells["ID_VIAJE"].Value.ToString();
-                this.Viaje = dgvResultados.SelectedRows[0].Cells["ORIGEN"].Value.ToString() + " - " + dgvResultados.SelectedRows[0].Cells["DESTINO"].Value.ToString() + " - " + dgvResultados.SelectedRows[0].Cells["SERVICIO"].Value.ToString();
+                this.Viaje = dgvResultados.SelectedRows[0].Cells["ORIGEN"].Value.ToString() + " - " + dgvResultados.SelectedRows[0].Cells["DESTINO"].Value.ToString() + " - " + dgvResultados.SelectedRows[0].Cells["SERVICIO"].Value.ToString() + " - " + dgvResultados.SelectedRows[0].Cells["SALIDA"].Value.ToString();
                 this.AsientosDisponibles = int.Parse(dgvResultados.SelectedRows[0].Cells["BUTACAS_DISPONIBLES"].Value.ToString());
                 this.KilosDisponibles = int.Parse(dgvResultados.SelectedRows[0].Cells["KILOS_DISPONIBLES"].Value.ToString());
                 Close();

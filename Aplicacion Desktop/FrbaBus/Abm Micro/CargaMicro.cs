@@ -44,6 +44,8 @@ namespace FrbaBus.Abm_Micro
             labelHasta.Visible = false;
             dtpDesde.Visible = false;
             dtpHasta.Visible = false;
+            dtpDesde.Value = Config.FechaSistema;
+            dtpHasta.Value = Config.FechaSistema;
         }
 
         public CargaMicro(Micro micro)
@@ -52,22 +54,20 @@ namespace FrbaBus.Abm_Micro
             this.micro = micro;
             proposito = Proposito.Modificacion;
             this.Text = proposito + " de Micro";
+            labelServicio.Text = "Añadir período fuera de servicio";
 
             cargaMarca();
             cargaServicio();
             cargaButacas();
 
-            checkFueraServicio.Checked = micro.Baja_servicio;
-            labelDesde.Visible = micro.Baja_servicio;
-            labelHasta.Visible = micro.Baja_servicio;
-            dtpDesde.Visible = micro.Baja_servicio;
-            dtpHasta.Visible = micro.Baja_servicio;
-
-            if (micro.Baja_servicio)
-            {
-                dtpDesde.Value = micro.Fecha_servicio_desde;
-                dtpHasta.Value = micro.Fecha_servicio_hasta;
-            }
+            checkFueraServicio.Checked = false;
+            labelDesde.Visible = false;
+            labelHasta.Visible = false;
+            dtpDesde.Visible = false;
+            dtpHasta.Visible = false;
+            dtpDesde.Value = Config.FechaSistema;
+            dtpHasta.Value = Config.FechaSistema;
+            
             txtPatente.Text = micro.Patente;
             txtNumero.Text = micro.Numero;
             txtModelo.Text = micro.Modelo;
@@ -328,7 +328,7 @@ namespace FrbaBus.Abm_Micro
                             }
                             else
                             {
-                                DAC.ExecuteNonQuery("UPDATE DEL_NAVAL.MICROS SET NUMERO = @numero, TIPO_SERVICIO = @servicio, KILOS_BODEGA = @bodega, CANTIDAD_ASIENTOS = @asientos, MARCA= @marca, MODELO = @modelo, PATENTE = @patente, BAJA_FIN_VIDA_UTIL = 0, BAJA_SERVICIO = 0, FECHA_SERVICIO_DESDE = null, FECHA_SERVICIO_HASTA = null, FECHA_BAJA = null WHERE ID_MICRO = @id_micro", parametros);
+                                DAC.ExecuteNonQuery("UPDATE DEL_NAVAL.MICROS SET NUMERO = @numero, TIPO_SERVICIO = @servicio, KILOS_BODEGA = @bodega, CANTIDAD_ASIENTOS = @asientos, MARCA= @marca, MODELO = @modelo, PATENTE = @patente, BAJA_FIN_VIDA_UTIL = 0, FECHA_BAJA = null WHERE ID_MICRO = @id_micro", parametros);
                             }
                             break;
                     }
