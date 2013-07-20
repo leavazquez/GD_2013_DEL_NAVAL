@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using FrbaBus.GenerarViaje;
+using FrbaBus.Entidades;
 
 namespace FrbaBus.Compra_de_Pasajes
 {
@@ -21,7 +22,14 @@ namespace FrbaBus.Compra_de_Pasajes
         private ErrorProvider errorKilos = new ErrorProvider();
         private ErrorProvider errorPasajero = new ErrorProvider();
         private ErrorProvider errorViaje = new ErrorProvider();
+        private ErrorProvider errorItems = new ErrorProvider();
         private List<string> idsButacasAsiganadas = new List<string>();
+        private bool hayDiscapacitado = false;
+        private bool hayAcompanante = false;
+        private string idViajeDiscapacitado;
+
+        private List<Encomienda> encomiendas = new List<Encomienda>();
+        private List<Pasaje> pasajes = new List<Pasaje>();
 
         public ComprarPasajesEncomiendas()
         {
@@ -29,16 +37,21 @@ namespace FrbaBus.Compra_de_Pasajes
             DataGridViewColumn detalle = new DataGridViewColumn();
             detalle.Name = "Detalle";
             DataGridViewCell celda = new DataGridViewTextBoxCell();
+            detalle.Width = 419;
             detalle.CellTemplate = celda;
             dgvCompras.Columns.Add(detalle);
         }
 
         private void btnViaje_Click(object sender, EventArgs e)
         {
-            ListadoViajes listadoViajes = new ListadoViajes();
+            ListadoViajes listadoViajes;
             if (this.destinoObligado != null)
             {
-                listadoViajes.DestinoObligado = this.destinoObligado;
+                listadoViajes = new ListadoViajes(this.destinoObligado);
+            }
+            else
+            {
+                listadoViajes = new ListadoViajes(null);
             }
             listadoViajes.ShowDialog();
             if (listadoViajes.IdViaje != null)
@@ -54,7 +67,7 @@ namespace FrbaBus.Compra_de_Pasajes
                     kilosViaje.Add(listadoViajes.IdViaje, listadoViajes.KilosDisponibles);
                     destinoActual = listadoViajes.Destino;
                 }
-
+                labelDisponibilidad.Text = "Hay " + this.asientosViaje[this.idViaje] + " asientos disponibles y " + this.kilosViaje[this.idViaje] + " kilos libres";
             }
         }
 
@@ -70,9 +83,27 @@ namespace FrbaBus.Compra_de_Pasajes
             {
                 if (kilosAOcupar <= kilosViaje[this.idViaje])
                 {
-                    // lanzar cargaCliente
-                    // si esta ok restar kilos del viaje
-                    // insertar registro en dgv
+                    CargaCliente cargaCliente = new CargaCliente("Encomienda", 0, false, false);
+                    cargaCliente.IdViaje = this.idViaje;
+                    
+
+                    if (cargaCliente.ShowDialog() == DialogResult.OK)
+                    {
+                        this.kilosViaje[this.idViaje] = this.kilosViaje[this.idViaje] - kilosAOcupar;
+                        labelDisponibilidad.Text = "Hay " + this.asientosViaje[this.idViaje] + " asientos disponibles y " + this.kilosViaje[this.idViaje] + " kilos libres";
+                        DataGridViewRow fila = new DataGridViewRow();
+                        DataGridViewTextBoxCell detalle = new DataGridViewTextBoxCell();
+                        detalle.Value = btnViaje.Text + " \n " + txtKilos.Text + " Kilos " + cargaCliente.Detalle;
+                        fila.Height = 50;
+                        fila.Cells.Add(detalle);
+                        dgvCompras.Rows.Add(fila);
+
+                        Encomienda encomienda = new Encomienda();
+                        encomienda.Viaje = this.idViaje;
+                        encomienda.Peso = kilosAOcupar;
+                        encomienda.Remitente = cargaCliente.Dni;
+                        encomiendas.Add(encomienda);
+                    }
 
                 }
                 else
@@ -105,7 +136,14 @@ namespace FrbaBus.Compra_de_Pasajes
                         {
                             continua = true;
                         }
-                        CargaCliente cargaCliente = new CargaCliente(i + 1, continua);
+                        bool pedirAcompanante = false;
+                        if (hayDiscapacitado && idViajeDiscapacitado == idViaje && !this.hayAcompanante)
+                        {
+                            pedirAcompanante = true;
+                        }
+
+                        CargaCliente cargaCliente = new CargaCliente("Pasaje", i + 1, continua, pedirAcompanante);
+                        cargaCliente.HayDiscapacitado = this.hayDiscapacitado;
                         cargaCliente.butacasAExcluir = this.idsButacasAsiganadas;
                         cargaCliente.IdViaje = this.idViaje;
                         cargaCliente.CantidadPisosMicro = this.cantidadPisosMicro;
@@ -114,14 +152,26 @@ namespace FrbaBus.Compra_de_Pasajes
                         if (cargaCliente.IdButaca != null)
                         {
                             this.asientosViaje[this.idViaje] = this.asientosViaje[this.idViaje] - 1;
+                            labelDisponibilidad.Text = "Hay " + this.asientosViaje[this.idViaje] + " asientos disponibles y " + this.kilosViaje[this.idViaje] + " kilos libres";
                             DataGridViewRow fila = new DataGridViewRow();
                             DataGridViewTextBoxCell detalle = new DataGridViewTextBoxCell();
-                            detalle.Value = btnViaje.Text + " \n " + cargaCliente.Pasaje;
+                            detalle.Value = btnViaje.Text + " \n " + cargaCliente.Detalle;
                             fila.Height = 50;
                             fila.Cells.Add(detalle);
                             dgvCompras.Rows.Add(fila);
-                            
+                            if (cargaCliente.Discapacitado)
+                            {
+                                this.hayDiscapacitado = true;
+                                this.idViajeDiscapacitado = this.idViaje;
+                            }
+                            this.hayAcompanante = cargaCliente.EsAcompanante;
                             this.idsButacasAsiganadas.Add(cargaCliente.IdButaca);
+
+                            Pasaje pasaje = new Pasaje();
+                            pasaje.Viaje = this.idViaje;
+                            pasaje.Butaca = cargaCliente.IdButaca;
+                            pasaje.Pasajero = cargaCliente.Dni;
+                            pasajes.Add(pasaje);
                         }
                         
                     }
@@ -142,6 +192,22 @@ namespace FrbaBus.Compra_de_Pasajes
             if (dgvCompras.Rows.Count == 1)
             {
                 this.destinoObligado = this.destinoActual;
+            }
+        }
+
+        private void btnComprar_Click(object sender, EventArgs e)
+        {
+            if (dgvCompras.Rows.Count != 0)
+            {
+                CargaCliente cargaCliente = new CargaCliente("Compra", 0, false, false);
+                if (cargaCliente.ShowDialog() == DialogResult.OK)
+                {
+                    // comprar
+                }
+            }
+            else
+            {
+                errorItems.SetError(dgvCompras, "No hay items a comprar");
             }
         }
     }

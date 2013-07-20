@@ -16,10 +16,16 @@ namespace FrbaBus.GenerarViaje
         public string Butaca;
         public string IdViaje;
         public int CantidadPisosMicro;
-        public string Pasaje;
+        public string Detalle;
         public int NumeroOrden;
         public bool Continua;
         public List<string> butacasAExcluir = new List<string>();
+        public string Proposito;
+        public bool Discapacitado = false;
+        public bool EsAcompanante = false;
+        public int Dni;
+
+        public bool HayDiscapacitado;
 
         private ErrorProvider errorDni = new ErrorProvider();
         private ErrorProvider errorNombre = new ErrorProvider();
@@ -30,20 +36,52 @@ namespace FrbaBus.GenerarViaje
         private ErrorProvider errorMail = new ErrorProvider();
         private ErrorProvider errorFechaNacimiento = new ErrorProvider();
         private ErrorProvider errorButaca = new ErrorProvider();
+        private ErrorProvider errorDiscapacitado = new ErrorProvider();
 
-        public CargaCliente(int numeroOrden, bool continua)
+        public CargaCliente(string proposito, int numeroOrden, bool continua, bool pedirAcompanante)
         {
             InitializeComponent();
             dtpFechaNacimiento.Value = Config.FechaSistema;
-            this.NumeroOrden = numeroOrden;
-            if (this.NumeroOrden != 0)
+            if (pedirAcompanante)
             {
-                this.Text = "Pasaje #" + this.NumeroOrden;
+                labelAcompanante.Visible = true;
+                cbAcompanante.Visible = true;
             }
-            this.Continua = continua;
-            if (this.Continua)
+            this.Proposito = proposito;
+            switch (this.Proposito)
             {
-                btnSeleccionarAsiento.Text += " y continuar";
+                case "Pasaje":
+                    this.NumeroOrden = numeroOrden;
+                    if (this.NumeroOrden != 0)
+                    {
+                        this.Text = "Pasaje #" + this.NumeroOrden;
+                    }
+                    this.Continua = continua;
+                    if (this.Continua)
+                    {
+                        btnAceptar.AutoSize = true;
+                        btnAceptar.Left = btnAceptar.Left - 25;
+                        btnAceptar.Text += " y continuar";
+                    }
+                    break;
+                case "Encomienda":
+                    this.Text = "Datos del remitente";
+                    btnSeleccionarAsiento.Visible = false;
+                    labelAsiento.Visible = false;
+                    break;
+                case "Compra":
+                    this.Text = "Datos del comprador";
+                    btnSeleccionarAsiento.Visible = false;
+                    labelAsiento.Visible = false;
+                    labelFormaPago.Visible = true;
+                    cbFormaPago.Visible = true;
+                    cbFormaPago.Items.Add("Tarjeta");
+                    cbFormaPago.SelectedIndex = 0;
+                    if (Sesion.Iniciada)
+                    {
+                        cbFormaPago.Items.Add("Efectivo");
+                    }
+                    break;
             }
         }
 
@@ -55,15 +93,37 @@ namespace FrbaBus.GenerarViaje
 
         private void btnSeleccionarAsiento_Click(object sender, EventArgs e)
         {
-            SeleccionButaca seleccionButaca = new SeleccionButaca(this.CantidadPisosMicro);
-            seleccionButaca.IdViaje = this.IdViaje;
-            seleccionButaca.ButacasAExcluir = this.butacasAExcluir;
-            seleccionButaca.ShowDialog();
-            if (seleccionButaca.IdButaca != null)
+            int dni = 0;
+            if (int.TryParse(txtDni.Text, out dni))
             {
-                this.IdButaca = seleccionButaca.IdButaca;
-                btnSeleccionarAsiento.Text = seleccionButaca.Butaca;
-                this.Butaca = seleccionButaca.Butaca;
+                // chequear si el pasajero puede viajar
+                List<SqlParameter> parametros = new List<SqlParameter>();
+                parametros.Add(new SqlParameter("@dni", dni));
+                parametros.Add(new SqlParameter("@viaje", IdViaje));
+                int codigo = (int)DAC.ExecuteScalar(@"declare @outp int
+                    exec del_naval.pasajeroPuedeViajar @dni, @viaje, @outp output
+                    select @outp", parametros);
+                if (codigo == 0)
+                {
+                    SeleccionButaca seleccionButaca = new SeleccionButaca(this.CantidadPisosMicro);
+                    seleccionButaca.IdViaje = this.IdViaje;
+                    seleccionButaca.ButacasAExcluir = this.butacasAExcluir;
+                    seleccionButaca.ShowDialog();
+                    if (seleccionButaca.IdButaca != null)
+                    {
+                        this.IdButaca = seleccionButaca.IdButaca;
+                        btnSeleccionarAsiento.Text = seleccionButaca.Butaca;
+                        this.Butaca = seleccionButaca.Butaca;
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("El pasajero ya tiene otro viaje asignado para el misno rango de fecha/hora");
+                }
+            }
+            else
+            {
+                errorDni.SetError(txtDni, "DNI inválido");
             }
         }
 
@@ -130,10 +190,15 @@ namespace FrbaBus.GenerarViaje
                 isValid = false;
                 errorFechaNacimiento.SetError(dtpFechaNacimiento, "Fecha de nacimiento inválida");
             }
-            if (this.IdButaca == null)
+            if (this.IdButaca == null && this.Proposito == "Pasaje")
             {
                 isValid = false;
                 errorButaca.SetError(btnSeleccionarAsiento, "Seleccione un asiento");
+            }
+            if (this.HayDiscapacitado && cbDiscapacitado.Checked)
+            {
+                isValid = false;
+                errorDiscapacitado.SetError(cbDiscapacitado, "Ya hay un discapacitado en la comptra y no se permite más de uno");
             }
             if (isValid)
             {
@@ -167,8 +232,25 @@ namespace FrbaBus.GenerarViaje
                     // modificación
                     DAC.ExecuteNonQuery("UPDATE DEL_NAVAL.CLIENTES SET ID_DNI = @dni, NOMBRE = @nombre, APELLIDO = @apellido, FECHA_NACIMIENTO = @fecha_nacimiento, SEXO = @sexo, DISCAPACITADO = @discapacitado, JUBILADO_PENSIONADO = @jubilado_pensionado, DIRECCION = @direccion, TELEFONO = @telefono, MAIL = @mail WHERE ID_DNI = @dni", parametrosCliente);
                 }
-                MessageBox.Show("Asiento asignado");
-                this.Pasaje = txtDni.Text + " - " + this.Butaca;
+                this.Discapacitado = cbDiscapacitado.Checked;
+                this.Dni = dni;
+                switch (Proposito)
+                {
+                    case "Pasaje":
+                        this.Detalle = "DNI: " + txtDni.Text + " - " + this.Butaca;
+                        MessageBox.Show("Asiento asignado");
+                        this.EsAcompanante = cbAcompanante.Checked;
+                        this.DialogResult = DialogResult.OK;
+                        break;
+                    case "Encomienda":
+                        this.Detalle = "DNI: " + txtDni.Text;
+                        MessageBox.Show("Datos del remitente cargados");
+                        this.DialogResult = DialogResult.OK;
+                        break;
+                    case "Compra":
+                        break;
+                }
+                
                 Close();
             }
         }
@@ -196,8 +278,14 @@ namespace FrbaBus.GenerarViaje
                         rbHombre.Checked = false;
                         rbMujer.Checked = true;
                     }
-                    cbDiscapacitado.Checked = fila["DISCAPACITADO"].ToString() == "1";
-                    cbJubiladoPensionado.Checked = fila["JUBILADO_PENSIONADO"].ToString() == "1";
+
+                    if (fila["SEXO"].ToString() == "")
+                    {
+                        rbHombre.Checked = false;
+                        rbMujer.Checked = false;
+                    }
+                    cbDiscapacitado.Checked = fila["DISCAPACITADO"].ToString() == "True";
+                    cbJubiladoPensionado.Checked = fila["JUBILADO_PENSIONADO"].ToString() == "True";
                     txtDirección.Text = fila["DIRECCION"].ToString();
                     txtTelefono.Text = fila["TELEFONO"].ToString();
                     txtMail.Text = fila["MAIL"].ToString();

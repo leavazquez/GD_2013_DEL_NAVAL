@@ -53,6 +53,10 @@
             this.cbDiscapacitado = new System.Windows.Forms.CheckBox();
             this.labelJubilado = new System.Windows.Forms.Label();
             this.cbJubiladoPensionado = new System.Windows.Forms.CheckBox();
+            this.labelAcompanante = new System.Windows.Forms.Label();
+            this.cbAcompanante = new System.Windows.Forms.CheckBox();
+            this.labelFormaPago = new System.Windows.Forms.Label();
+            this.cbFormaPago = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
             // 
             // labelDni
@@ -222,7 +226,7 @@
             // 
             // btnAceptar
             // 
-            this.btnAceptar.Location = new System.Drawing.Point(197, 367);
+            this.btnAceptar.Location = new System.Drawing.Point(197, 402);
             this.btnAceptar.Name = "btnAceptar";
             this.btnAceptar.Size = new System.Drawing.Size(75, 23);
             this.btnAceptar.TabIndex = 19;
@@ -232,7 +236,7 @@
             // 
             // btnLimpiar
             // 
-            this.btnLimpiar.Location = new System.Drawing.Point(12, 367);
+            this.btnLimpiar.Location = new System.Drawing.Point(12, 402);
             this.btnLimpiar.Name = "btnLimpiar";
             this.btnLimpiar.Size = new System.Drawing.Size(75, 23);
             this.btnLimpiar.TabIndex = 20;
@@ -276,11 +280,55 @@
             this.cbJubiladoPensionado.TabIndex = 26;
             this.cbJubiladoPensionado.UseVisualStyleBackColor = true;
             // 
+            // labelAcompanante
+            // 
+            this.labelAcompanante.AutoSize = true;
+            this.labelAcompanante.Location = new System.Drawing.Point(12, 369);
+            this.labelAcompanante.Name = "labelAcompanante";
+            this.labelAcompanante.Size = new System.Drawing.Size(73, 13);
+            this.labelAcompanante.TabIndex = 27;
+            this.labelAcompanante.Text = "Acompañante";
+            this.labelAcompanante.Visible = false;
+            // 
+            // cbAcompanante
+            // 
+            this.cbAcompanante.AutoSize = true;
+            this.cbAcompanante.Location = new System.Drawing.Point(171, 369);
+            this.cbAcompanante.Name = "cbAcompanante";
+            this.cbAcompanante.Size = new System.Drawing.Size(15, 14);
+            this.cbAcompanante.TabIndex = 28;
+            this.cbAcompanante.UseVisualStyleBackColor = true;
+            this.cbAcompanante.Visible = false;
+            // 
+            // labelFormaPago
+            // 
+            this.labelFormaPago.AutoSize = true;
+            this.labelFormaPago.Location = new System.Drawing.Point(12, 370);
+            this.labelFormaPago.Name = "labelFormaPago";
+            this.labelFormaPago.Size = new System.Drawing.Size(79, 13);
+            this.labelFormaPago.TabIndex = 29;
+            this.labelFormaPago.Text = "Forma de Pago";
+            this.labelFormaPago.Visible = false;
+            // 
+            // cbFormaPago
+            // 
+            this.cbFormaPago.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbFormaPago.FormattingEnabled = true;
+            this.cbFormaPago.Location = new System.Drawing.Point(151, 366);
+            this.cbFormaPago.Name = "cbFormaPago";
+            this.cbFormaPago.Size = new System.Drawing.Size(121, 21);
+            this.cbFormaPago.TabIndex = 30;
+            this.cbFormaPago.Visible = false;
+            // 
             // CargaCliente
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(284, 401);
+            this.ClientSize = new System.Drawing.Size(284, 437);
+            this.Controls.Add(this.cbFormaPago);
+            this.Controls.Add(this.labelFormaPago);
+            this.Controls.Add(this.cbAcompanante);
+            this.Controls.Add(this.labelAcompanante);
             this.Controls.Add(this.cbJubiladoPensionado);
             this.Controls.Add(this.labelJubilado);
             this.Controls.Add(this.cbDiscapacitado);
@@ -340,5 +388,9 @@
         private System.Windows.Forms.CheckBox cbDiscapacitado;
         private System.Windows.Forms.Label labelJubilado;
         private System.Windows.Forms.CheckBox cbJubiladoPensionado;
+        private System.Windows.Forms.Label labelAcompanante;
+        private System.Windows.Forms.CheckBox cbAcompanante;
+        private System.Windows.Forms.Label labelFormaPago;
+        private System.Windows.Forms.ComboBox cbFormaPago;
     }
 }

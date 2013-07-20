@@ -132,7 +132,9 @@
       <DependentUpon>ConsultarPuntos.cs</DependentUpon>
     </Compile>
     <Compile Include="DAC.cs" />
+    <Compile Include="Entidades\Encomienda.cs" />
     <Compile Include="Entidades\Micro.cs" />
+    <Compile Include="Entidades\Pasaje.cs" />
     <Compile Include="Entidades\Recorrido.cs" />
     <Compile Include="Entidades\Rol.cs" />
     <Compile Include="Filtros\Filtro.cs">

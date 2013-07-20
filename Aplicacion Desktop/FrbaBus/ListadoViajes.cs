@@ -19,9 +19,8 @@ namespace FrbaBus
         public int CantidadPisos;
         public string Viaje;
         public string Destino;
-        public string DestinoObligado;
 
-        public ListadoViajes()
+        public ListadoViajes(string destinoObligado)
         {
             InitializeComponent();
             this.Text = "Seleccione un viaje";
@@ -54,9 +53,9 @@ namespace FrbaBus
             AgregarFiltro(origen);
             FiltroSeleccion destino = new FiltroSeleccion("Destino", "d.nombre_ciudad", ciudades);
             AgregarFiltro(destino);
-            if (this.DestinoObligado != null)
+            if (destinoObligado != null)
             {
-                destino.cbValor.SelectedItem = this.DestinoObligado;
+                destino.cbValor.SelectedItem = destinoObligado;
                 destino.cbValor.Enabled = false;
             }
         }

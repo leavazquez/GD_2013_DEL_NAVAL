@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             this.labelViaje = new System.Windows.Forms.Label();
             this.btnViaje = new System.Windows.Forms.Button();
             this.labelCantidad = new System.Windows.Forms.Label();
@@ -39,6 +39,7 @@
             this.btnOcupar = new System.Windows.Forms.Button();
             this.dgvCompras = new System.Windows.Forms.DataGridView();
             this.btnComprar = new System.Windows.Forms.Button();
+            this.labelDisponibilidad = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dgvCompras)).BeginInit();
             this.SuspendLayout();
             // 
@@ -118,14 +119,14 @@
             this.dgvCompras.AllowUserToAddRows = false;
             this.dgvCompras.AllowUserToDeleteRows = false;
             this.dgvCompras.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dgvCompras.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgvCompras.DefaultCellStyle = dataGridViewCellStyle3;
             this.dgvCompras.Location = new System.Drawing.Point(13, 167);
             this.dgvCompras.Name = "dgvCompras";
             this.dgvCompras.ReadOnly = true;
@@ -143,12 +144,22 @@
             this.btnComprar.TabIndex = 9;
             this.btnComprar.Text = "Comprar";
             this.btnComprar.UseVisualStyleBackColor = true;
+            this.btnComprar.Click += new System.EventHandler(this.btnComprar_Click);
+            // 
+            // labelDisponibilidad
+            // 
+            this.labelDisponibilidad.AutoSize = true;
+            this.labelDisponibilidad.Location = new System.Drawing.Point(121, 62);
+            this.labelDisponibilidad.Name = "labelDisponibilidad";
+            this.labelDisponibilidad.Size = new System.Drawing.Size(0, 13);
+            this.labelDisponibilidad.TabIndex = 10;
             // 
             // ComprarPasajesEncomiendas
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(444, 357);
+            this.Controls.Add(this.labelDisponibilidad);
             this.Controls.Add(this.btnComprar);
             this.Controls.Add(this.dgvCompras);
             this.Controls.Add(this.btnOcupar);
@@ -179,5 +190,6 @@
         private System.Windows.Forms.Button btnOcupar;
         private System.Windows.Forms.DataGridView dgvCompras;
         private System.Windows.Forms.Button btnComprar;
+        private System.Windows.Forms.Label labelDisponibilidad;
     }
 }
