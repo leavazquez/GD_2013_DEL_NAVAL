@@ -64,6 +64,7 @@ OK- en intentarBajarMicro arreglar esto:
 
 -- exlpicar logica de canjes de puntos y de utilizacion de puntos usados
 
+-- hacer unique codigo de pasaje y encomienda
 
 
 
