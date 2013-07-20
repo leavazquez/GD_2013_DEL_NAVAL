@@ -221,7 +221,7 @@ namespace FrbaBus.Compra_de_Pasajes
                         parametrosPasaje.Add(new SqlParameter("@butaca", pasaje.Butaca));
                         DataTable datosPasaje = DAC.ExecuteReader(@"declare @codigo_pasaje int
                             declare @outp int " +
-                            (pasaje.Gratis ? "set @outp = 0" : "") +
+                            (pasaje.Gratis ? "set @outp = 0 " : "") +
                             @"exec del_naval.insertarPasaje @voucher, @viaje, @pasajero, @butaca, @codigo_pasaje output, @outp output
                             select @outp as monto, @codigo_pasaje as codigo", parametrosPasaje);
                         pasaje.Monto = decimal.Parse(datosPasaje.Rows[0]["monto"].ToString()) / 100;
@@ -249,7 +249,7 @@ namespace FrbaBus.Compra_de_Pasajes
                     }
                     foreach (Encomienda encomienda in encomiendas)
                     {
-                        mensajeFinal.AppendLine("Encomienda: " + encomienda.Codigo.ToString() + " - Código" + encomienda.Monto.ToString()):
+                        mensajeFinal.AppendLine("Encomienda: " + encomienda.Codigo.ToString() + " - Código" + encomienda.Monto.ToString());
                     }
                     MessageBox.Show(mensajeFinal.ToString());
                     this.Close();
