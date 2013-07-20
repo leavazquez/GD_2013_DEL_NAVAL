@@ -235,6 +235,7 @@ create table del_naval.encomiendas (
 	id_encomienda int identity (1,1),	
 	voucher int,
 	viaje int,
+	remitente numeric(18,0),  
 	peso numeric(18,0),
 	cancelado bit,
 	monto numeric(18,2),
@@ -395,7 +396,7 @@ and co.fecha_compra = case when ma.Pasaje_FechaCompra > ma.Paquete_FechaCompra t
 and co.aux_migracion = case when ma.Pasaje_Codigo > ma.Paquete_Codigo then ma.Pasaje_Codigo else ma.Paquete_Codigo end
 
 insert into DEL_NAVAL.encomiendas
-select co.id_voucher, vi.id_viaje, ma.Paquete_KG, 0, ma.Paquete_Precio, ma.Paquete_Codigo
+select co.id_voucher, vi.id_viaje, co.comprador, ma.Paquete_KG, 0, ma.Paquete_Precio, ma.Paquete_Codigo
 from gd_esquema.Maestra ma,
 DEL_NAVAL.compras co, DEL_NAVAL.viajes vi, DEL_NAVAL.recorridos re, DEL_NAVAL.micros mi, DEL_NAVAL.compras_viajes cv
 where cv.viaje = vi.id_viaje
@@ -442,10 +443,9 @@ select pasajero, cast (monto / 5 as int),  fecha_llegada, id_pasaje, NULL, 0
 from DEL_NAVAL.pasajes PA, DEL_NAVAL.viajes VI
 where PA.viaje = VI.id_viaje
 union
-select comprador, cast (monto / 5 as int), fecha_llegada, NULL, id_encomienda, 0
-from DEL_NAVAL.encomiendas EN, DEL_NAVAL.viajes VI, DEL_NAVAL.compras CO
+select EN.remitente, cast (monto / 5 as int), fecha_llegada, NULL, id_encomienda, 0
+from DEL_NAVAL.encomiendas EN, DEL_NAVAL.viajes VI
 where EN.viaje = VI.id_viaje 
-and   EN.voucher = CO.id_voucher
 
 
 --Se elimina la columna aux_migración que solo se utilizo para poder relacionar uno a uno las compras con las encomiendas o pasajes
@@ -618,10 +618,16 @@ alter table del_naval.compras_viajes
 add constraint fk_viajes_compras foreign key (viaje) references del_naval.viajes (id_viaje)
 
 alter table del_naval.pasajes
-add constraint fk_pasajes_compras foreign key (voucher) references del_naval.compras (id_voucher)
+ add constraint fk_pasajes_compras foreign key (voucher) references del_naval.compras (id_voucher)
+alter table del_naval.pasajes 
+ add constraint fk_pasajes_viajes foreign key (viaje) references del_naval.viajes (id_viaje)
 
 alter table del_naval.encomiendas
-add constraint fk_encomiendas_compras foreign key (voucher) references del_naval.compras (id_voucher)
+ add constraint fk_encomiendas_compras foreign key (voucher) references del_naval.compras (id_voucher)
+alter table del_naval.encomiendas
+ add constraint fk_encomiendas_viajes foreign key (viaje) references del_naval.viajes (id_viaje)
+alter table del_naval.encomiendas
+ add constraint fk_encomienda_remitente foreign key (remitente) references del_naval.clientes (id_dni)
 
 alter table del_naval.pasajes
 add constraint fk_pasajes_clientes foreign key (pasajero) references del_naval.clientes (id_dni)
