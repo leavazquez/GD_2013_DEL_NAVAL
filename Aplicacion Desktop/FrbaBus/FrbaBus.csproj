@@ -123,6 +123,12 @@
     <Compile Include="Compra de Pasajes\ComprarPasajesEncomiendas.Designer.cs">
       <DependentUpon>ComprarPasajesEncomiendas.cs</DependentUpon>
     </Compile>
+    <Compile Include="Compra de Pasajes\DatosTarjeta.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Compra de Pasajes\DatosTarjeta.Designer.cs">
+      <DependentUpon>DatosTarjeta.cs</DependentUpon>
+    </Compile>
     <Compile Include="Comun.cs" />
     <Compile Include="Config.cs" />
     <Compile Include="Consulta Puntos Adquiridos\ConsultarPuntos.cs">
@@ -255,6 +261,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Compra de Pasajes\ComprarPasajesEncomiendas.resx">
       <DependentUpon>ComprarPasajesEncomiendas.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Compra de Pasajes\DatosTarjeta.resx">
+      <DependentUpon>DatosTarjeta.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Filtros\Filtro.resx">
       <DependentUpon>Filtro.cs</DependentUpon>

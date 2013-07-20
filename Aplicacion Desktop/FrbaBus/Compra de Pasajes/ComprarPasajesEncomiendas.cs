@@ -171,6 +171,7 @@ namespace FrbaBus.Compra_de_Pasajes
                             pasaje.Viaje = this.idViaje;
                             pasaje.Butaca = cargaCliente.IdButaca;
                             pasaje.Pasajero = cargaCliente.Dni;
+                            pasaje.Gratis = cargaCliente.Discapacitado || cargaCliente.EsAcompanante;
                             pasajes.Add(pasaje);
                         }
                         

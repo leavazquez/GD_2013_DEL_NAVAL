@@ -248,6 +248,7 @@ namespace FrbaBus.GenerarViaje
                         this.DialogResult = DialogResult.OK;
                         break;
                     case "Compra":
+
                         break;
                 }
                 

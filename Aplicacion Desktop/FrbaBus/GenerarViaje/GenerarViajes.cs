@@ -67,7 +67,7 @@ namespace FrbaBus.GenerarViaje
                 errorFechas.SetError(dtpSalida, "La fechas deben ser futuras");
                 return;
             }
-            if (dtpLlegada.Value < dtpSalida.Value)
+            if (dtpLlegada.Value <= dtpSalida.Value)
             {
                 isValid = false;
                 errorFechas.SetError(dtpSalida, "Rango de fechas inválido");

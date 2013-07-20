@@ -10,5 +10,6 @@ namespace FrbaBus.Entidades
         public string Viaje;
         public int Pasajero;
         public string Butaca;
+        public bool Gratis;
     }
 }
