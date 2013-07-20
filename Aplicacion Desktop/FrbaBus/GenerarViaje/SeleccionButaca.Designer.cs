@@ -95,6 +95,7 @@
             this.dgvButacas.Location = new System.Drawing.Point(13, 139);
             this.dgvButacas.MultiSelect = false;
             this.dgvButacas.Name = "dgvButacas";
+            this.dgvButacas.ReadOnly = true;
             this.dgvButacas.RowHeadersVisible = false;
             this.dgvButacas.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvButacas.Size = new System.Drawing.Size(353, 150);
@@ -108,6 +109,7 @@
             this.btnSeleccionar.TabIndex = 6;
             this.btnSeleccionar.Text = "Seleccionar";
             this.btnSeleccionar.UseVisualStyleBackColor = true;
+            this.btnSeleccionar.Click += new System.EventHandler(this.btnSeleccionar_Click);
             // 
             // SeleccionButaca
             // 

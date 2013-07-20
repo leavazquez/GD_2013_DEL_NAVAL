@@ -51,6 +51,8 @@
             this.btnLimpiar = new System.Windows.Forms.Button();
             this.labelDiscapacitado = new System.Windows.Forms.Label();
             this.cbDiscapacitado = new System.Windows.Forms.CheckBox();
+            this.labelJubilado = new System.Windows.Forms.Label();
+            this.cbJubiladoPensionado = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // labelDni
@@ -106,7 +108,7 @@
             // labelDireccion
             // 
             this.labelDireccion.AutoSize = true;
-            this.labelDireccion.Location = new System.Drawing.Point(12, 168);
+            this.labelDireccion.Location = new System.Drawing.Point(12, 194);
             this.labelDireccion.Name = "labelDireccion";
             this.labelDireccion.Size = new System.Drawing.Size(52, 13);
             this.labelDireccion.TabIndex = 6;
@@ -114,7 +116,7 @@
             // 
             // txtDirección
             // 
-            this.txtDirección.Location = new System.Drawing.Point(123, 165);
+            this.txtDirección.Location = new System.Drawing.Point(123, 191);
             this.txtDirección.Name = "txtDirección";
             this.txtDirección.Size = new System.Drawing.Size(149, 20);
             this.txtDirección.TabIndex = 7;
@@ -122,7 +124,7 @@
             // labelTelefono
             // 
             this.labelTelefono.AutoSize = true;
-            this.labelTelefono.Location = new System.Drawing.Point(13, 198);
+            this.labelTelefono.Location = new System.Drawing.Point(13, 224);
             this.labelTelefono.Name = "labelTelefono";
             this.labelTelefono.Size = new System.Drawing.Size(49, 13);
             this.labelTelefono.TabIndex = 8;
@@ -130,7 +132,7 @@
             // 
             // txtTelefono
             // 
-            this.txtTelefono.Location = new System.Drawing.Point(172, 195);
+            this.txtTelefono.Location = new System.Drawing.Point(172, 221);
             this.txtTelefono.Name = "txtTelefono";
             this.txtTelefono.Size = new System.Drawing.Size(100, 20);
             this.txtTelefono.TabIndex = 9;
@@ -138,7 +140,7 @@
             // labelMail
             // 
             this.labelMail.AutoSize = true;
-            this.labelMail.Location = new System.Drawing.Point(13, 224);
+            this.labelMail.Location = new System.Drawing.Point(13, 250);
             this.labelMail.Name = "labelMail";
             this.labelMail.Size = new System.Drawing.Size(26, 13);
             this.labelMail.TabIndex = 10;
@@ -146,7 +148,7 @@
             // 
             // txtMail
             // 
-            this.txtMail.Location = new System.Drawing.Point(123, 221);
+            this.txtMail.Location = new System.Drawing.Point(123, 247);
             this.txtMail.Name = "txtMail";
             this.txtMail.Size = new System.Drawing.Size(149, 20);
             this.txtMail.TabIndex = 11;
@@ -154,7 +156,7 @@
             // labelFechaNacimiento
             // 
             this.labelFechaNacimiento.AutoSize = true;
-            this.labelFechaNacimiento.Location = new System.Drawing.Point(13, 251);
+            this.labelFechaNacimiento.Location = new System.Drawing.Point(13, 277);
             this.labelFechaNacimiento.Name = "labelFechaNacimiento";
             this.labelFechaNacimiento.Size = new System.Drawing.Size(108, 13);
             this.labelFechaNacimiento.TabIndex = 12;
@@ -162,10 +164,11 @@
             // 
             // dtpFechaNacimiento
             // 
-            this.dtpFechaNacimiento.Location = new System.Drawing.Point(12, 267);
+            this.dtpFechaNacimiento.Location = new System.Drawing.Point(12, 293);
             this.dtpFechaNacimiento.Name = "dtpFechaNacimiento";
             this.dtpFechaNacimiento.Size = new System.Drawing.Size(215, 20);
             this.dtpFechaNacimiento.TabIndex = 13;
+            this.dtpFechaNacimiento.ValueChanged += new System.EventHandler(this.dtpFechaNacimiento_ValueChanged);
             // 
             // labelSexo
             // 
@@ -201,7 +204,7 @@
             // labelAsiento
             // 
             this.labelAsiento.AutoSize = true;
-            this.labelAsiento.Location = new System.Drawing.Point(12, 305);
+            this.labelAsiento.Location = new System.Drawing.Point(12, 331);
             this.labelAsiento.Name = "labelAsiento";
             this.labelAsiento.Size = new System.Drawing.Size(42, 13);
             this.labelAsiento.TabIndex = 17;
@@ -209,7 +212,7 @@
             // 
             // btnSeleccionarAsiento
             // 
-            this.btnSeleccionarAsiento.Location = new System.Drawing.Point(76, 305);
+            this.btnSeleccionarAsiento.Location = new System.Drawing.Point(76, 331);
             this.btnSeleccionarAsiento.Name = "btnSeleccionarAsiento";
             this.btnSeleccionarAsiento.Size = new System.Drawing.Size(196, 23);
             this.btnSeleccionarAsiento.TabIndex = 18;
@@ -219,7 +222,7 @@
             // 
             // btnAceptar
             // 
-            this.btnAceptar.Location = new System.Drawing.Point(197, 341);
+            this.btnAceptar.Location = new System.Drawing.Point(197, 367);
             this.btnAceptar.Name = "btnAceptar";
             this.btnAceptar.Size = new System.Drawing.Size(75, 23);
             this.btnAceptar.TabIndex = 19;
@@ -229,7 +232,7 @@
             // 
             // btnLimpiar
             // 
-            this.btnLimpiar.Location = new System.Drawing.Point(12, 341);
+            this.btnLimpiar.Location = new System.Drawing.Point(12, 367);
             this.btnLimpiar.Name = "btnLimpiar";
             this.btnLimpiar.Size = new System.Drawing.Size(75, 23);
             this.btnLimpiar.TabIndex = 20;
@@ -240,7 +243,7 @@
             // labelDiscapacitado
             // 
             this.labelDiscapacitado.AutoSize = true;
-            this.labelDiscapacitado.Location = new System.Drawing.Point(15, 129);
+            this.labelDiscapacitado.Location = new System.Drawing.Point(13, 161);
             this.labelDiscapacitado.Name = "labelDiscapacitado";
             this.labelDiscapacitado.Size = new System.Drawing.Size(75, 13);
             this.labelDiscapacitado.TabIndex = 23;
@@ -249,17 +252,37 @@
             // cbDiscapacitado
             // 
             this.cbDiscapacitado.AutoSize = true;
-            this.cbDiscapacitado.Location = new System.Drawing.Point(123, 129);
+            this.cbDiscapacitado.Location = new System.Drawing.Point(171, 161);
             this.cbDiscapacitado.Name = "cbDiscapacitado";
             this.cbDiscapacitado.Size = new System.Drawing.Size(15, 14);
             this.cbDiscapacitado.TabIndex = 24;
             this.cbDiscapacitado.UseVisualStyleBackColor = true;
             // 
+            // labelJubilado
+            // 
+            this.labelJubilado.AutoSize = true;
+            this.labelJubilado.Location = new System.Drawing.Point(12, 125);
+            this.labelJubilado.Name = "labelJubilado";
+            this.labelJubilado.Size = new System.Drawing.Size(113, 13);
+            this.labelJubilado.TabIndex = 25;
+            this.labelJubilado.Text = "Jubilado / Pensionado";
+            // 
+            // cbJubiladoPensionado
+            // 
+            this.cbJubiladoPensionado.AutoSize = true;
+            this.cbJubiladoPensionado.Location = new System.Drawing.Point(171, 125);
+            this.cbJubiladoPensionado.Name = "cbJubiladoPensionado";
+            this.cbJubiladoPensionado.Size = new System.Drawing.Size(15, 14);
+            this.cbJubiladoPensionado.TabIndex = 26;
+            this.cbJubiladoPensionado.UseVisualStyleBackColor = true;
+            // 
             // CargaCliente
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(284, 374);
+            this.ClientSize = new System.Drawing.Size(284, 401);
+            this.Controls.Add(this.cbJubiladoPensionado);
+            this.Controls.Add(this.labelJubilado);
             this.Controls.Add(this.cbDiscapacitado);
             this.Controls.Add(this.labelDiscapacitado);
             this.Controls.Add(this.btnLimpiar);
@@ -315,5 +338,7 @@
         private System.Windows.Forms.Button btnLimpiar;
         private System.Windows.Forms.Label labelDiscapacitado;
         private System.Windows.Forms.CheckBox cbDiscapacitado;
+        private System.Windows.Forms.Label labelJubilado;
+        private System.Windows.Forms.CheckBox cbJubiladoPensionado;
     }
 }
