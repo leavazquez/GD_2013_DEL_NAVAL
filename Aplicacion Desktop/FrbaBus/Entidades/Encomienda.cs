@@ -10,5 +10,7 @@ namespace FrbaBus.Entidades
         public string Viaje;
         public int Remitente;
         public int Peso;
+        public int Codigo;
+        public decimal Monto;
     }
 }

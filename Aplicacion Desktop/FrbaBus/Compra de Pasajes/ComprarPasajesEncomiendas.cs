@@ -8,6 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using FrbaBus.GenerarViaje;
 using FrbaBus.Entidades;
+using System.Data.SqlClient;
 
 namespace FrbaBus.Compra_de_Pasajes
 {
@@ -203,7 +204,55 @@ namespace FrbaBus.Compra_de_Pasajes
                 CargaCliente cargaCliente = new CargaCliente("Compra", 0, false, false);
                 if (cargaCliente.ShowDialog() == DialogResult.OK)
                 {
-                    // comprar
+                    List<SqlParameter> parametros = new List<SqlParameter>();
+                    parametros.Add(new SqlParameter("@comprador", cargaCliente.Dni));
+                    parametros.Add(new SqlParameter("@forma_pago", cargaCliente.FormaPago));
+                    parametros.Add(new SqlParameter("@fecha", Config.FechaSistema));
+                    int voucher = (int)DAC.ExecuteScalar(@"set dateformat dmy
+                        declare @voucher int
+                        exec del_naval.insertarCompra @comprador, @forma_pago, @fecha, @voucher output
+                        select @voucher", parametros);
+                    foreach (Pasaje pasaje in pasajes)
+                    {
+                        List<SqlParameter> parametrosPasaje = new List<SqlParameter>();
+                        parametrosPasaje.Add(new SqlParameter("@voucher", voucher));
+                        parametrosPasaje.Add(new SqlParameter("@viaje", pasaje.Viaje));
+                        parametrosPasaje.Add(new SqlParameter("@pasajero", pasaje.Pasajero));
+                        parametrosPasaje.Add(new SqlParameter("@butaca", pasaje.Butaca));
+                        DataTable datosPasaje = DAC.ExecuteReader(@"declare @codigo_pasaje int
+                            declare @outp int " +
+                            (pasaje.Gratis ? "set @outp = 0" : "") +
+                            @"exec del_naval.insertarPasaje @voucher, @viaje, @pasajero, @butaca, @codigo_pasaje output, @outp output
+                            select @outp as monto, @codigo_pasaje as codigo", parametrosPasaje);
+                        pasaje.Monto = decimal.Parse(datosPasaje.Rows[0]["monto"].ToString()) / 100;
+                        pasaje.Codigo = int.Parse(datosPasaje.Rows[0]["codigo"].ToString());
+                    }
+
+                    foreach (Encomienda encomienda in encomiendas)
+                    {
+                        List<SqlParameter> parametrosEncomienda = new List<SqlParameter>();
+                        parametrosEncomienda.Add(new SqlParameter("@voucher", voucher));
+                        parametrosEncomienda.Add(new SqlParameter("@viaje", encomienda.Viaje));
+                        parametrosEncomienda.Add(new SqlParameter("@remitente", encomienda.Remitente));
+                        parametrosEncomienda.Add(new SqlParameter("@peso", encomienda.Peso));
+                        DataTable datosPasaje = DAC.ExecuteReader(@"declare @codigo_encomienda int
+                            declare @outp int
+                            exec del_naval.insertarEncomienda @voucher, @viaje, @remitente, @peso, @codigo_encomienda  output, @outp output
+                            select @outp monto, @codigo_encomienda codigo", parametrosEncomienda);
+                        encomienda.Monto = decimal.Parse(datosPasaje.Rows[0]["monto"].ToString()) / 100;
+                        encomienda.Codigo = int.Parse(datosPasaje.Rows[0]["codigo"].ToString());
+                    }
+                    StringBuilder mensajeFinal = new StringBuilder();
+                    foreach (Pasaje pasaje in pasajes)
+                    {
+                        mensajeFinal.AppendLine("Pasaje: " + pasaje.Codigo.ToString() + " - Código" + pasaje.Monto.ToString());
+                    }
+                    foreach (Encomienda encomienda in encomiendas)
+                    {
+                        mensajeFinal.AppendLine("Encomienda: " + encomienda.Codigo.ToString() + " - Código" + encomienda.Monto.ToString()):
+                    }
+                    MessageBox.Show(mensajeFinal.ToString());
+                    this.Close();
                 }
             }
             else

@@ -11,5 +11,7 @@ namespace FrbaBus.Entidades
         public int Pasajero;
         public string Butaca;
         public bool Gratis;
+        public decimal Monto;
+        public int Codigo;
     }
 }

@@ -24,6 +24,7 @@ namespace FrbaBus.GenerarViaje
         public bool Discapacitado = false;
         public bool EsAcompanante = false;
         public int Dni;
+        public string FormaPago;
 
         public bool HayDiscapacitado;
 
@@ -248,7 +249,10 @@ namespace FrbaBus.GenerarViaje
                         this.DialogResult = DialogResult.OK;
                         break;
                     case "Compra":
-
+                        // lanzar pago con tarjeta si corresponde
+                        MessageBox.Show("Datos del comprador cargados");
+                        this.DialogResult = DialogResult.OK;
+                        this.FormaPago = cbFormaPago.SelectedItem.ToString().ToUpper();
                         break;
                 }
                 
