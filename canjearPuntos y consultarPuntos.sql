@@ -20,12 +20,25 @@ as
 begin
 
 --valida stock
-if (select stock from DEL_NAVAL.productos where id_producto = @producto ) <= 0
- return -1 --no hay stock
+if (select stock from DEL_NAVAL.productos where id_producto = @producto ) < @cantidad
+ return -1 --no hay stock suficiente para la cantidad requerida
 
---validar puntos 
+--detecta cuantos puntos necesita  canjear
+declare @puntos_a_canjear
+set @puntos_a_canjear = (select valor_puntos 
+                           from DEL_NAVAL.productos 
+                           where id_producto = @producto) * @cantidad   
+
+--valida que el cliente tenga esos puntos 
+if (select SUM (puntos) - SUM(usados) 
+    from DEL_NAVAL.consultarPuntos (@cliente,@fecha) < @puntos_a_canjear
+  return -2 --puntos insuficientes   
+  
+--si esta todo ok, consume los puntos y realiza la registracion del canje
+
+begin transaction
  
-
+  
 
 
 commit                  
@@ -42,15 +55,17 @@ create function del_naval.consultarPuntos
 
 returns @consultarPuntos TABLE
 (
+id_punto int, 
+id_canje int,
 cliente int,
-puntos int, 
+puntos_obtenidos int, 
+puntos_canjeados int,
 fecha datetime, 
 usados int, 
 vejez int,
 producto int, 
-cantidad int,
-fecha_canje datetime, 
-puntos_canjeados int
+cantidad int
+
  )
 
 
@@ -59,17 +74,19 @@ puntos_canjeados int
  as
 Begin
  insert @consultarPuntos
- select PU.cliente, PU.puntos, PU.fecha, PU.usados, DATEDIFF (DAY,PU.fecha,@fecha), NULL,  NULL,  NULL,  NULL
+ select PU.id_punto, NULL, PU.cliente, PU.puntos, NULL, PU.fecha, PU.usados, DATEDIFF (DAY,PU.fecha,@fecha) as vejez, NULL,  NULL
   from DEL_NAVAL.puntos PU
   where PU.cliente = @cliente
+  and DATEDIFF (DAY,PU.fecha,@fecha)<= 365  --los vencidos no los muestra
   and PU.fecha < @fecha -- solo trae puntos vigentes hasta la fecha ingresada por parametro
-  order by vejez desc
- union 
-  select CA.cliente, NULL, NULL, NULL, NULL, CA.producto, CA.cantidad, CA.fecha_canje, CA.puntos_canjeados
+  
+   union 
+  select NULL, CA.id_canje, CA.cliente, NULL, CA.puntos_canjeados, CA.fecha_canje, NULL,NULL, CA.producto, CA.cantidad
   from DEL_NAVAL.canjes CA
  where  CA.cliente = @cliente
  and CA.fecha_canje < @fecha 
- 
+   order by vejez desc 
+
  
 return 
     
