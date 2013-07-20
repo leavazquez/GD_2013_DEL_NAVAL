@@ -16,6 +16,7 @@ namespace FrbaBus
         public string IdViaje;
         public int AsientosDisponibles;
         public int KilosDisponibles;
+        public int CantidadPisos;
         public string Viaje;
         public string Destino;
         public string DestinoObligado;
@@ -25,8 +26,8 @@ namespace FrbaBus
             InitializeComponent();
             this.Text = "Seleccione un viaje";
             this.Size = new Size(974, 536);
-            this.Query = @"select vi.id_viaje ID_VIAJE, vi.fecha_salida SALIDA, ts.nombre_servicio SERVICIO, (mi.cantidad_asientos - (select count(*) from DEL_NAVAL.butacas_ocupadas where viaje = vi.id_viaje)) BUTACAS_DISPONIBLES, o.nombre_ciudad ORIGEN, d.nombre_ciudad DESTINO
-                ,(mi.kilos_bodega - SUM(en.peso)) as KILOS_DISPONIBLES
+            this.Query = @"select vi.id_viaje ID_VIAJE, vi.micro MICRO, vi.fecha_salida SALIDA, ts.nombre_servicio SERVICIO, (mi.cantidad_asientos - (select count(*) from DEL_NAVAL.butacas_ocupadas where viaje = vi.id_viaje)) BUTACAS_DISPONIBLES, o.nombre_ciudad ORIGEN, d.nombre_ciudad DESTINO
+                ,(mi.kilos_bodega - SUM(isnull(en.peso, 0))) as KILOS_DISPONIBLES
                 from DEL_NAVAL.viajes vi 
                 left join DEL_NAVAL.recorridos re on vi.recorrido = re.id_recorrido
                 left join DEL_NAVAL.tipos_servicio ts on re.tipo_servicio = ts.id_servicio
@@ -34,7 +35,7 @@ namespace FrbaBus
                 left join DEL_NAVAL.encomiendas EN on vi.id_viaje = EN.viaje
                 left join DEL_NAVAL.ciudades o on re.origen = o.id_ciudad
                 left join DEL_NAVAL.ciudades d on re.destino = d.id_ciudad";
-            this.GroupBy = "group by vi.id_viaje, vi.fecha_salida, ts.nombre_servicio, mi.cantidad_asientos, mi.kilos_bodega, o.nombre_ciudad, d.nombre_ciudad";
+            this.GroupBy = "group by vi.id_viaje, vi.fecha_salida, ts.nombre_servicio, mi.cantidad_asientos, mi.kilos_bodega, o.nombre_ciudad, d.nombre_ciudad, vi.micro";
             this.columnasVisibles.Add("SALIDA", "Salida");
             this.columnasVisibles.Add("SERVICIO", "Tipo de Servicio");
             this.columnasVisibles.Add("BUTACAS_DISPONIBLES", "Butacas disponibles");
@@ -69,6 +70,12 @@ namespace FrbaBus
                 this.AsientosDisponibles = int.Parse(dgvResultados.SelectedRows[0].Cells["BUTACAS_DISPONIBLES"].Value.ToString());
                 this.KilosDisponibles = int.Parse(dgvResultados.SelectedRows[0].Cells["KILOS_DISPONIBLES"].Value.ToString());
                 this.Destino = dgvResultados.SelectedRows[0].Cells["DESTINO"].Value.ToString();
+
+                List<SqlParameter> parametrosPisos = new List<SqlParameter>();
+                parametrosPisos.Add(new SqlParameter("@id_micro", dgvResultados.SelectedRows[0].Cells["MICRO"].Value.ToString()));
+                this.CantidadPisos = int.Parse(DAC.ExecuteScalar("SELECT MAX(piso) FROM DEL_NAVAL.BUTACAS WHERE MICRO = @id_micro", parametrosPisos).ToString());
+
+
                 Close();
             }
             else

@@ -165,6 +165,18 @@
     <Compile Include="Filtros\FiltroSeleccion.Designer.cs">
       <DependentUpon>FiltroSeleccion.cs</DependentUpon>
     </Compile>
+    <Compile Include="GenerarViaje\CargaCliente.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GenerarViaje\CargaCliente.Designer.cs">
+      <DependentUpon>CargaCliente.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GenerarViaje\SeleccionButaca.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GenerarViaje\SeleccionButaca.Designer.cs">
+      <DependentUpon>SeleccionButaca.cs</DependentUpon>
+    </Compile>
     <Compile Include="Inicio.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -248,8 +260,14 @@
     <EmbeddedResource Include="Filtros\FiltroFecha.resx">
       <DependentUpon>FiltroFecha.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="GenerarViaje\CargaCliente.resx">
+      <DependentUpon>CargaCliente.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="GenerarViaje\GenerarViajes.resx">
       <DependentUpon>GenerarViajes.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GenerarViaje\SeleccionButaca.resx">
+      <DependentUpon>SeleccionButaca.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Inicio.resx">
       <DependentUpon>Inicio.cs</DependentUpon>

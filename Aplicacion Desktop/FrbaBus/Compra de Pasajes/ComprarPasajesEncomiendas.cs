@@ -6,18 +6,21 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using FrbaBus.GenerarViaje;
 
 namespace FrbaBus.Compra_de_Pasajes
 {
     public partial class ComprarPasajesEncomiendas : Form
     {
         private string idViaje;
+        private int cantidadPisosMicro;
         private Dictionary<string, int> asientosViaje = new Dictionary<string, int>();
         private Dictionary<string, int> kilosViaje = new Dictionary<string, int>();
         private string destinoActual;
         private string destinoObligado;
         private ErrorProvider errorKilos = new ErrorProvider();
         private ErrorProvider errorPasajero = new ErrorProvider();
+        private ErrorProvider errorViaje = new ErrorProvider();
 
         public ComprarPasajesEncomiendas()
         {
@@ -38,18 +41,25 @@ namespace FrbaBus.Compra_de_Pasajes
                 btnAsignarPasajero.Enabled = true;
                 btnOcupar.Enabled = true;
                 idViaje = listadoViajes.IdViaje;
+                cantidadPisosMicro = listadoViajes.CantidadPisos;
                 if (!asientosViaje.Keys.Contains(listadoViajes.IdViaje))
                 {
                     asientosViaje.Add(listadoViajes.IdViaje, listadoViajes.AsientosDisponibles);
                     kilosViaje.Add(listadoViajes.IdViaje, listadoViajes.KilosDisponibles);
                     destinoActual = listadoViajes.Destino;
                 }
+
             }
         }
 
         private void btnOcupar_Click(object sender, EventArgs e)
         {
             int kilosAOcupar = 0;
+            if (this.idViaje == null)
+            {
+                errorViaje.SetError(btnViaje, "Primero seleccione un viaje");
+                return;
+            }
             if (int.TryParse(txtKilos.Text, out kilosAOcupar) && kilosAOcupar > 0)
             {
                 if (kilosAOcupar <= kilosViaje[this.idViaje])
@@ -73,11 +83,19 @@ namespace FrbaBus.Compra_de_Pasajes
         private void btnAsignarPasajero_Click(object sender, EventArgs e)
         {
             int pasajesAAsignar = 0;
+            if (this.idViaje == null)
+            {
+                errorViaje.SetError(btnViaje, "Primero seleccione un viaje");
+                return;
+            }
             if (int.TryParse(txtCantidad.Text, out pasajesAAsignar) && pasajesAAsignar > 0)
             {
                 if (pasajesAAsignar <= asientosViaje[this.idViaje])
                 {
-                    // lanzar cargaCliente
+                    CargaCliente cargaCliente = new CargaCliente();
+                    cargaCliente.IdViaje = this.idViaje;
+                    cargaCliente.CantidadPisosMicro = this.cantidadPisosMicro;
+                    cargaCliente.ShowDialog();
                     // si esta ok restar aientos del viaje
                     // insertar registro en dgv
                 }
