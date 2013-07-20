@@ -15,6 +15,7 @@ namespace FrbaBus.GenerarViaje
         public string IdViaje;
         public string IdButaca;
         public string Butaca;
+        public List<string> ButacasAExcluir = new List<string>();
 
         private ErrorProvider errorButaca = new ErrorProvider();
 
@@ -38,7 +39,7 @@ namespace FrbaBus.GenerarViaje
             List<DataRow> aEliminar = new List<DataRow>();
             foreach (DataRow fila in butacas.Rows)
             {
-                if (fila["piso"].ToString() != cbPiso.SelectedItem.ToString() || fila["tipo"].ToString() != cbTipo.SelectedItem.ToString())
+                if (fila["piso"].ToString() != cbPiso.SelectedItem.ToString() || fila["tipo"].ToString() != cbTipo.SelectedItem.ToString() || this.ButacasAExcluir.Contains(fila["id_butaca"].ToString()))
                 {
                     aEliminar.Add(fila);
                 }
@@ -57,7 +58,7 @@ namespace FrbaBus.GenerarViaje
             if (dgvButacas.SelectedRows.Count > 0)
             {
                 this.IdButaca = dgvButacas.SelectedRows[0].Cells["id_butaca"].Value.ToString();
-                this.Butaca = "Número: " + dgvButacas.SelectedRows[0].Cells["numero"].Value.ToString() + " Piso: " + dgvButacas.SelectedRows[0].Cells["piso"].Value.ToString() + " - " + dgvButacas.SelectedRows[0].Cells["tipo"].Value.ToString(); ;
+                this.Butaca = "Asiento #: " + dgvButacas.SelectedRows[0].Cells["numero"].Value.ToString() + " Piso: " + dgvButacas.SelectedRows[0].Cells["piso"].Value.ToString() + " - " + dgvButacas.SelectedRows[0].Cells["tipo"].Value.ToString(); ;
                 this.Close();
             }
             else

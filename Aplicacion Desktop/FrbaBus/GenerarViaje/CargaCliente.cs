@@ -16,6 +16,10 @@ namespace FrbaBus.GenerarViaje
         public string Butaca;
         public string IdViaje;
         public int CantidadPisosMicro;
+        public string Pasaje;
+        public int NumeroOrden;
+        public bool Continua;
+        public List<string> butacasAExcluir = new List<string>();
 
         private ErrorProvider errorDni = new ErrorProvider();
         private ErrorProvider errorNombre = new ErrorProvider();
@@ -27,6 +31,21 @@ namespace FrbaBus.GenerarViaje
         private ErrorProvider errorFechaNacimiento = new ErrorProvider();
         private ErrorProvider errorButaca = new ErrorProvider();
 
+        public CargaCliente(int numeroOrden, bool continua)
+        {
+            InitializeComponent();
+            dtpFechaNacimiento.Value = Config.FechaSistema;
+            this.NumeroOrden = numeroOrden;
+            if (this.NumeroOrden != 0)
+            {
+                this.Text = "Pasaje #" + this.NumeroOrden;
+            }
+            this.Continua = continua;
+            if (this.Continua)
+            {
+                btnSeleccionarAsiento.Text += " y continuar";
+            }
+        }
 
         public CargaCliente()
         {
@@ -38,11 +57,13 @@ namespace FrbaBus.GenerarViaje
         {
             SeleccionButaca seleccionButaca = new SeleccionButaca(this.CantidadPisosMicro);
             seleccionButaca.IdViaje = this.IdViaje;
+            seleccionButaca.ButacasAExcluir = this.butacasAExcluir;
             seleccionButaca.ShowDialog();
             if (seleccionButaca.IdButaca != null)
             {
                 this.IdButaca = seleccionButaca.IdButaca;
                 btnSeleccionarAsiento.Text = seleccionButaca.Butaca;
+                this.Butaca = seleccionButaca.Butaca;
             }
         }
 
@@ -99,7 +120,7 @@ namespace FrbaBus.GenerarViaje
                 isValid = false;
                 errorTelefono.SetError(txtTelefono, "Telefono inválido");
             }
-            if (txtMail.Text == "" || !txtMail.Text.Contains('@') || txtMail.Text.Contains(' '))
+            if (txtMail.Text != "" && ( !txtMail.Text.Contains('@') || txtMail.Text.Contains(' ') ))
             {
                 isValid = false;
                 errorMail.SetError(txtMail, "Mail inválido");
@@ -109,9 +130,46 @@ namespace FrbaBus.GenerarViaje
                 isValid = false;
                 errorFechaNacimiento.SetError(dtpFechaNacimiento, "Fecha de nacimiento inválida");
             }
+            if (this.IdButaca == null)
+            {
+                isValid = false;
+                errorButaca.SetError(btnSeleccionarAsiento, "Seleccione un asiento");
+            }
             if (isValid)
             {
-
+                List<SqlParameter> parametrosCliente = new List<SqlParameter>();
+                parametrosCliente.Add(new SqlParameter("@dni", dni));
+                char sexo = rbHombre.Checked ? 'H' : 'M';
+                parametrosCliente.Add(new SqlParameter("@nombre", txtNombre.Text));
+                parametrosCliente.Add(new SqlParameter("@apellido", txtApellido.Text));
+                parametrosCliente.Add(new SqlParameter("@fecha_nacimiento", dtpFechaNacimiento.Value));
+                parametrosCliente.Add(new SqlParameter("@sexo", sexo));
+                parametrosCliente.Add(new SqlParameter("@discapacitado", cbDiscapacitado.Checked));
+                parametrosCliente.Add(new SqlParameter("@direccion", txtDirección.Text));
+                parametrosCliente.Add(new SqlParameter("@telefono", txtTelefono.Text));
+                parametrosCliente.Add(new SqlParameter("@jubilado_pensionado", cbJubiladoPensionado.Checked));
+                if (txtMail.Text != "")
+                {
+                    parametrosCliente.Add(new SqlParameter("@mail", txtMail.Text));
+                }
+                else
+                {
+                    parametrosCliente.Add(new SqlParameter("@mail", DBNull.Value));
+                }
+                int encontrados = int.Parse(DAC.ExecuteScalar("SELECT COUNT(*) FROM DEL_NAVAL.CLIENTES WHERE ID_DNI = @dni", parametrosCliente).ToString());
+                if (encontrados == 0)
+                {
+                    // alta
+                    DAC.ExecuteNonQuery("INSERT INTO DEL_NAVAL.CLIENTES VALUES (@dni, @nombre, @apellido, @fecha_nacimiento, @sexo, @discapacitado, @jubilado_pensionado, @direccion, @telefono, @mail)", parametrosCliente);
+                }
+                else
+                {
+                    // modificación
+                    DAC.ExecuteNonQuery("UPDATE DEL_NAVAL.CLIENTES SET ID_DNI = @dni, NOMBRE = @nombre, APELLIDO = @apellido, FECHA_NACIMIENTO = @fecha_nacimiento, SEXO = @sexo, DISCAPACITADO = @discapacitado, JUBILADO_PENSIONADO = @jubilado_pensionado, DIRECCION = @direccion, TELEFONO = @telefono, MAIL = @mail WHERE ID_DNI = @dni", parametrosCliente);
+                }
+                MessageBox.Show("Asiento asignado");
+                this.Pasaje = txtDni.Text + " - " + this.Butaca;
+                Close();
             }
         }
 
@@ -139,6 +197,7 @@ namespace FrbaBus.GenerarViaje
                         rbMujer.Checked = true;
                     }
                     cbDiscapacitado.Checked = fila["DISCAPACITADO"].ToString() == "1";
+                    cbJubiladoPensionado.Checked = fila["JUBILADO_PENSIONADO"].ToString() == "1";
                     txtDirección.Text = fila["DIRECCION"].ToString();
                     txtTelefono.Text = fila["TELEFONO"].ToString();
                     txtMail.Text = fila["MAIL"].ToString();

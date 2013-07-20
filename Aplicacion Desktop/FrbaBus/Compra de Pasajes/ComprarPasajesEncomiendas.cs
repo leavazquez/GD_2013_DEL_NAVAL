@@ -21,10 +21,16 @@ namespace FrbaBus.Compra_de_Pasajes
         private ErrorProvider errorKilos = new ErrorProvider();
         private ErrorProvider errorPasajero = new ErrorProvider();
         private ErrorProvider errorViaje = new ErrorProvider();
+        private List<string> idsButacasAsiganadas = new List<string>();
 
         public ComprarPasajesEncomiendas()
         {
             InitializeComponent();
+            DataGridViewColumn detalle = new DataGridViewColumn();
+            detalle.Name = "Detalle";
+            DataGridViewCell celda = new DataGridViewTextBoxCell();
+            detalle.CellTemplate = celda;
+            dgvCompras.Columns.Add(detalle);
         }
 
         private void btnViaje_Click(object sender, EventArgs e)
@@ -92,12 +98,33 @@ namespace FrbaBus.Compra_de_Pasajes
             {
                 if (pasajesAAsignar <= asientosViaje[this.idViaje])
                 {
-                    CargaCliente cargaCliente = new CargaCliente();
-                    cargaCliente.IdViaje = this.idViaje;
-                    cargaCliente.CantidadPisosMicro = this.cantidadPisosMicro;
-                    cargaCliente.ShowDialog();
-                    // si esta ok restar aientos del viaje
-                    // insertar registro en dgv
+                    for (int i = 0; i < pasajesAAsignar; i++)
+                    {
+                        bool continua = false;
+                        if (i != pasajesAAsignar - 1)
+                        {
+                            continua = true;
+                        }
+                        CargaCliente cargaCliente = new CargaCliente(i + 1, continua);
+                        cargaCliente.butacasAExcluir = this.idsButacasAsiganadas;
+                        cargaCliente.IdViaje = this.idViaje;
+                        cargaCliente.CantidadPisosMicro = this.cantidadPisosMicro;
+                        cargaCliente.ShowDialog();
+                        
+                        if (cargaCliente.IdButaca != null)
+                        {
+                            this.asientosViaje[this.idViaje] = this.asientosViaje[this.idViaje] - 1;
+                            DataGridViewRow fila = new DataGridViewRow();
+                            DataGridViewTextBoxCell detalle = new DataGridViewTextBoxCell();
+                            detalle.Value = btnViaje.Text + " \n " + cargaCliente.Pasaje;
+                            fila.Height = 50;
+                            fila.Cells.Add(detalle);
+                            dgvCompras.Rows.Add(fila);
+                            
+                            this.idsButacasAsiganadas.Add(cargaCliente.IdButaca);
+                        }
+                        
+                    }
                 }
                 else
                 {
