@@ -62,9 +62,8 @@ OK- en intentarBajarMicro arreglar esto:
 
 -- explicar que las bajas de servicio solo registran historico para fines estadistico, y que la que figura en el dato maestro del micro es la actual, la ultima que se usa para validar disponibilidad del micro
 
+-- exlpicar logica de canjes de puntos y de utilizacion de puntos usados
 
 
-OBLIGATORIO
-----------
 
-agregar campo remitente en encomiendas y considerarlo en la migracion
+

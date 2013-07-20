@@ -456,12 +456,12 @@ drop column aux_migracion;
 insert into del_naval.productos
 Values 
 ('Termo Lu Milagros', 150, 500),
-('Cafetera de bolsillo', 1, 100),
+('Cafetera de bolsillo', 3, 100),
 ('Disfraz del hombre invisible',2,1500),
-('Anteojos infrarojos',0,10),
-('Agua pesada (bidon de 5L)',1,50),
+('Anteojos infrarojos',1,10),
+('Agua pesada (bidon de 5L)',10,50),
 ('Tp de Gestion de datos 1C 2013 Completo', 0,20000),
-('Recoge plátanos', 1,20)
+('Recoge plátanos', 10,20)
  
 insert into del_naval.roles
 values
