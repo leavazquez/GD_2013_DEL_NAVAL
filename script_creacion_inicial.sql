@@ -198,6 +198,7 @@ create table del_naval.clientes (
 	fecha_nacimiento datetime,
 	sexo char,
 	discapacitado bit,
+	jubilado_pensionado bit, 
 	direccion nvarchar(255),
 	telefono numeric(18,0),
 	mail nvarchar(255),
@@ -324,7 +325,7 @@ from gd_esquema.Maestra
 
 
 insert into DEL_NAVAL.clientes
-select distinct(Cli_Dni), Cli_Nombre, Cli_Apellido, Cli_Fecha_Nac, null, 0, Cli_Dir, Cli_Telefono, Cli_Mail
+select distinct(Cli_Dni), Cli_Nombre, Cli_Apellido, Cli_Fecha_Nac, null, 0, 0, Cli_Dir, Cli_Telefono, Cli_Mail
 from gd_esquema.Maestra
 
 
