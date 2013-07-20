@@ -19,9 +19,14 @@ select @codigo_pasaje
 
 declare @codigo_pasaje int
 declare @outp int
+--set @outp = 1
 exec del_naval.insertarPasaje 506084, 10547, 32238185, 1073,@codigo_pasaje output, @outp output
 select @outp
 select @codigo_pasaje
+
+update DEL_NAVAL.clientes 
+set jubilado_pensionado = 1
+where id_dni = 32238185
 
  
 select * from del_naval.ButacasDisponiblesXviaje (10547)

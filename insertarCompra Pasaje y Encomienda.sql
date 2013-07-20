@@ -66,9 +66,20 @@ set @tipo_servicio = (select tipo_servicio from DEL_NAVAL.recorridos where id_re
 set @porcentaje = (select porcentaje from DEL_NAVAL.tipos_servicio where id_servicio = @tipo_servicio)
 
 --calcula el monto
-set @monto = convert (int, (@precio_base_pasaje * ((@porcentaje / 100) + 1)) * 100   )
+
+if (@monto <> 0) or @monto is null --si el monto no viene en cero, lo calcula, sino lo deja como esta
+-- viene en cero cuando estamos en presencia de un acompañante de discapacitado o de un discapacitado
+     
+      if (select jubilado_pensionado from DEL_NAVAL.clientes where id_dni = @pasajero) = 1
+      --si es jubilado o pensionado calcula con 50% de descuento     
+        set @monto = convert (int, (@precio_base_pasaje * ((@porcentaje / 100) + 1)) * 50   )
+      else
+        set @monto = convert (int, (@precio_base_pasaje * ((@porcentaje / 100) + 1)) * 100   )
+
+
 --obtiene el codigo de pasaje siguiente
 set  @codigo_pasaje = (select MAX(codigo_pasaje)+1 from del_naval.pasajes)
+
 
 
 declare @montonumeric numeric(18,2)
