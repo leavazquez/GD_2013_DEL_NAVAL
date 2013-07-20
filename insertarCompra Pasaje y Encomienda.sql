@@ -99,5 +99,46 @@ go
 
 
 
+create procedure del_naval.insertarEncomienda
+(@voucher int,
+@viaje int,
+@remitente int,
+@peso int,
+@codigo_encomienda int output,
+@monto int output
+)
+as
+begin
+ 
+declare @precio_kg_encomienda numeric(18,2),
+        @recorrido int
+      
+        
+
+set @recorrido = (select recorrido from DEL_NAVAL.viajes where id_viaje = @viaje )        
+set @precio_kg_encomienda = (select precio_kg_encomienda  from DEL_NAVAL.recorridos where id_recorrido = @recorrido)      
 
 
+--calcula el monto
+ set @monto = convert (int, (@precio_kg_encomienda  * @peso * 100) )
+
+
+--obtiene el codigo de pasaje siguiente
+set @codigo_encomienda = (select MAX(codigo_encomienda)+1 from del_naval.encomiendas)
+
+
+
+declare @montonumeric numeric(18,2)
+set @montonumeric = (convert(numeric(18,2),@monto) /100)
+
+
+insert DEL_NAVAL.encomiendas  
+values (@voucher, @viaje, @remitente, @peso, 0, @montonumeric ,@codigo_encomienda)  
+ 
+  
+  
+   return  --devuelve los valores de monto y codigo de pasaje
+
+    
+end;
+go

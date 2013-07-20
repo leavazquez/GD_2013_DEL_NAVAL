@@ -735,7 +735,7 @@ declare @pesoOcupado numeric(18,0)
  where viaje = @viaje
  and cancelado = 0)
  
- return isnull(@kilosBodega - @pesoOcupado,0)       
+ return (@kilosBodega - isnull(@pesoOcupado,0))       
 End;
 go
 

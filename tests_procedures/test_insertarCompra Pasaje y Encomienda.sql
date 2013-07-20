@@ -34,3 +34,27 @@ select * from del_naval.ButacasDisponiblesXviaje (10547)
 select *
 from DEL_NAVAL.pasajes 
 where codigo_pasaje = (select MAX(codigo_pasaje) from del_naval.pasajes)
+
+
+
+
+declare @codigo_encomienda int
+declare @outp int
+exec del_naval.insertarEncomienda 506084, 10547, 32238185, 10,@codigo_encomienda  output, @outp output
+select @outp
+select @codigo_encomienda 
+
+
+select DEL_NAVAL.PesoLibreEncomiendasXviaje (10547)
+
+update DEL_NAVAL.encomiendas 
+set cancelado = 1
+where viaje = 10547
+ 
+ 
+ select *
+ from DEL_NAVAL.viajes
+ where id_viaje = 10547
+ 
+ 
+
