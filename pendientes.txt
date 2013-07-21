@@ -1,4 +1,5 @@
 
+
 OK- procedure inhabilitar rol y usuarios asociados
 
 OK- trigger cancelacion de pasajes ante baja de recorrido
