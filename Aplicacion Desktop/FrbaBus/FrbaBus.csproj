@@ -203,6 +203,36 @@
     <Compile Include="GenerarViaje\GenerarViajes.Designer.cs">
       <DependentUpon>GenerarViajes.cs</DependentUpon>
     </Compile>
+    <Compile Include="Listado Estadistico\ListadoDiasServicio.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Listado Estadistico\ListadoDiasServicio.Designer.cs">
+      <DependentUpon>ListadoDiasServicio.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Listado Estadistico\ListadoMicrosMasVacios.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Listado Estadistico\ListadoMicrosMasVacios.Designer.cs">
+      <DependentUpon>ListadoMicrosMasVacios.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Listado Estadistico\ListadoPasajesCancelados.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Listado Estadistico\ListadoPasajesCancelados.Designer.cs">
+      <DependentUpon>ListadoPasajesCancelados.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Listado Estadistico\ListadoPasajesMasComprados.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Listado Estadistico\ListadoPasajesMasComprados.Designer.cs">
+      <DependentUpon>ListadoPasajesMasComprados.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Listado Estadistico\ListadoPuntosAcumulados.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Listado Estadistico\ListadoPuntosAcumulados.Designer.cs">
+      <DependentUpon>ListadoPuntosAcumulados.cs</DependentUpon>
+    </Compile>
     <Compile Include="Listado Estadistico\VerListadoEstadistico.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -294,6 +324,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ABM.resx">
       <DependentUpon>ABM.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Listado Estadistico\VerListadoEstadistico.resx">
+      <DependentUpon>VerListadoEstadistico.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Login\Login.resx">
       <DependentUpon>Login.cs</DependentUpon>

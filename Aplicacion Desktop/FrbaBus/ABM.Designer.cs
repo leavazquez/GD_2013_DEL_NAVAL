@@ -148,11 +148,11 @@
 
         private System.Windows.Forms.GroupBox gbFiltros;
         private System.Windows.Forms.Button btnLimpiar;
-        private System.Windows.Forms.Button btnBuscar;
         private System.Windows.Forms.Button btnModificar;
         private System.Windows.Forms.Button btnEliminar;
         private System.Windows.Forms.Button btnCrear;
         protected System.Windows.Forms.GroupBox gbComandos;
         protected System.Windows.Forms.DataGridView dgvResultados;
+        protected System.Windows.Forms.Button btnBuscar;
     }
 }

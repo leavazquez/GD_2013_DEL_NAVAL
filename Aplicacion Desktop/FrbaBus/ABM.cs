@@ -55,10 +55,15 @@ namespace FrbaBus
             comandos.Add(comando);
         }
 
-        private void btnBuscar_Click(object sender, EventArgs e)
+        protected void btnBuscar_Click(object sender, EventArgs e)
         {
             
             string nuevaQuery = this.Query;
+            List<SqlParameter> parametros = new List<SqlParameter>();
+            foreach (SqlParameter parametro in this.parametros)
+            {
+                parametros.Add(parametro);
+            }
 
             bool primero = this.Condicion == "";
             nuevaQuery += this.Condicion != "" ? " WHERE " + this.Condicion : "" ;
