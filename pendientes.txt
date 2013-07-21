@@ -19,7 +19,7 @@ OK- agregar en la busqueda de viajes a cancelar en "cancelar recorrido" una cond
 
 -- set dateformat dmy antes de cada sentencia q incolucre fechas
 
--- probar trigger de insert butacas ocupadas
+OK- probar trigger de insert butacas ocupadas
 
 OK-en "intentarbajarmicro" esta mal la forma en que obtiene el micro disponible, deberia ademas 
 no tener viajes asignados en esas fechas
@@ -45,28 +45,33 @@ OK- en intentarBajarMicro arreglar esto:
  and fecha_estimada <= @hasta
  and cancelado = 0 )  
 
--- Probar punto anterior
--- arreglar rangos en estadisticas (union select day('27/01/2013') = 27)
+-- Probar punto anterior (se hara desde la aPP)
+
 
 -------------------------------------------------------------------------
 
---implementar registrar puntos en registrarLlegada
+OK-implementar registrar puntos en registrarLlegada
 
 --poner en la estrategia cuestiones de migracion (codigo de anulacion, codigo de pasaje, encomienda y voucher)
 
--- en registrarLlegada validar fecha hora de salida + 24 horas
+OK- en registrarLlegada validar fecha hora de salida + 24 horas
 
 -- convertir todo a datet donde sea necesario (o sumarle un dia)
 
 -- validar superposicion de bajas servicio micro
 
--- explicar que las bajas de servicio solo registran historico para fines estadistico, y que la que figura en el dato maestro del micro es la actual, la ultima que se usa para validar disponibilidad del micro
+OK- explicar que las bajas de servicio solo registran historico para fines estadistico, y que la que figura en el dato maestro del micro es la actual, la ultima que se usa para validar disponibilidad del micro
 
--- exlpicar logica de canjes de puntos y de utilizacion de puntos usados
+OK- exlpicar logica de canjes de puntos y de utilizacion de puntos usados
 
 -- hacer unique codigo de pasaje y encomienda
 
 -- que mierda ahcemos con la tabla compras_viajes?
+
+
+
+-- arreglar rangos en estadisticas (union select day('27/01/2013') = 27)
+
 
 
 
