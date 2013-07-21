@@ -27,6 +27,12 @@ drop table del_naval.encomiendas
 if OBJECT_ID ('del_naval.pasajes','U') is not null
 drop table del_naval.pasajes 
 
+if OBJECT_ID ('del_naval.pagos_tarjetas','U') is not null
+drop table del_naval.pagos_tarjetas 
+
+if OBJECT_ID ('del_naval.tarjetas','U') is not null
+drop table del_naval.tarjetas
+
 if OBJECT_ID ('del_naval.compras_viajes','U') is not null
 drop table del_naval.compras_viajes
 
@@ -220,6 +226,26 @@ create table del_naval.compras_viajes(
 	viaje int not null
 )
 
+create table del_naval.tarjetas (
+ id_tarjeta int identity (1,1),
+ nombre nvarchar(255),
+ cuotas bit,
+constraint pk_tarjetas primary key (id_tarjeta)
+)
+
+create table del_naval.pagos_tarjetas (
+ id_pago_tarjeta int identity (1,1),
+ voucher int, 
+ tarjeta int,
+ numero nvarchar(255),
+ cod_ser nvarchar(255),
+ vencimiento datetime, 
+constraint pk_pago_tarjeta primary key (id_pago_tarjeta),
+constraint fk_compras_pagos foreign key (voucher) references del_naval.compras (id_voucher),
+constraint fk_tarjeta_pagos foreign key (tarjeta) references del_naval.tarjetas (id_tarjeta)
+)
+
+
 create table del_naval.pasajes (
 	id_pasaje int identity (1,1),	
 	voucher int,
@@ -371,7 +397,7 @@ and Butaca_Tipo in ('Ventanilla', 'Pasillo')
 order by id_micro, Butaca_Nro
 
 insert into DEL_NAVAL.compras
-select ma.Cli_Dni, null,
+select ma.Cli_Dni, 'EFECTIVO',
 case when ma.Paquete_FechaCompra > ma.Pasaje_FechaCompra then ma.Paquete_FechaCompra else ma.Pasaje_FechaCompra end,
 case when ma.Pasaje_Codigo > ma.Paquete_Codigo then ma.Pasaje_Codigo else ma.Paquete_Codigo end
 from gd_esquema.Maestra ma, DEL_NAVAL.viajes vi, DEL_NAVAL.recorridos re, DEL_NAVAL.micros mi
@@ -462,6 +488,15 @@ Values
 ('Agua pesada (bidon de 5L)',10,50),
 ('Tp de Gestion de datos 1C 2013 Completo', 0,20000),
 ('Recoge plátanos', 10,20)
+
+insert into del_naval.tarjetas
+Values 
+('Visa', 1),
+('Master Card', 1),
+('Italcred',0),
+('American Express',0)
+
+ 
  
 insert into del_naval.roles
 values

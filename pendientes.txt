@@ -66,5 +66,7 @@ OK- en intentarBajarMicro arreglar esto:
 
 -- hacer unique codigo de pasaje y encomienda
 
+-- que mierda ahcemos con la tabla compras_viajes?
+
 
 

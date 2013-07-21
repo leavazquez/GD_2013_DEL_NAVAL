@@ -58,3 +58,14 @@ where viaje = 10547
  
  
 
+set dateformat dmy
+go
+
+exec del_naval.insertarDatosTarjeta 506084, 1, '3223 8185', '103' , '27/03/2015'
+-- voucher, id_tarjeta, numero, codigo seguridad, vencimiento
+
+select *
+from DEL_NAVAL.tarjetas
+
+select *
+from DEL_NAVAL.pagos_tarjetas
