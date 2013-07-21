@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using FrbaBus.Filtros;
+using System.Data.SqlClient;
 
 namespace FrbaBus.Consulta_Puntos_Adquiridos
 {
@@ -15,8 +16,12 @@ namespace FrbaBus.Consulta_Puntos_Adquiridos
         public ConsultarPuntos()
         {
             InitializeComponent();
-            this.Query = "SELECT DEL_NAVAL.PUNTOS.CLIENTE CLIENTE FROM DEL_NAVAL.PUNTOS P, DEL_NAVAL.CANJES C";
-            this.Condicion = "P.CLIENTE = C.CLIENTE";
+            this.Query = "select * from DEL_NAVAL.consultarPuntos (@cliente, @fecha)";
+            this.Condicion = "cliente = @cliente";
+            this.parametros.Add(new SqlParameter("@fecha", Config.FechaSistema));
+            FiltroExacto dni = new FiltroExacto("DNI", "cliente");
+            AgregarFiltro(dni);
+            gbComandos.Controls.Clear();
         }
 
         protected override void seleccionar(object sender, EventArgs e)

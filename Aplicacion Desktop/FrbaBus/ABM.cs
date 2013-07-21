@@ -22,6 +22,7 @@ namespace FrbaBus
         protected bool CondicionCampoBaja;
         protected Dictionary<string, string> columnasVisibles = new Dictionary<string, string>();
         private Point puntoInicialFiltros = new Point(20,25);
+        protected List<SqlParameter> parametros = new List<SqlParameter>();
 
         public ABM()
         {
@@ -56,7 +57,7 @@ namespace FrbaBus
 
         private void btnBuscar_Click(object sender, EventArgs e)
         {
-            List<SqlParameter> parametros = new List<SqlParameter>();
+            
             string nuevaQuery = this.Query;
 
             bool primero = this.Condicion == "";

@@ -212,6 +212,7 @@ namespace FrbaBus.Compra_de_Pasajes
                         declare @voucher int
                         exec del_naval.insertarCompra @comprador, @forma_pago, @fecha, @voucher output
                         select @voucher", parametros);
+                    decimal montoTotal = 0;
                     foreach (Pasaje pasaje in pasajes)
                     {
                         List<SqlParameter> parametrosPasaje = new List<SqlParameter>();
@@ -226,6 +227,7 @@ namespace FrbaBus.Compra_de_Pasajes
                             select @outp as monto, @codigo_pasaje as codigo", parametrosPasaje);
                         pasaje.Monto = decimal.Parse(datosPasaje.Rows[0]["monto"].ToString()) / 100;
                         pasaje.Codigo = int.Parse(datosPasaje.Rows[0]["codigo"].ToString());
+                        montoTotal += pasaje.Monto;
                     }
 
                     foreach (Encomienda encomienda in encomiendas)
@@ -241,16 +243,21 @@ namespace FrbaBus.Compra_de_Pasajes
                             select @outp monto, @codigo_encomienda codigo", parametrosEncomienda);
                         encomienda.Monto = decimal.Parse(datosPasaje.Rows[0]["monto"].ToString()) / 100;
                         encomienda.Codigo = int.Parse(datosPasaje.Rows[0]["codigo"].ToString());
+                        montoTotal += encomienda.Monto;
                     }
                     StringBuilder mensajeFinal = new StringBuilder();
+                    mensajeFinal.AppendLine("Su número de voucher es: " + voucher.ToString());
+                    mensajeFinal.AppendLine("");
                     foreach (Pasaje pasaje in pasajes)
                     {
-                        mensajeFinal.AppendLine("Pasaje: " + pasaje.Codigo.ToString() + " - Código" + pasaje.Monto.ToString());
+                        mensajeFinal.AppendLine("Pasaje (código): " + pasaje.Codigo.ToString() + " - Monto: " + pasaje.Monto.ToString());
                     }
                     foreach (Encomienda encomienda in encomiendas)
                     {
-                        mensajeFinal.AppendLine("Encomienda: " + encomienda.Codigo.ToString() + " - Código" + encomienda.Monto.ToString());
+                        mensajeFinal.AppendLine("Encomienda (código): " + encomienda.Codigo.ToString() + " - Monto: " + encomienda.Monto.ToString());
                     }
+                    mensajeFinal.AppendLine("");
+                    mensajeFinal.AppendLine("El monto total es: " + montoTotal.ToString());
                     MessageBox.Show(mensajeFinal.ToString());
                     this.Close();
                 }
