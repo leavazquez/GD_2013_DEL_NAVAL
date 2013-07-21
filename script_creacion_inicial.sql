@@ -126,7 +126,7 @@ create table del_naval.tipos_servicio (
 
 create table del_naval.recorridos (
 	id_recorrido int identity (1,1),
-	codigo_recorrido numeric(18,0)unique,
+	codigo_recorrido nvarchar(255) unique, --Este tipo dato difiere de los de la tabla del sistema anterior, para adaptarse a las especificaciones funcionales del nuevo sistema
 	origen int,
 	destino int,
 	tipo_servicio int,
@@ -254,7 +254,7 @@ create table del_naval.pasajes (
 	butaca int,
 	cancelado bit,
 	monto numeric(18,2),
-	codigo_pasaje numeric(18,0),
+	codigo_pasaje numeric(18,0) unique,
 	constraint pk_pasajes primary key (id_pasaje)
 )
 
@@ -266,7 +266,7 @@ create table del_naval.encomiendas (
 	peso numeric(18,0),
 	cancelado bit,
 	monto numeric(18,2),
-	codigo_encomienda numeric(18,0),
+	codigo_encomienda numeric(18,0) unique,
 	constraint pk_encomiendas primary key (id_encomienda),
 )
 
@@ -354,9 +354,9 @@ insert into DEL_NAVAL.clientes
 select distinct(Cli_Dni), Cli_Nombre, Cli_Apellido, Cli_Fecha_Nac, null, 0, 0, Cli_Dir, Cli_Telefono, Cli_Mail
 from gd_esquema.Maestra
 
-
+--se convierte el codigo_recorrido de numeric a nvarchar
 insert into del_naval.recorridos
-select distinct recorrido_codigo, ORI, DES, id_servicio, sum(recorrido_precio_basepasaje), sum(Recorrido_Precio_BaseKG), 0
+select distinct convert(nvarchar(255),recorrido_codigo), ORI, DES, id_servicio, sum(recorrido_precio_basepasaje), sum(Recorrido_Precio_BaseKG), 0
 from(
 
 select distinct recorrido_codigo, ORIG.id_ciudad as ORI, DEST.id_ciudad as DES, id_servicio, recorrido_precio_basepasaje, Recorrido_Precio_BaseKG
@@ -632,19 +632,8 @@ values
  where nombre_rol = 'Cliente'),
  (select id_funcionalidad
  from DEL_NAVAL.funcionalidades 
- where nombre_funcionalidad = 'ConsultarPuntos')),
+ where nombre_funcionalidad = 'ConsultarPuntos'))
  
-  ((select id_rol
- from DEL_NAVAL.roles 
- where nombre_rol = 'Cliente'),
- (select id_funcionalidad
- from DEL_NAVAL.funcionalidades 
- where nombre_funcionalidad = 'CanjearPuntos'))
- 
-
-
-
-
 
 --Las siguientes claves foráneas se agregan ahora porque de hacerlo previo a la migración de datos cae la performance considerablmente
 alter table del_naval.compras_viajes
