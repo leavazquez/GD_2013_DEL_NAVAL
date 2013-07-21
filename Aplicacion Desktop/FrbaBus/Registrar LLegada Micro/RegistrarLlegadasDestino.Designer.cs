@@ -35,7 +35,7 @@
             this.labelDestino = new System.Windows.Forms.Label();
             this.cbDestino = new System.Windows.Forms.ComboBox();
             this.btnRegistrarLlegada = new System.Windows.Forms.Button();
-            this.dateTimePicker1 = new System.Windows.Forms.DateTimePicker();
+            this.dtpLlegada = new System.Windows.Forms.DateTimePicker();
             this.labelLlegada = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
@@ -56,6 +56,7 @@
             this.btnSeleccionarMicro.TabIndex = 1;
             this.btnSeleccionarMicro.Text = "< Seleccione un micro >";
             this.btnSeleccionarMicro.UseVisualStyleBackColor = true;
+            this.btnSeleccionarMicro.Click += new System.EventHandler(this.btnSeleccionarMicro_Click);
             // 
             // labelOrigen
             // 
@@ -101,14 +102,15 @@
             this.btnRegistrarLlegada.TabIndex = 6;
             this.btnRegistrarLlegada.Text = "Registrar llegada";
             this.btnRegistrarLlegada.UseVisualStyleBackColor = true;
+            this.btnRegistrarLlegada.Click += new System.EventHandler(this.btnRegistrarLlegada_Click);
             // 
-            // dateTimePicker1
+            // dtpLlegada
             // 
-            this.dateTimePicker1.Format = System.Windows.Forms.DateTimePickerFormat.Time;
-            this.dateTimePicker1.Location = new System.Drawing.Point(15, 160);
-            this.dateTimePicker1.Name = "dateTimePicker1";
-            this.dateTimePicker1.Size = new System.Drawing.Size(200, 20);
-            this.dateTimePicker1.TabIndex = 7;
+            this.dtpLlegada.Format = System.Windows.Forms.DateTimePickerFormat.Time;
+            this.dtpLlegada.Location = new System.Drawing.Point(15, 160);
+            this.dtpLlegada.Name = "dtpLlegada";
+            this.dtpLlegada.Size = new System.Drawing.Size(200, 20);
+            this.dtpLlegada.TabIndex = 7;
             // 
             // labelLlegada
             // 
@@ -125,7 +127,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(284, 262);
             this.Controls.Add(this.labelLlegada);
-            this.Controls.Add(this.dateTimePicker1);
+            this.Controls.Add(this.dtpLlegada);
             this.Controls.Add(this.btnRegistrarLlegada);
             this.Controls.Add(this.cbDestino);
             this.Controls.Add(this.labelDestino);
@@ -149,7 +151,7 @@
         private System.Windows.Forms.Label labelDestino;
         private System.Windows.Forms.ComboBox cbDestino;
         private System.Windows.Forms.Button btnRegistrarLlegada;
-        private System.Windows.Forms.DateTimePicker dateTimePicker1;
+        private System.Windows.Forms.DateTimePicker dtpLlegada;
         private System.Windows.Forms.Label labelLlegada;
     }
 }
