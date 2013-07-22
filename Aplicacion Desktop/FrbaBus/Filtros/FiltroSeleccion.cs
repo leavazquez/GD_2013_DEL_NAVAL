@@ -30,6 +30,7 @@ namespace FrbaBus.Filtros
             {
                 cbValor.Items.Add(valor);
             }
+            cbValor.SelectedIndex = 0;
         }
 
         public override SqlParameter Parametro

@@ -193,6 +193,7 @@
             this.rbHombre.TabStop = true;
             this.rbHombre.Text = "Hombre";
             this.rbHombre.UseVisualStyleBackColor = true;
+            this.rbHombre.CheckedChanged += new System.EventHandler(this.rbHombre_CheckedChanged);
             // 
             // rbMujer
             // 
@@ -204,6 +205,7 @@
             this.rbMujer.TabStop = true;
             this.rbMujer.Text = "Mujer";
             this.rbMujer.UseVisualStyleBackColor = true;
+            this.rbMujer.CheckedChanged += new System.EventHandler(this.rbMujer_CheckedChanged);
             // 
             // labelAsiento
             // 

@@ -60,6 +60,7 @@
             this.cbNombre.Name = "cbNombre";
             this.cbNombre.Size = new System.Drawing.Size(121, 21);
             this.cbNombre.TabIndex = 1;
+            this.cbNombre.SelectedValueChanged += new System.EventHandler(this.cbNombre_SelectedValueChanged);
             // 
             // labelNumero
             // 

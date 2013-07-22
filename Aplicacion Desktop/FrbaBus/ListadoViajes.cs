@@ -25,7 +25,7 @@ namespace FrbaBus
             InitializeComponent();
             this.Text = "Seleccione un viaje";
             this.Size = new Size(974, 536);
-            this.Query = @"select vi.id_viaje ID_VIAJE, vi.micro MICRO, vi.fecha_salida SALIDA, ts.nombre_servicio SERVICIO, (mi.cantidad_asientos - (select count(*) from DEL_NAVAL.butacas_ocupadas where viaje = vi.id_viaje)) BUTACAS_DISPONIBLES, o.nombre_ciudad ORIGEN, d.nombre_ciudad DESTINO
+            this.Query = @"select vi.id_viaje ID_VIAJE, vi.micro MICRO, vi.fecha_salida SALIDA, vi.fecha_estimada LLEGADA, ts.nombre_servicio SERVICIO, (mi.cantidad_asientos - (select count(*) from DEL_NAVAL.butacas_ocupadas where viaje = vi.id_viaje)) BUTACAS_DISPONIBLES, o.nombre_ciudad ORIGEN, d.nombre_ciudad DESTINO
                 ,(mi.kilos_bodega - SUM(isnull(en.peso, 0))) as KILOS_DISPONIBLES
                 from DEL_NAVAL.viajes vi 
                 left join DEL_NAVAL.recorridos re on vi.recorrido = re.id_recorrido
@@ -34,7 +34,7 @@ namespace FrbaBus
                 left join DEL_NAVAL.encomiendas EN on vi.id_viaje = EN.viaje
                 left join DEL_NAVAL.ciudades o on re.origen = o.id_ciudad
                 left join DEL_NAVAL.ciudades d on re.destino = d.id_ciudad";
-            this.GroupBy = "group by vi.id_viaje, vi.fecha_salida, ts.nombre_servicio, mi.cantidad_asientos, mi.kilos_bodega, o.nombre_ciudad, d.nombre_ciudad, vi.micro";
+            this.GroupBy = "group by vi.id_viaje, vi.fecha_salida, ts.nombre_servicio, mi.cantidad_asientos, mi.kilos_bodega, o.nombre_ciudad, d.nombre_ciudad, vi.micro, vi.fecha_estimada";
             this.columnasVisibles.Add("SALIDA", "Salida");
             this.columnasVisibles.Add("SERVICIO", "Tipo de Servicio");
             this.columnasVisibles.Add("BUTACAS_DISPONIBLES", "Butacas disponibles");

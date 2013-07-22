@@ -11,11 +11,13 @@ namespace FrbaBus
 {
     public abstract partial class Listado : ABM
     {
+        protected Button btnSeleccionar = new Button();
+
         public Listado()
         {
             InitializeComponent();
             this.gbComandos.Controls.Clear();
-            Button btnSeleccionar = new Button();
+            
             btnSeleccionar.Text = "Seleccionar";
             btnSeleccionar.AutoSize = true;
             this.gbComandos.Controls.Add(btnSeleccionar);

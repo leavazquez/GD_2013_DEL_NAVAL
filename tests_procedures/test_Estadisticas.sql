@@ -9,11 +9,16 @@ select top 5 * from DEL_NAVAL.destinos_micros_vacios ('01/07/2012', '31/12/2012'
 
 select top 5 * from DEL_NAVAL.clientes_mayor_puntaje ('01/07/2012', '02/07/2012')
 
-select top 5 * from DEL_NAVAL.destinos_pasajes_cancelados ('01/07/2012', '31/12/2013')
+select top 5 * from DEL_NAVAL.destinos_pasajes_cancelados ('11/07/2012', '11/07/2012')
 
-select top 5 * from DEL_NAVAL.micros_fuera_servicio('01/07/2012', '31/03/2013') 
+set dateformat dmy
+go
+select top 5 * from DEL_NAVAL.micros_fuera_servicio('21/01/2013', '30/01/2013') 
 
 
+select *
+from DEL_NAVAL.servicios_micro
+where micro = 15 or micro = 3
 
 select *
 from DEL_NAVAL.compras

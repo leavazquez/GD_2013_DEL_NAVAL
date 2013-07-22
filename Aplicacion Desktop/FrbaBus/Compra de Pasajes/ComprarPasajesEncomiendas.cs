@@ -28,6 +28,8 @@ namespace FrbaBus.Compra_de_Pasajes
         private bool hayDiscapacitado = false;
         private bool hayAcompanante = false;
         private string idViajeDiscapacitado;
+        private Viaje viajeActual;
+        private List<Viaje> viajes = new List<Viaje>();
 
         private List<Encomienda> encomiendas = new List<Encomienda>();
         private List<Pasaje> pasajes = new List<Pasaje>();
@@ -69,6 +71,17 @@ namespace FrbaBus.Compra_de_Pasajes
                     destinoActual = listadoViajes.Destino;
                 }
                 labelDisponibilidad.Text = "Hay " + this.asientosViaje[this.idViaje] + " asientos disponibles y " + this.kilosViaje[this.idViaje] + " kilos libres";
+                Viaje viajeActual = new Viaje();
+                viajeActual.IdViaje = listadoViajes.IdViaje;
+
+                // buscar salida y llegada del viaje
+                List<SqlParameter> parametrosFechas = new List<SqlParameter>();
+                parametrosFechas.Add(new SqlParameter("@id_viaje", viajeActual.IdViaje));
+                DataTable datosViaje = DAC.ExecuteReader("SELECT fecha_salida, fecha_estimada FROM DEL_NAVAL.VIAJES WHERE ID_VIAJE = @id_viaje", parametrosFechas);
+
+                viajeActual.salida = (DateTime)datosViaje.Rows[0]["fecha_salida"];
+                viajeActual.llegada = (DateTime)datosViaje.Rows[0]["fecha_estimada"];
+                this.viajeActual = viajeActual;
             }
         }
 
@@ -148,6 +161,8 @@ namespace FrbaBus.Compra_de_Pasajes
                         cargaCliente.butacasAExcluir = this.idsButacasAsiganadas;
                         cargaCliente.IdViaje = this.idViaje;
                         cargaCliente.CantidadPisosMicro = this.cantidadPisosMicro;
+                        cargaCliente.ViajesActuales = this.viajes;
+                        cargaCliente.viajeCarga = viajeActual;
                         cargaCliente.ShowDialog();
                         
                         if (cargaCliente.IdButaca != null)
@@ -165,7 +180,10 @@ namespace FrbaBus.Compra_de_Pasajes
                                 this.hayDiscapacitado = true;
                                 this.idViajeDiscapacitado = this.idViaje;
                             }
-                            this.hayAcompanante = cargaCliente.EsAcompanante;
+                            if (cargaCliente.EsAcompanante)
+	                        {
+                                this.hayAcompanante = true;
+	                        }
                             this.idsButacasAsiganadas.Add(cargaCliente.IdButaca);
 
                             Pasaje pasaje = new Pasaje();
@@ -174,6 +192,7 @@ namespace FrbaBus.Compra_de_Pasajes
                             pasaje.Pasajero = cargaCliente.Dni;
                             pasaje.Gratis = cargaCliente.Discapacitado || cargaCliente.EsAcompanante;
                             pasajes.Add(pasaje);
+                            viajes.Add(cargaCliente.viajeCarga);
                         }
                         
                     }
@@ -212,6 +231,19 @@ namespace FrbaBus.Compra_de_Pasajes
                         declare @voucher int
                         exec del_naval.insertarCompra @comprador, @forma_pago, @fecha, @voucher output
                         select @voucher", parametros);
+
+                    if (cargaCliente.DatosTarjetaCompra != null)
+                    {
+                        List<SqlParameter> parametrosTarjeta = new List<SqlParameter>();
+                        parametrosTarjeta.Add(new SqlParameter("@voucher", voucher));
+                        parametrosTarjeta.Add(new SqlParameter("@tarjeta", cargaCliente.DatosTarjetaCompra.IdTarjeta));
+                        parametrosTarjeta.Add(new SqlParameter("@numero", cargaCliente.DatosTarjetaCompra.Numero));
+                        parametrosTarjeta.Add(new SqlParameter("@codigo", cargaCliente.DatosTarjetaCompra.Codigo));
+                        parametrosTarjeta.Add(new SqlParameter("@vencimiento", cargaCliente.DatosTarjetaCompra.Vencimiento));
+                        DAC.ExecuteNonQuery(@"set dateformat dmy
+                            exec del_naval.insertarDatosTarjeta @voucher, @tarjeta, @numero, @codigo, @vencimiento", parametrosTarjeta);
+                    }
+
                     decimal montoTotal = 0;
                     foreach (Pasaje pasaje in pasajes)
                     {

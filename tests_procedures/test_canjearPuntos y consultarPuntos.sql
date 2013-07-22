@@ -27,13 +27,13 @@ go
 --tabla completa
 set dateformat dmy
 go
-select * from DEL_NAVAL.consultarPuntos (32238185,'27/01/2014')
+select * from DEL_NAVAL.consultarPuntos (32238185,'28/01/2014')
 
 
 set dateformat dmy
 go
 declare @outp int
-exec del_naval.canjearPuntos 32238185,9, 1, '27/01/2014', @outp output
+exec del_naval.canjearPuntos 32238185,1, 1, '28/01/2014', @outp output
 select @outp
 -- -2 puntos insuficientes
 -- -1 no hay stock
@@ -66,5 +66,5 @@ where id_punto = 93358
 --calcular puntos listos para usar por cliente en una fecha
 set dateformat dmy
 go
-select SUM (puntos) - SUM(puntos_usados) from DEL_NAVAL.consultarPuntos (32238185,'27/01/2014')
+select SUM (puntos) - SUM(puntos_usados) from DEL_NAVAL.consultarPuntos (32238185,'28/01/2014')
 where id_canje is null

@@ -7,7 +7,7 @@
 
 set dateformat dmy
 go              
-exec reemplazarMicro 7, 15, '27/01/2013', NULL            
+exec del_naval.reemplazarMicro 7, 15, '21/01/2013', '21/01/2013'            
               
 
 

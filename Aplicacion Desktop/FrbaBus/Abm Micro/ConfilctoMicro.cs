@@ -17,7 +17,6 @@ namespace FrbaBus.Abm_Micro
         public DateTime Hasta = DateTime.MinValue;
 
         private int idMicroReemplazo = -1;
-        private string patenteMicroReemplazo;
         private int idMicro;
         
 

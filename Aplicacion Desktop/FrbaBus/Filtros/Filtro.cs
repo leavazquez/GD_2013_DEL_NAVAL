@@ -13,6 +13,8 @@ namespace FrbaBus.Filtros
     public abstract partial class Filtro : UserControl
     {
         public string Campo;
+        public ErrorProvider errorCampo = new ErrorProvider();
+
         public Filtro()
         {
             InitializeComponent();
@@ -46,6 +48,16 @@ namespace FrbaBus.Filtros
         public void Limpiar()
         {
             this.txtValor.Text = "";
+        }
+
+        public virtual bool Valido()
+        {
+            return true;
+        }
+
+        public virtual void MostrarError()
+        {
+
         }
     }
 }

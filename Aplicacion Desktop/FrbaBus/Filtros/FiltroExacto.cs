@@ -13,6 +13,8 @@ namespace FrbaBus.Filtros
 {
     public partial class FiltroExacto : Filtro
     {
+        public bool esNumerico = false;
+
         public FiltroExacto()
         {
             InitializeComponent();
@@ -36,6 +38,28 @@ namespace FrbaBus.Filtros
             get
             {
                 return Campo + "= @" + Campo;
+            }
+        }
+
+        public override void MostrarError()
+        {
+            errorCampo.SetError(txtValor, "Valor inválido");
+        }
+
+        public override bool Valido()
+        {
+            if (esNumerico)
+            {
+                int dni = 0;
+                if (!int.TryParse(txtValor.Text, out dni) || dni <= 0)
+                {
+                    return false;
+                }
+                return true;
+            }
+            else
+            {
+                return true;
             }
         }
     }

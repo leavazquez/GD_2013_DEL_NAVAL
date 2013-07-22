@@ -149,6 +149,8 @@
     <Compile Include="Entidades\Pasaje.cs" />
     <Compile Include="Entidades\Recorrido.cs" />
     <Compile Include="Entidades\Rol.cs" />
+    <Compile Include="Entidades\Tarjeta.cs" />
+    <Compile Include="Entidades\Viaje.cs" />
     <Compile Include="Filtros\Filtro.cs">
       <SubType>UserControl</SubType>
     </Compile>

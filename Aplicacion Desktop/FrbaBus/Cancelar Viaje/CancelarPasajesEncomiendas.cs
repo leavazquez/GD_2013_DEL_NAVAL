@@ -108,6 +108,7 @@ namespace FrbaBus.Cancelar_Viaje
                     }
                 }
                 MessageBox.Show("Pasajes y/o encomiendas cancelados. Monto a devolver: " + monto.ToString());
+                this.Close();
             }
             else 
             {

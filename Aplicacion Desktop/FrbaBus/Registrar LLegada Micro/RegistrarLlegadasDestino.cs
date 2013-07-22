@@ -25,6 +25,7 @@ namespace FrbaBus.Registrar_LLegada_Micro
             cargaComboCiudad(cbDestino);
             cbOrigen.SelectedIndex = 0;
             cbDestino.SelectedIndex = 1;
+            dtpLlegada.Value = Config.FechaSistema;
         }
 
         private void btnSeleccionarMicro_Click(object sender, EventArgs e)

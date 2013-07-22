@@ -7,6 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Data.SqlClient;
+using FrbaBus.Entidades;
+using FrbaBus.Compra_de_Pasajes;
 
 namespace FrbaBus.GenerarViaje
 {
@@ -25,6 +27,9 @@ namespace FrbaBus.GenerarViaje
         public bool EsAcompanante = false;
         public int Dni;
         public string FormaPago;
+        public Tarjeta DatosTarjetaCompra;
+        public List<Viaje> ViajesActuales = new List<Viaje>();
+        public Viaje viajeCarga;
 
         public bool HayDiscapacitado;
 
@@ -106,15 +111,23 @@ namespace FrbaBus.GenerarViaje
                     select @outp", parametros);
                 if (codigo == 0)
                 {
-                    SeleccionButaca seleccionButaca = new SeleccionButaca(this.CantidadPisosMicro);
-                    seleccionButaca.IdViaje = this.IdViaje;
-                    seleccionButaca.ButacasAExcluir = this.butacasAExcluir;
-                    seleccionButaca.ShowDialog();
-                    if (seleccionButaca.IdButaca != null)
+                    // validar dentro del pedido
+                    if (!colisionDentroDelPedido(dni))
                     {
-                        this.IdButaca = seleccionButaca.IdButaca;
-                        btnSeleccionarAsiento.Text = seleccionButaca.Butaca;
-                        this.Butaca = seleccionButaca.Butaca;
+                        SeleccionButaca seleccionButaca = new SeleccionButaca(this.CantidadPisosMicro);
+                        seleccionButaca.IdViaje = this.IdViaje;
+                        seleccionButaca.ButacasAExcluir = this.butacasAExcluir;
+                        seleccionButaca.ShowDialog();
+                        if (seleccionButaca.IdButaca != null)
+                        {
+                            this.IdButaca = seleccionButaca.IdButaca;
+                            btnSeleccionarAsiento.Text = seleccionButaca.Butaca;
+                            this.Butaca = seleccionButaca.Butaca;
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show("El pasajero ya tiene otro viaje asignado para el misno rango de fecha/hora dentro de la misma compra");
                     }
                 }
                 else
@@ -126,6 +139,19 @@ namespace FrbaBus.GenerarViaje
             {
                 errorDni.SetError(txtDni, "DNI inválido");
             }
+        }
+
+        private bool colisionDentroDelPedido(int dni)
+        {
+            if (this.ViajesActuales.Count > 0)
+            {
+                foreach (Viaje v in this.ViajesActuales)
+                {
+                    if (v.pasajeros.Contains(dni) && ((v.salida >= this.viajeCarga.salida && v.llegada <= this.viajeCarga.llegada) || (this.viajeCarga.salida >= v.salida && this.viajeCarga.salida <= v.llegada) || (this.viajeCarga.llegada >= v.salida && this.viajeCarga.llegada <= v.llegada)))
+                        return true;
+                }
+            }
+            return false;
         }
 
         private void btnLimpiar_Click(object sender, EventArgs e)
@@ -242,6 +268,7 @@ namespace FrbaBus.GenerarViaje
                         MessageBox.Show("Asiento asignado");
                         this.EsAcompanante = cbAcompanante.Checked;
                         this.DialogResult = DialogResult.OK;
+                        this.viajeCarga.pasajeros.Add(dni);
                         break;
                     case "Encomienda":
                         this.Detalle = "DNI: " + txtDni.Text;
@@ -249,7 +276,15 @@ namespace FrbaBus.GenerarViaje
                         this.DialogResult = DialogResult.OK;
                         break;
                     case "Compra":
-                        // lanzar pago con tarjeta si corresponde
+                        if (cbFormaPago.SelectedItem.ToString() == "Tarjeta")
+                        {
+                            DatosTarjeta datosTarjeta = new DatosTarjeta();
+                            if (datosTarjeta.ShowDialog() != DialogResult.OK)
+                            {
+                                return;
+                            }
+                            DatosTarjetaCompra = datosTarjeta.Datos;
+                        }
                         MessageBox.Show("Datos del comprador cargados");
                         this.DialogResult = DialogResult.OK;
                         this.FormaPago = cbFormaPago.SelectedItem.ToString().ToUpper();
@@ -310,6 +345,16 @@ namespace FrbaBus.GenerarViaje
             {
                 cbJubiladoPensionado.Checked = true;
             }
+        }
+
+        private void rbMujer_CheckedChanged(object sender, EventArgs e)
+        {
+            dtpFechaNacimiento_ValueChanged(sender, e);
+        }
+
+        private void rbHombre_CheckedChanged(object sender, EventArgs e)
+        {
+            dtpFechaNacimiento_ValueChanged(sender, e);
         }
     }
 }

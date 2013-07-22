@@ -26,6 +26,7 @@ namespace FrbaBus.Filtros
             dtpValor.Top = txtValor.Top;
             dtpValor.Format = DateTimePickerFormat.Short;
             this.txtValor.Visible = false;
+            dtpValor.Value = Config.FechaSistema;
         }
 
         public override SqlParameter Parametro

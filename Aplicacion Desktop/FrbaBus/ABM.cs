@@ -57,7 +57,14 @@ namespace FrbaBus
 
         protected void btnBuscar_Click(object sender, EventArgs e)
         {
-            
+            foreach (Filtro filtro in filtros)
+            {
+                if (!filtro.Valido())
+                {
+                    filtro.MostrarError();
+                    return;
+                }
+            }
             string nuevaQuery = this.Query;
             List<SqlParameter> parametros = new List<SqlParameter>();
             foreach (SqlParameter parametro in this.parametros)
@@ -82,7 +89,7 @@ namespace FrbaBus
                 nuevaQuery += " " + this.GroupBy;
             }
             DataTable resultados = DAC.ExecuteReader(nuevaQuery, parametros);
-            // ejecutar quey y llenar el datatable
+            // ejecutar query y llenar el datatable
             dgvResultados.DataSource = resultados;
             if (columnasVisibles.Count > 0)
             {
